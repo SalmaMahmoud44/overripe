@@ -13,6 +13,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float dashDuration = 0.2f;
     [SerializeField] float dashCooldown = 1f;
 
+    [Header("Shoot Settings")]
+    [SerializeField] ArrowProjectille arrowPrefab;
+    [SerializeField] Transform arrowSpawnPoint;
+    [SerializeField] float arrowCooldown = 0.5f;
+
+
+    float shootTimer = 0f;  
     bool isDashing = false;
     bool canDash = true;
     Vector2 moveInput;
@@ -28,6 +35,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (shootTimer > 0f)
+            shootTimer -= Time.deltaTime; // Decrease the shoot timer
+
+
         Run();
         Flip();
     }
@@ -58,10 +69,11 @@ public class PlayerController : MonoBehaviour
 
     void OnShoot(InputValue value)
     {
+        
+
         if (value.isPressed)
         {
-            // Implement shooting logic here
-            Debug.Log("Shoot!");
+            ShootArrow();
         }
     }
     void OnMelee(InputValue value)
@@ -87,7 +99,23 @@ public class PlayerController : MonoBehaviour
         if (isMoving) 
           myTransform.localScale = new Vector2(Mathf.Sign(myRigidbody.linearVelocity.x), 1f);
     }
-   
+
+    void ShootArrow()
+    {
+        if(arrowPrefab == null || arrowSpawnPoint == null)
+        {
+            Debug.LogWarning("Arrow prefab or spawn point is not assigned.");
+            return;
+        }
+        if (shootTimer > 0f)
+            return; // Don't allow shooting if on cooldown
+
+        shootTimer = arrowCooldown; // Reset the shoot timer
+
+        Vector2 shootDirection = new Vector2(Mathf.Sign(myTransform.localScale.x), 0f); // Shoot in the direction the player is facing
+        ArrowProjectille arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, Quaternion.identity);
+        arrow.Init(shootDirection);
+    }   
     System.Collections.IEnumerator Dash()
     {
         isDashing = true;
