@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: dd588221fdb660d47ac81211bda3e974
+guid: f1e1b9cefa7f3234697415e276b2b64f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4186736258513074180
-    second: Untitled13_20260829140504_0
+      213: 7189771685645713622
+    second: Untitled13_20260829140519_0
+  - first:
+      213: -3501976077420753009
+    second: Untitled13_20260829140519_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +54,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 16
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,12 +116,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Untitled13_20260829140504_0
+      name: Untitled13_20260829140519_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 12
         y: 0
-        width: 1920
+        width: 824
         height: 1080
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -128,8 +131,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4087be0e1764a1a30800000000000000
-      internalID: 4186736258513074180
+      spriteID: 6d0031b414337c360800000000000000
+      internalID: 7189771685645713622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Untitled13_20260829140519_1
+      rect:
+        serializedVersion: 2
+        x: 958
+        y: 0
+        width: 700
+        height: 976
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8f8b65df4b766fc0800000000000000
+      internalID: -3501976077420753009
       vertices: []
       indices: 
       edges: []
@@ -148,7 +173,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Untitled13_20260829140504_0: 4186736258513074180
+      Untitled13_20260829140519_0: 7189771685645713622
+      Untitled13_20260829140519_1: -3501976077420753009
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
