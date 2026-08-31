@@ -18,14 +18,27 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform arrowSpawnPoint;
     [SerializeField] float arrowCooldown = 0.5f;
 
+    [Header("Melee Settings")]
+    [SerializeField] float meleeCooldown = 1f;
+    [SerializeField] Transform meleeSpawnPoint;
+    [SerializeField] float meleeRange = 1f;
+    [SerializeField] float meleeDamage = 10f;
+    [SerializeField] LayerMask enemyLayer;
+
 
     float shootTimer = 0f;  
+    float meleeTimer = 0f;
+
     bool isDashing = false;
     bool canDash = true;
+
     Vector2 moveInput;
     Rigidbody2D myRigidbody;
     Transform myTransform;
     CapsuleCollider2D myCollider;
+    Vector2 worldPos;
+    Vector2 mousePos;
+    RaycastHit2D[] hits;
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
@@ -37,6 +50,8 @@ public class PlayerController : MonoBehaviour
     {
         if (shootTimer > 0f)
             shootTimer -= Time.deltaTime; // Decrease the shoot timer
+        if(meleeTimer > 0f)
+            meleeTimer -= Time.deltaTime;
 
 
         Run();
@@ -80,8 +95,7 @@ public class PlayerController : MonoBehaviour
     {
         if (value.isPressed)
         {
-            // Implement melee attack logic here
-            Debug.Log("Melee Attack!");
+            MeleeAttack();
         }
     }
     void Run()
@@ -112,10 +126,43 @@ public class PlayerController : MonoBehaviour
 
         shootTimer = arrowCooldown; // Reset the shoot timer
 
-        Vector2 shootDirection = new Vector2(Mathf.Sign(myTransform.localScale.x), 0f); // Shoot in the direction the player is facing
+        //Vector2 shootDirection = new Vector2(Mathf.Sign(myTransform.localScale.x), 0f); // Shoot in the direction the player is facing
+
+        worldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()); // Get the mouse position in world coordinates
+        mousePos = new Vector2(worldPos.x, worldPos.y); // Get the mouse position in 2D space
+        Vector2 shootDirection = (mousePos - (Vector2)arrowSpawnPoint.position).normalized; // Shoot towards the mouse position
         ArrowProjectille arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, Quaternion.identity);
         arrow.Init(shootDirection);
     }   
+
+    void MeleeAttack()
+    {
+        if (meleeTimer > 0f)
+            return; // Don't allow melee attack if on cooldown
+
+        meleeTimer = meleeCooldown; // Reset the melee timer
+
+        hits = Physics2D.CircleCastAll(meleeSpawnPoint.position, meleeRange, Vector2.right, 0f, enemyLayer);
+        for (int i = 0; i < hits.Length; i++)
+        {
+            IDamagable damagable = hits[i].collider.gameObject.GetComponent<IDamagable>();
+            Debug.Log("Hit: " + hits[i].collider.gameObject.name);
+            if (damagable != null)
+            {
+                Debug.Log("Damaging: " + hits[i].collider.gameObject.name);
+                damagable.TakeDamage(meleeDamage);
+            }
+        }
+    }
+
+    void OnDrawGizmos()
+    {
+        if (meleeSpawnPoint != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(meleeSpawnPoint.position, meleeRange);
+        }
+    }
     System.Collections.IEnumerator Dash()
     {
         isDashing = true;
