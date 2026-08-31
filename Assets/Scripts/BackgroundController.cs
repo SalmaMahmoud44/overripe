@@ -2,33 +2,37 @@ using UnityEngine;
 
 public class BackgroundController : MonoBehaviour
 {
-    private float startPos, length;
-    public GameObject cam;
-    public float parallaxEffect; // The speed at which the background should move relative to the camera
+    [System.Serializable]
+    public class ParallaxLayer
+    {
+        public Transform layer;
+        [Range(0, 1)] public float parallaxFactor;
+    }
+
+    public ParallaxLayer[] layers;
+
+    public Transform camTransform;
+    private Vector3 lastCameraPosition;
 
     void Start()
     {
-        startPos = transform.position.x;
-        length = GetComponent<SpriteRenderer>().bounds.size.x;
+        lastCameraPosition = camTransform.position;
     }
 
-    void FixedUpdate()
+
+    void LateUpdate()
     {
-        // Calculate distance background move based on cam movement
-        float distance = cam.transform.position.x * parallaxEffect; // 0 = move with cam || 1 = won't move || 0.5 = half
-        float movement = cam.transform.position.x * (1 - parallaxEffect);
+        Vector3 cameraDelta = camTransform.position - lastCameraPosition;
 
-        transform.position = new Vector3(startPos + distance, transform.position.y, transform.position.z);
+        foreach (ParallaxLayer layer in layers)
+        {
+            float moveX = cameraDelta.x * layer.parallaxFactor;
+            float moveY = cameraDelta.y * layer.parallaxFactor;
 
-        // if background has reached the end of its length adjust its position so that it's always wedge between infinite scrolling backgrounds
-        if (movement > startPos + length)
-        {
-            startPos += length;
+            layer.layer.position += new Vector3(moveX, moveY, 0);
         }
-        else if (movement < startPos - length)
-        {
-            startPos -= length;
-        }
+
+        lastCameraPosition = camTransform.position;
     }
 }
 
