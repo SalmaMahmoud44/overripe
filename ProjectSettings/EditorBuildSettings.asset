@@ -6,8 +6,14 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
+    path: Assets/Scenes/Main Menu.unity
+    guid: 1141c0c28de36a841add0a0ae543a70d
+  - enabled: 1
+    path: Assets/Scenes/Banana.unity
+    guid: f5dec3861cc171c4aa7c780d0bd71d81
+  - enabled: 1
+    path: Assets/Scenes/mango.unity
+    guid: 7e35f2c1d20dc164eb619367a9494fca
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
