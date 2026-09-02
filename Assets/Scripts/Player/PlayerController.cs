@@ -50,7 +50,8 @@ public class PlayerController : MonoBehaviour
     Vector2 worldPos;
     Vector2 mousePos;
     RaycastHit2D[] hits;
- 
+    Animator myAnimator;
+
 
 
     void Start()
@@ -61,8 +62,9 @@ public class PlayerController : MonoBehaviour
         arrowSpawnPoint = transform.Find("ArrowSpawnPoint");
         meleeSpawnPoint = transform.Find("MeleeSpawnPoint");
         enemyLayer = LayerMask.GetMask("Enemy");
+        myAnimator = GetComponentInChildren<Animator>();
 
-        if(levelManager == null)
+        if (levelManager == null)
             levelManager = FindObjectOfType<LevelManager>();
     }
 
@@ -176,6 +178,9 @@ public class PlayerController : MonoBehaviour
 
         Vector2 playerVelocity = new Vector2(moveInput.x * moveSpeed, myRigidbody.linearVelocity.y);
         myRigidbody.linearVelocity = playerVelocity;
+
+        bool isMoving = Mathf.Abs(myRigidbody.linearVelocity.x) > Mathf.Epsilon;
+        myAnimator.SetBool("isRunning", isMoving);
     }
 
     void Flip()
