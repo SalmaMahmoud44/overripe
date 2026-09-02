@@ -105,6 +105,7 @@ public class DialougeManager : MonoBehaviour
     }
     void SubscribeToPlayerAction(PlayerAction action)
     {
+
         switch (action)
         {
             case PlayerAction.Move:
@@ -126,7 +127,7 @@ public class DialougeManager : MonoBehaviour
         player.OnPlayerMoved -= OnMovePerformed;
         player.OnPlayerJumped -= OnActionPerformed;
         player.OnPlayerDashed -= OnActionPerformed;
-        player.OnPlayerMelee -= OnActionPerformed;  
+        player.OnPlayerMelee -= OnActionPerformed;
     }
     void OnMovePerformed(KeyCode key)
     {
