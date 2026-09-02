@@ -1,6 +1,6 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;  
+using UnityEngine.InputSystem;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,13 +17,23 @@ public class PlayerController : MonoBehaviour
     [SerializeField] ArrowProjectille arrowPrefab;
     [SerializeField] Transform arrowSpawnPoint;
     [SerializeField] float arrowCooldown = 0.5f;
+    [SerializeField] LevelManager levelManager;
 
     [Header("Melee Settings")]
     [SerializeField] float meleeCooldown = 1f;
     [SerializeField] Transform meleeSpawnPoint;
     [SerializeField] float meleeRange = 1f;
     [SerializeField] float meleeDamage = 10f;
-    [SerializeField] LayerMask enemyLayer;
+    [SerializeField] LayerMask enemyLayer ;
+
+
+
+
+    // Events for player actions
+    public event Action<KeyCode> OnPlayerMoved;
+    public event Action OnPlayerJumped;
+    public event Action OnPlayerDashed;
+    public event Action OnPlayerMelee;
 
 
     float shootTimer = 0f;  
@@ -31,6 +41,7 @@ public class PlayerController : MonoBehaviour
 
     bool isDashing = false;
     bool canDash = true;
+    bool controlsLocked = false;
 
     Vector2 moveInput;
     Rigidbody2D myRigidbody;
@@ -39,11 +50,20 @@ public class PlayerController : MonoBehaviour
     Vector2 worldPos;
     Vector2 mousePos;
     RaycastHit2D[] hits;
+ 
+
+
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
         myTransform = GetComponent<Transform>();
         myCollider = GetComponent<CapsuleCollider2D>();
+        arrowSpawnPoint = transform.Find("ArrowSpawnPoint");
+        meleeSpawnPoint = transform.Find("MeleeSpawnPoint");
+        enemyLayer = LayerMask.GetMask("Enemy");
+
+        if(levelManager == null)
+            levelManager = FindObjectOfType<LevelManager>();
     }
 
     void Update()
@@ -60,15 +80,32 @@ public class PlayerController : MonoBehaviour
     void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
+
+        if (controlsLocked)
+        {
+            moveInput = Vector2.zero; // Ignore input if controls are locked
+            return;
+        }
+        if (moveInput.x != 0f)
+        {
+            KeyCode keyPressed = moveInput.x > 0f ? KeyCode.D : KeyCode.A;
+            OnPlayerMoved?.Invoke(keyPressed); // Invoke the event when the player moves
+        }     
     }
     void OnJump(InputValue value)
     {
         if (isDashing)
             return; // Don't allow jumping while dashing
 
+        if (controlsLocked)
+        {
+            return;
+        }
+
         if (value.isPressed && myCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
             myRigidbody.linearVelocity += new Vector2(0f,jumpSpeed);
+            OnPlayerJumped?.Invoke(); // Invoke the event when the player jumps
         }
     }
     void OnDash(InputValue value)
@@ -76,33 +113,67 @@ public class PlayerController : MonoBehaviour
         if (!canDash)
             return; // Don't allow dashing if on cooldown
 
+        if (controlsLocked)
+        {
+            return;
+        }
+
+
         if (value.isPressed && !isDashing)
         {
             StartCoroutine(Dash());
+            OnPlayerDashed?.Invoke(); // Invoke the event when the player dashes
         }
     }
 
     void OnShoot(InputValue value)
     {
-        
 
-        if (value.isPressed)
+
+        if (value.isPressed && (levelManager.curreLevel == "Peach" || levelManager.currentLevelIndex == 4) )
         {
             ShootArrow();
         }
     }
     void OnMelee(InputValue value)
     {
-        if (value.isPressed)
+        if(!value.isPressed)
+            return; // Only perform melee attack on button press
+
+        if (controlsLocked)
         {
-            MeleeAttack();
+            return;
+        }
+
+        if (MeleeAttack())
+        {
+            OnPlayerMelee?.Invoke(); // Invoke the event when the player performs a melee attack
+
         }
     }
+
+    public void SetControlsLocked(bool locked)
+    {
+        controlsLocked = locked;
+
+        if (locked)
+        {
+            moveInput = Vector2.zero;
+
+            if (myRigidbody != null)
+            {
+                myRigidbody.linearVelocity = new Vector2(
+                    0f,
+                    myRigidbody.linearVelocity.y
+                );
+            }
+        }
+    } 
     void Run()
     {
         if(isDashing) 
             return; // Don't allow normal movement while dashing
-  
+
         Vector2 playerVelocity = new Vector2(moveInput.x * moveSpeed, myRigidbody.linearVelocity.y);
         myRigidbody.linearVelocity = playerVelocity;
     }
@@ -135,17 +206,17 @@ public class PlayerController : MonoBehaviour
         arrow.Init(shootDirection);
     }   
 
-    void MeleeAttack()
+      bool MeleeAttack()
     {
         if (meleeTimer > 0f)
-            return; // Don't allow melee attack if on cooldown
+            return false; // Don't allow melee attack if on cooldown
 
         meleeTimer = meleeCooldown; // Reset the melee timer
 
         hits = Physics2D.CircleCastAll(meleeSpawnPoint.position, meleeRange, Vector2.right, 0f, enemyLayer);
         for (int i = 0; i < hits.Length; i++)
         {
-            IDamagable damagable = hits[i].collider.gameObject.GetComponent<IDamagable>();
+            IDamagable damagable = hits[i].collider.gameObject.GetComponent<EnemyHealth>();
             Debug.Log("Hit: " + hits[i].collider.gameObject.name);
             if (damagable != null)
             {
@@ -153,6 +224,7 @@ public class PlayerController : MonoBehaviour
                 damagable.TakeDamage(meleeDamage);
             }
         }
+        return true; // Return true to indicate that the melee attack was performed
     }
 
     void OnDrawGizmos()
@@ -169,7 +241,6 @@ public class PlayerController : MonoBehaviour
         canDash = false;
         float originalGravity = myRigidbody.gravityScale;
         myRigidbody.gravityScale = 0f; // Disable gravity during dash
-        bool isMoving = Mathf.Abs(myRigidbody.linearVelocity.x) > Mathf.Epsilon;
         myRigidbody.linearVelocity = new Vector2(Mathf.Sign(myTransform.localScale.x) * dashSpeed, 0f); // Set dash velocity
         yield return new WaitForSeconds(dashDuration); // Wait for the duration of the dash
         myRigidbody.gravityScale = originalGravity; // Restore original gravity
