@@ -373,6 +373,66 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b242ac9e0707cd4ebf8edc1750c8f44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenu
+--- !u!1001 &1160184102
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 231211639008246866, guid: 11083b29bb44fd04db47c21601809af0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 547.5379
+      objectReference: {fileID: 0}
+    - target: {fileID: 231211639008246866, guid: 11083b29bb44fd04db47c21601809af0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 86.09727
+      objectReference: {fileID: 0}
+    - target: {fileID: 231211639008246866, guid: 11083b29bb44fd04db47c21601809af0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 231211639008246866, guid: 11083b29bb44fd04db47c21601809af0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 231211639008246866, guid: 11083b29bb44fd04db47c21601809af0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 231211639008246866, guid: 11083b29bb44fd04db47c21601809af0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 231211639008246866, guid: 11083b29bb44fd04db47c21601809af0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 231211639008246866, guid: 11083b29bb44fd04db47c21601809af0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 231211639008246866, guid: 11083b29bb44fd04db47c21601809af0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 231211639008246866, guid: 11083b29bb44fd04db47c21601809af0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 386142130034357102, guid: 11083b29bb44fd04db47c21601809af0, type: 3}
+      propertyPath: m_Name
+      value: LevelManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 386142130034357102, guid: 11083b29bb44fd04db47c21601809af0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2144810392}
+  m_SourcePrefab: {fileID: 100100000, guid: 11083b29bb44fd04db47c21601809af0, type: 3}
 --- !u!1 &1206241165
 GameObject:
   m_ObjectHideFlags: 0
@@ -1129,10 +1189,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1914109743}
   m_CullTransparentMesh: 1
+--- !u!1 &2144810391 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 386142130034357102, guid: 11083b29bb44fd04db47c21601809af0, type: 3}
+  m_PrefabInstance: {fileID: 1160184102}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2144810392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2144810391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e30952ee1c8dd0499b7ef86d627f5af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelManager
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1160184102}
   - {fileID: 1289481194}
   - {fileID: 470177692}
   - {fileID: 1483476350}

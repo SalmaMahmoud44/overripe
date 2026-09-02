@@ -1,16 +1,24 @@
+using System;
 using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour, IDamagable
 {
+    [Header("Health Settings")]
     [SerializeField] private float maxHealth = 100f;
     [SerializeField] private float currentHealth;
 
+    [Header("Time Settings")]
+    [SerializeField] private float timeToAdd = 2f;
+    [SerializeField] RotTimer rotTimer;
+
+    public event Action OnEnemyDied;
     void Start()
     {
         currentHealth = maxHealth;
+        rotTimer = GameObject.Find("RotTimerCanvas").GetComponent<RotTimer>();
     }
 
-    public void TakeDamage(float damage)
+    public new void TakeDamage(float damage)
     {
         Debug.Log("Enemy took damage: " + damage);
         currentHealth -= damage;
@@ -22,6 +30,8 @@ public class EnemyHealth : MonoBehaviour, IDamagable
 
     void Die()
     {
+        rotTimer.AddTime(timeToAdd);
         Destroy(gameObject);
+        OnEnemyDied?.Invoke();
     }
 }
