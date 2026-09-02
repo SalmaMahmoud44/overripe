@@ -30,7 +30,7 @@ public class ArrowProjectille : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        IDamagable damagable = collision.gameObject.GetComponent<IDamagable>();
+        IDamagable damagable = collision.gameObject.GetComponent<EnemyHealth>();
         Debug.Log("Arrow hit: " + collision.gameObject.name);
         if (damagable != null)
         {

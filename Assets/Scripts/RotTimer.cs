@@ -7,19 +7,23 @@ public class RotTimer : MonoBehaviour
     [SerializeField] int startTime = 60;
     [SerializeField] Image fillBar;
     [SerializeField] TextMeshProUGUI timerText;
+    [SerializeField] bool sartPaused = false;
 
-    int currentTime;
+
+    public float currentTime{ get; private set; }    
     float tickTimer;
+    bool timerRunning;
 
     void Start()
     {
         currentTime = startTime;
+        timerRunning = !sartPaused;
         UpdateUI();
     }
 
     void Update()
     {
-        if (currentTime <= 0)
+        if (!timerRunning || currentTime <= 0)
             return;
 
         tickTimer += Time.deltaTime;
@@ -32,8 +36,13 @@ public class RotTimer : MonoBehaviour
             UpdateUI();
         }
     }
+    
+    public void StartTimer()
+    {
+        timerRunning = true;
+    }
 
-    public void AddTime(int amount)
+    public void AddTime(float amount)
     {
         currentTime += amount;
         if (currentTime > startTime)

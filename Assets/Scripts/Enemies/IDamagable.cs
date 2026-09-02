@@ -2,5 +2,5 @@ using UnityEngine;
 
 public interface IDamagable 
 {
-    public void TakeDamage(float damage) { }
+    public virtual void TakeDamage(float damage) { }
 }
