@@ -256,7 +256,7 @@ MonoBehaviour:
   startTime: 60
   fillBar: {fileID: 3679300882927168516}
   timerText: {fileID: 5511353440758658396}
-  sartPaused: 1
+  sartPaused: 0
 --- !u!1 &2680867790955665411
 GameObject:
   m_ObjectHideFlags: 0
