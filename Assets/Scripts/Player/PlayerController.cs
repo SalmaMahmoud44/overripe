@@ -78,6 +78,7 @@ public class PlayerController : MonoBehaviour
 
         Run();
         Flip();
+        CheckJumpAnimation();
     }
     void OnMove(InputValue value)
     {
@@ -107,6 +108,9 @@ public class PlayerController : MonoBehaviour
         if (value.isPressed && myCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
             myRigidbody.linearVelocity += new Vector2(0f,jumpSpeed);
+
+            myAnimator.SetBool("isJumping", true);
+
             OnPlayerJumped?.Invoke(); // Invoke the event when the player jumps
         }
     }
@@ -231,7 +235,13 @@ public class PlayerController : MonoBehaviour
         }
         return true; // Return true to indicate that the melee attack was performed
     }
-
+    void CheckJumpAnimation()
+    {
+        if (myCollider.IsTouchingLayers(LayerMask.GetMask("Ground")) && myRigidbody.linearVelocity.y <= 0f)
+        {
+            myAnimator.SetBool("isJumping", false);
+        }
+    }
     void OnDrawGizmos()
     {
         if (meleeSpawnPoint != null)
@@ -243,6 +253,8 @@ public class PlayerController : MonoBehaviour
     System.Collections.IEnumerator Dash()
     {
         isDashing = true;
+
+        myAnimator.SetBool("isDashing", true);
         canDash = false;
         float originalGravity = myRigidbody.gravityScale;
         myRigidbody.gravityScale = 0f; // Disable gravity during dash
@@ -250,6 +262,8 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(dashDuration); // Wait for the duration of the dash
         myRigidbody.gravityScale = originalGravity; // Restore original gravity
         isDashing = false;
+
+        myAnimator.SetBool("isDashing", false);
 
         yield return new WaitForSeconds(dashCooldown); // Wait for the cooldown period
         canDash = true;
