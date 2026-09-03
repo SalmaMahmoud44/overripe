@@ -8,6 +8,11 @@ public class EnemyMovement : MonoBehaviour
     private Transform currentPoint;
     public float speed;
 
+    [Header("Damage Settings")]
+    [SerializeField] float damageAmount = 5f;
+    [SerializeField] float damageCooldown = 1f;
+    float damageTimer = 0f;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -16,6 +21,9 @@ public class EnemyMovement : MonoBehaviour
 
     void Update()
     {
+        if (damageTimer > 0f)
+            damageTimer -= Time.deltaTime;
+
         Vector2 point = currentPoint.position - transform.position;
 
         if (currentPoint == pointB.transform)
@@ -38,6 +46,19 @@ public class EnemyMovement : MonoBehaviour
             Debug.Log("Reached A, switching to B");
             Flip();
             currentPoint = pointB.transform;
+        }
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player") && damageTimer <= 0f)
+        {
+            IDamagable damagable = collision.gameObject.GetComponent<IDamagable>();
+            if (damagable != null)
+            {
+                damagable.TakeDamage(damageAmount);
+                damageTimer = damageCooldown;
+            }
         }
     }
 
