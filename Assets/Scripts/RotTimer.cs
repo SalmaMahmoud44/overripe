@@ -11,6 +11,11 @@ public class RotTimer : MonoBehaviour
 
 
     public float currentTime{ get; private set; }    
+    public float NormalizedTime {
+        get { return currentTime / startTime; }
+    }
+
+
     float tickTimer;
     bool timerRunning;
 
