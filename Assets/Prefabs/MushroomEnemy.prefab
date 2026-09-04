@@ -320,4 +320,4 @@ MonoBehaviour:
   currentHealth: 0
   timeToAdd: 10
   rotTimer: {fileID: 6917241684926676987, guid: 5b6573c3b63f51f4fa6648c26c8993c8, type: 3}
-  deathDelay: 0.5
+  deathDelay: 2

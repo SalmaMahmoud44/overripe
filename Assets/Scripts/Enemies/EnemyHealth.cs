@@ -12,10 +12,13 @@ public class EnemyHealth : MonoBehaviour, IDamagable
     [SerializeField] RotTimer rotTimer;
 
     [Header("Death Settings")]
-    [SerializeField] float deathDelay = 0.5f;
+    [SerializeField] float deathDelay = 2f;
 
     Animator anim;
     bool isDead = false;
+
+    Collider2D col;
+    Rigidbody2D rb;
 
     public event Action OnEnemyDied;
 
@@ -24,6 +27,8 @@ public class EnemyHealth : MonoBehaviour, IDamagable
         currentHealth = maxHealth;
         rotTimer = GameObject.Find("RotTimerCanvas").GetComponent<RotTimer>();
         anim = GetComponent<Animator>();
+        col = GetComponent<Collider2D>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     public new void TakeDamage(float damage)
@@ -60,6 +65,8 @@ public class EnemyHealth : MonoBehaviour, IDamagable
         if (flyEnemy != null)
             flyEnemy.OnDeath();
 
+        col.isTrigger = true;
+        rb.bodyType = RigidbodyType2D.Static;
         Destroy(gameObject, deathDelay);
     }
 }

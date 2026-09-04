@@ -2441,7 +2441,7 @@ Transform:
   m_GameObject: {fileID: 1054016202}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -22.009043, y: -12.541635, z: -10}
+  m_LocalPosition: {x: -20.905958, y: -12.531403, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -16351,7 +16351,7 @@ PrefabInstance:
     - target: {fileID: 2495899831795144147, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
       propertyPath: meleeClip
       value: 
-      objectReference: {fileID: 8300000, guid: ed4775513313c9147b7c8f43b29053ec, type: 3}
+      objectReference: {fileID: 8300000, guid: 2705332ee4b22ed459d7306c832dcb48, type: 3}
     - target: {fileID: 3409880110786988337, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
       propertyPath: rotTimer
       value: 
