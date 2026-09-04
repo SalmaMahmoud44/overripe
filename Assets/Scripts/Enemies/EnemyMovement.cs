@@ -37,13 +37,11 @@ public class EnemyMovement : MonoBehaviour
 
         if (Mathf.Abs(transform.position.x - pointB.transform.position.x) < 0.5f && currentPoint == pointB.transform)
         {
-            Debug.Log("Reached B, switching to A");
             Flip();
             currentPoint = pointA.transform;
         }
         if (Mathf.Abs(transform.position.x - pointA.transform.position.x) < 0.5f && currentPoint == pointA.transform)
         {
-            Debug.Log("Reached A, switching to B");
             Flip();
             currentPoint = pointB.transform;
         }
