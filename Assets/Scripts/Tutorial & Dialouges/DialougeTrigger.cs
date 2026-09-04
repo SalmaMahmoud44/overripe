@@ -12,6 +12,11 @@ public class DialougeTrigger : MonoBehaviour
 
     bool hasTriggered = false;
 
+    [Header("Timer Settings")]
+    [SerializeField] private bool startTimerAfterDialogue = false;
+    [SerializeField] private RotTimer rotTimer;
+
+
     private void Reset()
     {
         // Ensure the collider is set as a trigger
@@ -38,13 +43,34 @@ public class DialougeTrigger : MonoBehaviour
             dialougeManager = GameObject.Find("DialougeManager")
                 .GetComponent<DialougeManager>();
         }
+
+        if (rotTimer == null)
+        {
+            rotTimer = GameObject.Find("RotTimerCanvas")
+                .GetComponent<RotTimer>();
+        }
+
         Debug.Log("Starting Dialogue from Trigger: " + gameObject.name);
 
         if (dialougeManager.OpenDialouge(messages, actors))
         {
             Debug.Log("Dialogue started successfully.");
+
+            if (startTimerAfterDialogue)
+            {
+                dialougeManager.OnDialougeFinished += StartTimerAfterDialogue;
+            }
         }   
-    
+
+        void StartTimerAfterDialogue()
+        {
+            dialougeManager.OnDialougeFinished -= StartTimerAfterDialogue;
+            if (rotTimer != null)
+            {
+                rotTimer.StartTimer();
+            }
+        }
+
     }
 }
 

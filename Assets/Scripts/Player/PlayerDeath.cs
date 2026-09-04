@@ -4,13 +4,20 @@ using UnityEngine.SceneManagement;
 
 public class PlayerDeath : MonoBehaviour , IDamagable
 {
+
+    PlayerController playerController;
     RotTimer rotTimer;
     Animator animator;
+    Rigidbody2D myrigidbody;
     bool isDead = false;
+    PlayerAudio playerAudio;
     void Start()
     {
         rotTimer = GameObject.Find("RotTimerCanvas").GetComponent<RotTimer>();
         animator = GetComponentInChildren<Animator>();
+        playerController = GetComponent<PlayerController>();
+        myrigidbody = GetComponent<Rigidbody2D>();
+        playerAudio = GetComponent<PlayerAudio>();
     }
 
     void Update()
@@ -22,9 +29,15 @@ public class PlayerDeath : MonoBehaviour , IDamagable
         }
     }
 
-    void Die()
+   public void Die()
     {
         isDead = true;
+
+        if(playerController != null)
+            playerController.SetControlsLocked(true); // Lock player controls
+        myrigidbody.linearVelocity = Vector2.zero; // Stop player movement
+        myrigidbody.bodyType = RigidbodyType2D.Kinematic; // Make the player kinematic to prevent further physics interactions
+
         animator.SetTrigger("isDead");
         StartCoroutine(RestartLevel());
     }
@@ -39,7 +52,8 @@ public class PlayerDeath : MonoBehaviour , IDamagable
     {
         if (collision.CompareTag("Juice"))
         {
-           Die();
+            playerAudio.PlayJuiceSound();
+            Die();
         }
     }
 

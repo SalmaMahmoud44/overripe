@@ -10,12 +10,22 @@ public class ArtiifactCollect : MonoBehaviour
     [SerializeField] private Actor[] actors;
 
     bool collected = false;
+
+    Collider2D artifactCollider;
+    SpriteRenderer artifactRenderer;
+
+    private void Awake()
+    {
+        artifactCollider = GetComponent<Collider2D>();
+        artifactRenderer = GetComponentInChildren<SpriteRenderer>();
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-       if(collected || !collision.CompareTag("Player")) return;
+        if(collected || !collision.CompareTag("Player")) return;
 
-       collected = true;
-       GetComponent<Collider2D>().enabled = false; // Disable the collider to prevent further triggers
+        collected = true;
+        
+       artifactCollider.enabled = false; // Disable the collider to prevent further triggers
        
         if (dialougeManager == null)
             dialougeManager = GameObject.Find("DialougeManager").GetComponent<DialougeManager>();
@@ -30,7 +40,11 @@ public class ArtiifactCollect : MonoBehaviour
     }
     IEnumerator NextLevel()
     {
-        yield return new WaitForSeconds(2f);
+        if (artifactRenderer != null)
+        {
+            artifactRenderer.enabled = false; // Hide the artifact
+        }
+        yield return new WaitForSeconds(1.5f);
         Destroy(gameObject);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }

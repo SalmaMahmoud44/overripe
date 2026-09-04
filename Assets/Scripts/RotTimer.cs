@@ -4,11 +4,17 @@ using TMPro;
 
 public class RotTimer : MonoBehaviour
 {
+    [Header("Timer Settings")]
     [SerializeField] int startTime = 60;
     [SerializeField] Image fillBar;
     [SerializeField] TextMeshProUGUI timerText;
     [SerializeField] bool sartPaused = false;
 
+    [Header("Timer Audio Clip")]
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip timerWarningClip;
+
+    bool isWarningTime = false;
 
     public float currentTime{ get; private set; }    
     public float NormalizedTime {
@@ -24,6 +30,11 @@ public class RotTimer : MonoBehaviour
         currentTime = startTime;
         timerRunning = !sartPaused;
         UpdateUI();
+
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
+
+        
     }
 
     void Update()
@@ -38,6 +49,13 @@ public class RotTimer : MonoBehaviour
             currentTime--;
             if (currentTime < 0)
                 currentTime = 0;
+
+            if (currentTime <= 10 && isWarningTime)
+            {
+                audioSource.PlayOneShot(timerWarningClip);
+                isWarningTime = false; // Prevents the warning sound from playing repeatedly
+            }
+
             UpdateUI();
         }
     }
@@ -46,12 +64,23 @@ public class RotTimer : MonoBehaviour
     {
         timerRunning = true;
     }
+    public void PauseTimer()
+    {
+        timerRunning = false;
+    }
+    public void ResumeTimer()
+    {
+        timerRunning = true;
+    }
 
     public void AddTime(float amount)
     {
         currentTime += amount;
         if (currentTime > startTime)
-            currentTime = startTime; 
+            currentTime = startTime;
+
+        if (currentTime > 10)
+            isWarningTime = true;
         UpdateUI();
     }
 

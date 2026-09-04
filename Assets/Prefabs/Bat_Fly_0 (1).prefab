@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6497194824810700489}
   - component: {fileID: 8467059082306545527}
   - component: {fileID: 8243755633317336001}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bat_Fly_0 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -221,8 +221,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b66a0f43927a1242b18d3538f6b9d51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 100
+  maxHealth: 30
   currentHealth: 0
-  timeToAdd: 2
-  rotTimer: {fileID: 0}
+  timeToAdd: 10
+  rotTimer: {fileID: 6917241684926676987, guid: 5b6573c3b63f51f4fa6648c26c8993c8, type: 3}
   deathDelay: 0.5
