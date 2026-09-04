@@ -178,8 +178,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -611315949
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 3384204939538765328, guid: 3c38bb1d34282664493467933631ce67, type: 3}
@@ -302,6 +302,8 @@ MonoBehaviour:
   pointA: {fileID: 5134614569052667431}
   pointB: {fileID: 1699656521948048522}
   speed: 5
+  damageAmount: 5
+  damageCooldown: 1
 --- !u!114 &6055698812318141176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -318,3 +320,4 @@ MonoBehaviour:
   currentHealth: 0
   timeToAdd: 2
   rotTimer: {fileID: 6917241684926676987, guid: 5b6573c3b63f51f4fa6648c26c8993c8, type: 3}
+  deathDelay: 0.5
