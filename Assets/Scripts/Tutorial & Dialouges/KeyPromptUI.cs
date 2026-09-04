@@ -33,7 +33,7 @@ public class KeyPromptUI : MonoBehaviour
         {
             bool match = keyIcon.action == action;
             keyIcon.icon.gameObject.SetActive(match);
-            if (match) keyIcon.icon.color = inactiveColor;// Set to inactive color initially
+            if (match) keyIcon.icon.color = inactiveColor;
         }
     }
         public void LightUpKey(KeyCode key)
@@ -42,7 +42,7 @@ public class KeyPromptUI : MonoBehaviour
             {
                 if (keyIcon.key == key)
                 {
-                    keyIcon.icon.color = activeColor; // Change to active color when the player performs the action
+                    keyIcon.icon.color = activeColor; 
                     break;
                 }
             }
@@ -53,7 +53,7 @@ public class KeyPromptUI : MonoBehaviour
         {
             if (keyIcon.action == action)
             {
-                keyIcon.icon.color = activeColor; // Change to active color when the player performs the action
+                keyIcon.icon.color = activeColor; 
                 break;
             }
         }

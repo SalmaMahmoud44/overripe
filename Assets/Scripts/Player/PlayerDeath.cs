@@ -34,9 +34,9 @@ public class PlayerDeath : MonoBehaviour , IDamagable
         isDead = true;
 
         if(playerController != null)
-            playerController.SetControlsLocked(true); // Lock player controls
-        myrigidbody.linearVelocity = Vector2.zero; // Stop player movement
-        myrigidbody.bodyType = RigidbodyType2D.Kinematic; // Make the player kinematic to prevent further physics interactions
+            playerController.SetControlsLocked(true); 
+        myrigidbody.linearVelocity = Vector2.zero; 
+        myrigidbody.bodyType = RigidbodyType2D.Kinematic; 
 
         animator.SetTrigger("isDead");
         StartCoroutine(RestartLevel());
@@ -45,7 +45,7 @@ public class PlayerDeath : MonoBehaviour , IDamagable
     public new void TakeDamage(float damage)
     {
         Debug.Log("Player took damage: " + damage);
-        rotTimer.AddTime(-damage); // Assuming damage reduces times
+        rotTimer.AddTime(-damage); 
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -59,8 +59,9 @@ public class PlayerDeath : MonoBehaviour , IDamagable
 
     IEnumerator RestartLevel()
     {
-        yield return new WaitForSeconds(1.5f); // Wait a few seconds before restarting
+        yield return new WaitForSeconds(1.5f); 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+  
 }

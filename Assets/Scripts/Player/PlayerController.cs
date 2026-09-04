@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     [Header("Player Movement Settings")]
     [SerializeField] float moveSpeed = 10f;
     [SerializeField] float jumpSpeed = 15f;
-    [SerializeField] float footstepInterval = 0.5f; // Interval between footstep sounds
+    [SerializeField] float footstepInterval = 0.5f; 
 
     [Header("Dash Settings")]
     [SerializeField] float dashSpeed = 20f;
@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         if (shootTimer > 0f)
-            shootTimer -= Time.deltaTime; // Decrease the shoot timer
+            shootTimer -= Time.deltaTime; 
         if(meleeTimer > 0f)
             meleeTimer -= Time.deltaTime;
 
@@ -91,19 +91,19 @@ public class PlayerController : MonoBehaviour
 
         if (controlsLocked)
         {
-            moveInput = Vector2.zero; // Ignore input if controls are locked
+            moveInput = Vector2.zero; 
             return;
         }
         if (moveInput.x != 0f)
         {
             KeyCode keyPressed = moveInput.x > 0f ? KeyCode.D : KeyCode.A;
-            OnPlayerMoved?.Invoke(keyPressed); // Invoke the event when the player moves
+            OnPlayerMoved?.Invoke(keyPressed); 
         }     
     }
     void OnJump(InputValue value)
     {
         if (isDashing)
-            return; // Don't allow jumping while dashing
+            return; 
 
         if (controlsLocked)
         {
@@ -116,15 +116,15 @@ public class PlayerController : MonoBehaviour
 
             myAnimator.SetBool("isJumping", true);
 
-            playerAudio.PlayJump(); // Play jump sound effect
+            playerAudio.PlayJump(); 
 
-            OnPlayerJumped?.Invoke(); // Invoke the event when the player jumps
+            OnPlayerJumped?.Invoke(); 
         }
     }
     void OnDash(InputValue value)
     {
         if (!canDash)
-            return; // Don't allow dashing if on cooldown
+            return; 
 
         if (controlsLocked)
         {
@@ -135,7 +135,7 @@ public class PlayerController : MonoBehaviour
         if (value.isPressed && !isDashing)
         {
             StartCoroutine(Dash());
-            OnPlayerDashed?.Invoke(); // Invoke the event when the player dashes
+            OnPlayerDashed?.Invoke(); 
         }
     }
 
@@ -151,7 +151,7 @@ public class PlayerController : MonoBehaviour
     void OnMelee(InputValue value)
     {
         if(!value.isPressed)
-            return; // Only perform melee attack on button press
+            return; 
 
         if (controlsLocked)
         {
@@ -160,7 +160,7 @@ public class PlayerController : MonoBehaviour
 
         if (MeleeAttack())
         {
-            OnPlayerMelee?.Invoke(); // Invoke the event when the player performs a melee attack
+            OnPlayerMelee?.Invoke(); 
 
         }
     }
@@ -185,7 +185,7 @@ public class PlayerController : MonoBehaviour
     void Run()
     {
         if(isDashing) 
-            return; // Don't allow normal movement while dashing
+            return; 
 
         Vector2 playerVelocity = new Vector2(moveInput.x * moveSpeed, myRigidbody.linearVelocity.y);
         myRigidbody.linearVelocity = playerVelocity;
@@ -198,8 +198,8 @@ public class PlayerController : MonoBehaviour
             footstepTimer += Time.deltaTime;
             if (footstepTimer >= footstepInterval)
             {
-                playerAudio.PlayFootstep(); // Play footstep sound effect
-                footstepTimer = 0f; // Reset the footstep timer
+                playerAudio.PlayFootstep(); 
+                footstepTimer = 0f; 
             }
         }
     }
@@ -219,15 +219,14 @@ public class PlayerController : MonoBehaviour
             return;
         }
         if (shootTimer > 0f)
-            return; // Don't allow shooting if on cooldown
+            return; 
 
-        shootTimer = arrowCooldown; // Reset the shoot timer
+        shootTimer = arrowCooldown; 
 
-        //Vector2 shootDirection = new Vector2(Mathf.Sign(myTransform.localScale.x), 0f); // Shoot in the direction the player is facing
 
-        worldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()); // Get the mouse position in world coordinates
-        mousePos = new Vector2(worldPos.x, worldPos.y); // Get the mouse position in 2D space
-        Vector2 shootDirection = (mousePos - (Vector2)arrowSpawnPoint.position).normalized; // Shoot towards the mouse position
+        worldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()); 
+        mousePos = new Vector2(worldPos.x, worldPos.y); 
+        Vector2 shootDirection = (mousePos - (Vector2)arrowSpawnPoint.position).normalized; 
         ArrowProjectille arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, Quaternion.identity);
         arrow.Init(shootDirection);
     }   
@@ -235,18 +234,18 @@ public class PlayerController : MonoBehaviour
       bool MeleeAttack()
     {
         if (meleeTimer > 0f)
-            return false; // Don't allow melee attack if on cooldown
+            return false; 
 
-        meleeTimer = meleeCooldown; // Reset the melee timer
+        meleeTimer = meleeCooldown; 
 
         if (nextMeleeFirst)
             myAnimator.SetTrigger("Melee1");
         else
             myAnimator.SetTrigger("Melee2");
 
-        playerAudio.PlayMelee(); // Play melee sound effect
+        playerAudio.PlayMelee(); 
 
-        nextMeleeFirst = !nextMeleeFirst; // Toggle the melee attack sequence
+        nextMeleeFirst = !nextMeleeFirst; 
 
 
         hits = Physics2D.CircleCastAll(meleeSpawnPoint.position, meleeRange, Vector2.right, 0f, enemyLayer);
@@ -260,7 +259,7 @@ public class PlayerController : MonoBehaviour
                 damagable.TakeDamage(meleeDamage);
             }
         }
-        return true; // Return true to indicate that the melee attack was performed
+        return true; 
     }
     void CheckJumpAnimation()
     {
@@ -286,15 +285,15 @@ public class PlayerController : MonoBehaviour
         myAnimator.SetBool("isDashing", true);
         canDash = false;
         float originalGravity = myRigidbody.gravityScale;
-        myRigidbody.gravityScale = 0f; // Disable gravity during dash
-        myRigidbody.linearVelocity = new Vector2(Mathf.Sign(myTransform.localScale.x) * dashSpeed, 0f); // Set dash velocity
-        yield return new WaitForSeconds(dashDuration); // Wait for the duration of the dash
-        myRigidbody.gravityScale = originalGravity; // Restore original gravity
+        myRigidbody.gravityScale = 0f; 
+        myRigidbody.linearVelocity = new Vector2(Mathf.Sign(myTransform.localScale.x) * dashSpeed, 0f); 
+        yield return new WaitForSeconds(dashDuration);
+        myRigidbody.gravityScale = originalGravity; 
         isDashing = false;
 
         myAnimator.SetBool("isDashing", false);
 
-        yield return new WaitForSeconds(dashCooldown); // Wait for the cooldown period
+        yield return new WaitForSeconds(dashCooldown); 
         canDash = true;
 
     }

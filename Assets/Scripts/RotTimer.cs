@@ -53,7 +53,7 @@ public class RotTimer : MonoBehaviour
             if (currentTime <= 10 && isWarningTime)
             {
                 audioSource.PlayOneShot(timerWarningClip);
-                isWarningTime = false; // Prevents the warning sound from playing repeatedly
+                isWarningTime = false; 
             }
 
             UpdateUI();
