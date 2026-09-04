@@ -52,7 +52,13 @@ public class EnemyHealth : MonoBehaviour, IDamagable
         rotTimer.AddTime(timeToAdd);
         OnEnemyDied?.Invoke();
 
-        GetComponent<EnemyMovement>().enabled = false;
+        EnemyMovement movement = GetComponent<EnemyMovement>();
+        if (movement != null)
+            movement.enabled = false;
+
+        FlyEnemy flyEnemy = GetComponent<FlyEnemy>();
+        if (flyEnemy != null)
+            flyEnemy.OnDeath();
 
         Destroy(gameObject, deathDelay);
     }
