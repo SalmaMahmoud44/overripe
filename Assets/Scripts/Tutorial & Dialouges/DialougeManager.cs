@@ -23,6 +23,10 @@ public class DialougeManager : MonoBehaviour
     [Header("Key Prompt UI")]   
     [SerializeField] KeyPromptUI keyPromptUI;
 
+    [Header("Timer Reference")]
+    [SerializeField] RotTimer rotTimer;
+    
+
     PlayerAction currentWaitAction;
     Message[] currentMessage;
     Actor[] currentActor;
@@ -40,6 +44,9 @@ public class DialougeManager : MonoBehaviour
     private void Awake()
     {
         isActive = false;
+
+        if(rotTimer == null)
+            rotTimer = GameObject.Find("RotTimerCanvas").GetComponent<RotTimer>();
     }
     public bool OpenDialouge(Message[] message, Actor[] actor)
     {
@@ -54,6 +61,10 @@ public class DialougeManager : MonoBehaviour
         currentActor = actor;
         activeMessage = 0;
         isActive = true;
+
+        if(rotTimer != null)
+            rotTimer.PauseTimer();
+
         dialougeBox.gameObject.SetActive(true);
         DisplayMessage();
 
@@ -142,7 +153,7 @@ public class DialougeManager : MonoBehaviour
             pressedD = true;
             keyPromptUI.LightUpKey(KeyCode.D);
         }
-        if (pressedA && pressedD)
+        if (pressedA || pressedD)
         {
             UnSubscribeAll();
             StartCoroutine(AdvanceAfterLight());
@@ -171,6 +182,10 @@ public class DialougeManager : MonoBehaviour
 
             dialougeBox.gameObject.SetActive(false);
             keyPromptUI.Hide();
+
+            //if (rotTimer != null && resumeTimer)
+            //    rotTimer.ResumeTimer();
+
 
             OnDialougeFinished?.Invoke();
         }

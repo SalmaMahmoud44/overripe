@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     [Header("Player Movement Settings")]
     [SerializeField] float moveSpeed = 10f;
     [SerializeField] float jumpSpeed = 15f;
+    [SerializeField] float footstepInterval = 0.5f; // Interval between footstep sounds
 
     [Header("Dash Settings")]
     [SerializeField] float dashSpeed = 20f;
@@ -38,10 +39,12 @@ public class PlayerController : MonoBehaviour
 
     float shootTimer = 0f;  
     float meleeTimer = 0f;
+    float footstepTimer = 0f;
 
     bool isDashing = false;
     bool canDash = true;
     bool controlsLocked = false;
+    bool nextMeleeFirst = true;
 
     Vector2 moveInput;
     Rigidbody2D myRigidbody;
@@ -51,6 +54,7 @@ public class PlayerController : MonoBehaviour
     Vector2 mousePos;
     RaycastHit2D[] hits;
     Animator myAnimator;
+    PlayerAudio playerAudio;
 
 
 
@@ -63,6 +67,7 @@ public class PlayerController : MonoBehaviour
         meleeSpawnPoint = transform.Find("MeleeSpawnPoint");
         enemyLayer = LayerMask.GetMask("Enemy");
         myAnimator = GetComponentInChildren<Animator>();
+        playerAudio = GetComponent<PlayerAudio>();
 
         if (levelManager == null)
             levelManager = FindObjectOfType<LevelManager>();
@@ -110,6 +115,8 @@ public class PlayerController : MonoBehaviour
             myRigidbody.linearVelocity += new Vector2(0f,jumpSpeed);
 
             myAnimator.SetBool("isJumping", true);
+
+            playerAudio.PlayJump(); // Play jump sound effect
 
             OnPlayerJumped?.Invoke(); // Invoke the event when the player jumps
         }
@@ -174,7 +181,7 @@ public class PlayerController : MonoBehaviour
                 );
             }
         }
-    } 
+    }
     void Run()
     {
         if(isDashing) 
@@ -185,6 +192,16 @@ public class PlayerController : MonoBehaviour
 
         bool isMoving = Mathf.Abs(myRigidbody.linearVelocity.x) > Mathf.Epsilon;
         myAnimator.SetBool("isRunning", isMoving);
+
+        if(isMoving && myCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
+        {
+            footstepTimer += Time.deltaTime;
+            if (footstepTimer >= footstepInterval)
+            {
+                playerAudio.PlayFootstep(); // Play footstep sound effect
+                footstepTimer = 0f; // Reset the footstep timer
+            }
+        }
     }
 
     void Flip()
@@ -222,6 +239,16 @@ public class PlayerController : MonoBehaviour
 
         meleeTimer = meleeCooldown; // Reset the melee timer
 
+        if (nextMeleeFirst)
+            myAnimator.SetTrigger("Melee1");
+        else
+            myAnimator.SetTrigger("Melee2");
+
+        playerAudio.PlayMelee(); // Play melee sound effect
+
+        nextMeleeFirst = !nextMeleeFirst; // Toggle the melee attack sequence
+
+
         hits = Physics2D.CircleCastAll(meleeSpawnPoint.position, meleeRange, Vector2.right, 0f, enemyLayer);
         for (int i = 0; i < hits.Length; i++)
         {
@@ -242,6 +269,8 @@ public class PlayerController : MonoBehaviour
             myAnimator.SetBool("isJumping", false);
         }
     }
+
+
     void OnDrawGizmos()
     {
         if (meleeSpawnPoint != null)
