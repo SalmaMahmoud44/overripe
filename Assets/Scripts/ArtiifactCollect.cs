@@ -25,7 +25,7 @@ public class ArtiifactCollect : MonoBehaviour
 
         collected = true;
         
-       artifactCollider.enabled = false; // Disable the collider to prevent further triggers
+       artifactCollider.enabled = false; 
        
         if (dialougeManager == null)
             dialougeManager = GameObject.Find("DialougeManager").GetComponent<DialougeManager>();
@@ -42,7 +42,7 @@ public class ArtiifactCollect : MonoBehaviour
     {
         if (artifactRenderer != null)
         {
-            artifactRenderer.enabled = false; // Hide the artifact
+            artifactRenderer.enabled = false; 
         }
         yield return new WaitForSeconds(1.5f);
         Destroy(gameObject);

@@ -17,8 +17,8 @@ public class DialougeManager : MonoBehaviour
     [SerializeField] PlayerController player;
 
     [Header("Dialouge Timing Settings")]
-    [SerializeField] float baseDisplayTime = 1f; // Base time to display each message
-    [SerializeField] float timePerCharacter = 0.05f; // Additional time per character in the message
+    [SerializeField] float baseDisplayTime = 1f; 
+    [SerializeField] float timePerCharacter = 0.05f; 
 
     [Header("Key Prompt UI")]   
     [SerializeField] KeyPromptUI keyPromptUI;
@@ -111,7 +111,7 @@ public class DialougeManager : MonoBehaviour
     }
     IEnumerator AdvanceAfterLight()
     {
-        yield return new WaitForSeconds(0.5f); // Wait for the light-up effect to be noticeable
+        yield return new WaitForSeconds(0.5f);
         NextMessage();
     }
     void SubscribeToPlayerAction(PlayerAction action)
@@ -182,10 +182,6 @@ public class DialougeManager : MonoBehaviour
 
             dialougeBox.gameObject.SetActive(false);
             keyPromptUI.Hide();
-
-            //if (rotTimer != null && resumeTimer)
-            //    rotTimer.ResumeTimer();
-
 
             OnDialougeFinished?.Invoke();
         }

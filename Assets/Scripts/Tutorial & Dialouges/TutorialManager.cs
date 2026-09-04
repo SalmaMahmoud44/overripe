@@ -20,7 +20,7 @@ public class TutorialManager : MonoBehaviour
     void HandleFirstKill()
     {
         timerTurorialTrigger.StartDialouge();
-        enemyHealth.OnEnemyDied -= HandleFirstKill; // Unsubscribe after the first kill
+        enemyHealth.OnEnemyDied -= HandleFirstKill;
     }
 
     public void SkipTutorial()
