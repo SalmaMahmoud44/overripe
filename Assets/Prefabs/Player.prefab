@@ -334,7 +334,7 @@ MonoBehaviour:
   audioSource: {fileID: 4410736930357738023}
   footstepClip: {fileID: 8300000, guid: f6030d8b461ddb74796b85ae756d93d5, type: 3}
   jumpClip: {fileID: 8300000, guid: 8510a1bde72366245aacf7e8b1917a33, type: 3}
-  meleeClip: {fileID: 8300000, guid: 0983faa39bf88a84f8ea3a60f2f72c74, type: 3}
+  meleeClip: {fileID: 8300000, guid: 2705332ee4b22ed459d7306c832dcb48, type: 3}
   juiceClip: {fileID: 8300000, guid: dbc5ee52eb78cae40ad31a81edcd57eb, type: 3}
 --- !u!1 &7086515663351076259
 GameObject:
