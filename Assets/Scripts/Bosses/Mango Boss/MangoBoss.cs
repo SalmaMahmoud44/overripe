@@ -1,6 +1,8 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class MangoBoss : MonoBehaviour, IDamagable
 {
@@ -39,6 +41,15 @@ public class MangoBoss : MonoBehaviour, IDamagable
     [Header("Attack Cycle Settings")]
     [SerializeField] int normalJumpCount = 2;
     [SerializeField] int enragedJumpCount = 4;
+
+    [Header("Juice Squeeze Settings")]
+    [SerializeField] GameObject puddlePrefab;
+    [SerializeField] int normalPuddleCount = 5;
+    [SerializeField] int enragedPuddleCount = 8;
+    [SerializeField] float normalOozeDuration = 2f;
+    [SerializeField] float enragedOozeDuration = 4f;
+    [SerializeField] float spreadRadius = 4f;
+    [SerializeField] float puddleYOffset = 0f;
 
     BossState currentState = BossState.Idle;
     Coroutine attackRoutine;
@@ -110,8 +121,7 @@ public class MangoBoss : MonoBehaviour, IDamagable
                 yield return StartCoroutine(JumpSlamAttack());
             }
 
-            Debug.Log("Ooze attack goes here");
-            yield return new WaitForSeconds(1f);
+            yield return StartCoroutine(JuiceSqueezeAttack());
         }
     }
 
@@ -152,6 +162,47 @@ public class MangoBoss : MonoBehaviour, IDamagable
 
         yield return new WaitForSeconds(pauseAfterLanding);
     }
+
+    IEnumerator JuiceSqueezeAttack()
+    {
+        int puddleCount = isEnraged ? enragedPuddleCount : normalPuddleCount;
+        float oozeDuration = isEnraged ? enragedOozeDuration : normalOozeDuration;
+
+        float intervalBetweenPuddles = oozeDuration / puddleCount;
+        List<GameObject> spawnedPuddles = new List<GameObject>();
+
+        for (int i = 0; i < puddleCount; i++)
+        {
+            GameObject puddle = SpawnPuddle();
+            if (puddle != null)
+                spawnedPuddles.Add(puddle);
+
+            yield return new WaitForSeconds(intervalBetweenPuddles);
+        }
+
+        foreach (GameObject puddle in spawnedPuddles)
+        {
+            if (puddle == null)
+                continue;
+
+            JuiceSqueeze puddleScript = puddle.GetComponent<JuiceSqueeze>();
+            if (puddleScript != null && !puddleScript.IsTriggered)
+            {
+                Destroy(puddle);
+            }
+        }
+    }
+
+    GameObject SpawnPuddle()
+{
+    if (puddlePrefab == null)
+        return null;
+
+    float randomX = Random.Range(-spreadRadius, spreadRadius);
+    Vector3 spawnPos = new Vector3(transform.position.x + randomX, transform.position.y + puddleYOffset, transform.position.z);
+
+    return Instantiate(puddlePrefab, spawnPos, Quaternion.identity);
+}
 
     [ContextMenu("Test Shadow Grow")]
     void TestShadowGrow()
