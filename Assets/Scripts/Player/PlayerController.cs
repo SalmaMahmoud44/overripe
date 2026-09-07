@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerController : MonoBehaviour
 {
@@ -27,7 +28,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float meleeDamage = 10f;
     [SerializeField] LayerMask enemyLayer ;
 
-
+    public bool isFacingRight = true;
 
 
     // Events for player actions
@@ -209,6 +210,10 @@ public class PlayerController : MonoBehaviour
         bool isMoving = Mathf.Abs(myRigidbody.linearVelocity.x) > Mathf.Epsilon;
         if (isMoving) 
           myTransform.localScale = new Vector2(Mathf.Sign(myRigidbody.linearVelocity.x), 1f);
+        if(myTransform.localScale.x > 0f)
+            isFacingRight = true;
+        else
+            isFacingRight = false;  
     }
 
     void ShootArrow()

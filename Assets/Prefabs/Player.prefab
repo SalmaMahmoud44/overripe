@@ -71,6 +71,7 @@ Transform:
   - {fileID: 512615423204088587}
   - {fileID: 731650840178208189}
   - {fileID: 9004734824301314033}
+  - {fileID: 152925524487991507}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!70 &4013685350287569201
@@ -196,6 +197,7 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
+  isFacingRight: 1
 --- !u!114 &8457654514636322652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -336,6 +338,37 @@ MonoBehaviour:
   jumpClip: {fileID: 8300000, guid: 8510a1bde72366245aacf7e8b1917a33, type: 3}
   meleeClip: {fileID: 8300000, guid: 2705332ee4b22ed459d7306c832dcb48, type: 3}
   juiceClip: {fileID: 8300000, guid: dbc5ee52eb78cae40ad31a81edcd57eb, type: 3}
+--- !u!1 &4835226886487152954
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 152925524487991507}
+  m_Layer: 0
+  m_Name: TripleB_FollowPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &152925524487991507
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4835226886487152954}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.94, y: 1.21, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 315650049332018269}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7086515663351076259
 GameObject:
   m_ObjectHideFlags: 0
