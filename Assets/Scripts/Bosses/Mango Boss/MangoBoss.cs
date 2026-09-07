@@ -27,6 +27,18 @@ public class MangoBoss : MonoBehaviour, IDamagable
     [SerializeField] Color shadowFadedColor = new Color(0f, 0f, 0f, 0.2f);
     [SerializeField] Color shadowClearColor = new Color(0f, 0f, 0f, 0.8f);
     [SerializeField] float shadowGrowDuration = 1f;
+    [SerializeField] float shadowYOffset = 0f;
+
+    [Header("Jump Slam Settings")]
+    [SerializeField] float jumpHeight = 8f;
+    [SerializeField] float riseDuration = 0.4f;
+    [SerializeField] float fallDuration = 0.3f;
+    [SerializeField] float pauseAfterLanding = 0.5f;
+    [SerializeField] float delayBeforeAttack = 1.5f;
+
+    [Header("Attack Cycle Settings")]
+    [SerializeField] int normalJumpCount = 2;
+    [SerializeField] int enragedJumpCount = 4;
 
     BossState currentState = BossState.Idle;
     Coroutine attackRoutine;
@@ -55,7 +67,8 @@ public class MangoBoss : MonoBehaviour, IDamagable
         if (currentState == BossState.Dead)
             return;
 
-        Flip();
+        if (currentState == BossState.Idle)
+            Flip();
 
         if (currentState != BossState.Idle)
             return;
@@ -86,11 +99,58 @@ public class MangoBoss : MonoBehaviour, IDamagable
 
     IEnumerator AttackLoop()
     {
+        yield return new WaitForSeconds(delayBeforeAttack);
+
         while (currentState == BossState.Attacking)
         {
-            Debug.Log(isEnraged ? "Attack cycle (enraged)" : "Attack cycle (normal)");
-            yield return new WaitForSeconds(2f);
+            int jumpsThisCycle = isEnraged ? enragedJumpCount : normalJumpCount;
+
+            for (int i = 0; i < jumpsThisCycle; i++)
+            {
+                yield return StartCoroutine(JumpSlamAttack());
+            }
+
+            Debug.Log("Ooze attack goes here");
+            yield return new WaitForSeconds(1f);
         }
+    }
+
+    IEnumerator JumpSlamAttack()
+    {
+        Vector3 startPos = transform.position;
+        Vector3 bossLandingPos = new Vector3(player.position.x, startPos.y, startPos.z);
+        Vector3 shadowPos = new Vector3(player.position.x, player.position.y + shadowYOffset, startPos.z);
+        Vector3 risePos = startPos + Vector3.up * jumpHeight;
+        Vector3 fallStartPos = new Vector3(bossLandingPos.x, risePos.y, bossLandingPos.z);
+
+        StartCoroutine(GrowShadow(shadowPos, shadowGrowDuration));
+
+        float elapsed = 0f;
+        while (elapsed < riseDuration)
+        {
+            elapsed += Time.deltaTime;
+            transform.position = Vector3.Lerp(startPos, risePos, elapsed / riseDuration);
+            yield return null;
+        }
+
+        float remainingHangTime = shadowGrowDuration - riseDuration - fallDuration;
+        if (remainingHangTime > 0f)
+            yield return new WaitForSeconds(remainingHangTime);
+
+        elapsed = 0f;
+        while (elapsed < fallDuration)
+        {
+            elapsed += Time.deltaTime;
+            transform.position = Vector3.Lerp(fallStartPos, bossLandingPos, elapsed / fallDuration);
+            yield return null;
+        }
+
+        transform.position = bossLandingPos;
+
+        if (jumpShadow != null)
+            jumpShadow.gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(pauseAfterLanding);
     }
 
     [ContextMenu("Test Shadow Grow")]
