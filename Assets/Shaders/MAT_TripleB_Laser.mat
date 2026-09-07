@@ -42,12 +42,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _LaserEdgeSmoothness: 10
-    - _LaserThickness: 50
+    - _LaserEdgeSmoothness: 50
+    - _LaserThickness: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 0.3921569}
+    - _Color: {r: 0.9911022, g: 0.70110214, b: 0.014443844, a: 1}
+    - _LaserSpeed: {r: -0.2, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &3941671455102971696
