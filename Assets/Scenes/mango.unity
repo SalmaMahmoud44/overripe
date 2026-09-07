@@ -2806,10 +2806,18 @@ MonoBehaviour:
   detectRange: 15
   animator: {fileID: 0}
   jumpShadow: {fileID: 623451608}
-  shadowMaxScale: {x: 1.5, y: 1.5, z: 1}
-  shadowFadedColor: {r: 0.1981132, g: 0.18783374, b: 0.18783374, a: 0.2}
+  shadowMaxScale: {x: 4.68, y: 1.09, z: 1}
+  shadowFadedColor: {r: 0.32156864, g: 0.32156864, b: 0.32156864, a: 0.2}
   shadowClearColor: {r: 0.122641504, g: 0.122641504, b: 0.122641504, a: 0.8}
-  shadowGrowDuration: 1
+  shadowGrowDuration: 1.5
+  shadowYOffset: -1.9
+  jumpHeight: 15.19
+  riseDuration: 0.4
+  fallDuration: 0.3
+  pauseAfterLanding: 0.5
+  delayBeforeAttack: 1
+  normalJumpCount: 2
+  enragedJumpCount: 4
 --- !u!212 &331767122
 SpriteRenderer:
   serializedVersion: 2
@@ -23316,7 +23324,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6917241684926676987, guid: 5b6573c3b63f51f4fa6648c26c8993c8, type: 3}
       propertyPath: sartPaused
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -23474,6 +23482,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3409880110786988337, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
+      propertyPath: rotTimer
+      value: 
+      objectReference: {fileID: 2004650175}
     - target: {fileID: 4095186360861652686, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
       propertyPath: m_Name
       value: Player
@@ -23691,6 +23703,10 @@ PrefabInstance:
     - target: {fileID: 856197343019323188, guid: 43d09e41e809d9845be4cd79b7b70202, type: 3}
       propertyPath: m_Name
       value: JumpShadow
+      objectReference: {fileID: 0}
+    - target: {fileID: 7843143223281297748, guid: 43d09e41e809d9845be4cd79b7b70202, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 4.68
       objectReference: {fileID: 0}
     - target: {fileID: 7843143223281297748, guid: 43d09e41e809d9845be4cd79b7b70202, type: 3}
       propertyPath: m_LocalPosition.x

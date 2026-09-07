@@ -251,7 +251,7 @@ public class PlayerController : MonoBehaviour
         hits = Physics2D.CircleCastAll(meleeSpawnPoint.position, meleeRange, Vector2.right, 0f, enemyLayer);
         for (int i = 0; i < hits.Length; i++)
         {
-            IDamagable damagable = hits[i].collider.gameObject.GetComponent<EnemyHealth>();
+            IDamagable damagable = hits[i].collider.gameObject.GetComponent<IDamagable>();
             Debug.Log("Hit: " + hits[i].collider.gameObject.name);
             if (damagable != null)
             {
