@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +22,7 @@ public class MangoBoss : MonoBehaviour, IDamagable
 
     [Header("References")]
     [SerializeField] Animator animator;
+    [SerializeField] CinemachineImpulseSource impulseSource;
 
     [Header("Jump Shadow Settings")]
     [SerializeField] SpriteRenderer jumpShadow;
@@ -181,6 +183,9 @@ public class MangoBoss : MonoBehaviour, IDamagable
 
     void CheckLandingHit()
     {
+        if (impulseSource != null)
+            impulseSource.GenerateImpulse();
+
         Collider2D myCollider = GetComponent<Collider2D>();
         Collider2D playerCollider = player.GetComponent<Collider2D>();
 
