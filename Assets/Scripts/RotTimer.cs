@@ -79,6 +79,9 @@ public class RotTimer : MonoBehaviour
         if (currentTime > startTime)
             currentTime = startTime;
 
+        if (currentTime < 0)
+            currentTime = 0;
+
         if (currentTime > 10)
             isWarningTime = true;
         UpdateUI();

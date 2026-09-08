@@ -37,6 +37,9 @@ public class MangoBoss : MonoBehaviour, IDamagable
     [SerializeField] float fallDuration = 0.3f;
     [SerializeField] float pauseAfterLanding = 0.5f;
     [SerializeField] float delayBeforeAttack = 1.5f;
+    [SerializeField] float landDamage = 5f;
+    [SerializeField] float enragedSpeedMultiplier = 0.6f;
+
 
     [Header("Attack Cycle Settings")]
     [SerializeField] int normalJumpCount = 2;
@@ -127,6 +130,11 @@ public class MangoBoss : MonoBehaviour, IDamagable
 
     IEnumerator JumpSlamAttack()
     {
+        float speedMultiplier = isEnraged ? enragedSpeedMultiplier : 1f;
+        float currentRiseDuration = riseDuration * speedMultiplier;
+        float currentFallDuration = fallDuration * speedMultiplier;
+        float currentPauseAfterLanding = pauseAfterLanding * speedMultiplier;
+
         Vector3 startPos = transform.position;
         Vector3 bossLandingPos = new Vector3(player.position.x, startPos.y, startPos.z);
         Vector3 shadowPos = new Vector3(player.position.x, player.position.y + shadowYOffset, startPos.z);
@@ -136,31 +144,47 @@ public class MangoBoss : MonoBehaviour, IDamagable
         StartCoroutine(GrowShadow(shadowPos, shadowGrowDuration));
 
         float elapsed = 0f;
-        while (elapsed < riseDuration)
+        while (elapsed < currentRiseDuration)
         {
             elapsed += Time.deltaTime;
-            transform.position = Vector3.Lerp(startPos, risePos, elapsed / riseDuration);
+            transform.position = Vector3.Lerp(startPos, risePos, elapsed / currentRiseDuration);
             yield return null;
         }
 
-        float remainingHangTime = shadowGrowDuration - riseDuration - fallDuration;
+        float remainingHangTime = shadowGrowDuration - currentRiseDuration - currentFallDuration;
         if (remainingHangTime > 0f)
             yield return new WaitForSeconds(remainingHangTime);
 
+        Flip();
+
         elapsed = 0f;
-        while (elapsed < fallDuration)
+        while (elapsed < currentFallDuration)
         {
             elapsed += Time.deltaTime;
-            transform.position = Vector3.Lerp(fallStartPos, bossLandingPos, elapsed / fallDuration);
+            transform.position = Vector3.Lerp(fallStartPos, bossLandingPos, elapsed / currentFallDuration);
             yield return null;
         }
 
         transform.position = bossLandingPos;
+        CheckLandingHit();
 
         if (jumpShadow != null)
             jumpShadow.gameObject.SetActive(false);
 
-        yield return new WaitForSeconds(pauseAfterLanding);
+        yield return new WaitForSeconds(currentPauseAfterLanding);
+    }
+
+    void CheckLandingHit()
+    {
+        Collider2D myCollider = GetComponent<Collider2D>();
+        Collider2D playerCollider = player.GetComponent<Collider2D>();
+
+        if (myCollider != null && playerCollider != null && myCollider.bounds.Intersects(playerCollider.bounds))
+        {
+            PlayerDeath playerDeath = player.GetComponent<PlayerDeath>();
+            if (playerDeath != null)
+                playerDeath.TakeDamage(landDamage);
+        }
     }
 
     IEnumerator JuiceSqueezeAttack()
@@ -194,15 +218,22 @@ public class MangoBoss : MonoBehaviour, IDamagable
     }
 
     GameObject SpawnPuddle()
-{
-    if (puddlePrefab == null)
-        return null;
+    {
+        if (puddlePrefab == null)
+            return null;
 
-    float randomX = Random.Range(-spreadRadius, spreadRadius);
-    Vector3 spawnPos = new Vector3(transform.position.x + randomX, transform.position.y + puddleYOffset, transform.position.z);
+        float randomX = Random.Range(-spreadRadius, spreadRadius);
+        Vector2 rayOrigin = new Vector2(transform.position.x + randomX, transform.position.y + 5f);
 
-    return Instantiate(puddlePrefab, spawnPos, Quaternion.identity);
-}
+        RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.down, 15f, LayerMask.GetMask("Ground"));
+
+        if (hit.collider == null)
+            return null;
+
+        Vector3 spawnPos = new Vector3(hit.point.x, hit.point.y + puddleYOffset, transform.position.z);
+
+        return Instantiate(puddlePrefab, spawnPos, Quaternion.identity);
+    }
 
     [ContextMenu("Test Shadow Grow")]
     void TestShadowGrow()
