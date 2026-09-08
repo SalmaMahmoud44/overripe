@@ -22,6 +22,10 @@ public class JuiceSqueeze : MonoBehaviour
 
     IEnumerator RootPlayerThenDisappear(PlayerController playerController)
     {
+        PlayerDeath playerDeath = playerController.GetComponent<PlayerDeath>();
+        if (playerDeath != null)
+            playerDeath.TakeDamage(2f);
+
         playerController.SetControlsLocked(true);
         yield return new WaitForSeconds(rootDuration);
         playerController.SetControlsLocked(false);
