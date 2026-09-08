@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 
 public class MangoBoss : MonoBehaviour, IDamagable
 {
@@ -40,7 +39,6 @@ public class MangoBoss : MonoBehaviour, IDamagable
     [SerializeField] float landDamage = 5f;
     [SerializeField] float enragedSpeedMultiplier = 0.6f;
 
-
     [Header("Attack Cycle Settings")]
     [SerializeField] int normalJumpCount = 2;
     [SerializeField] int enragedJumpCount = 4;
@@ -53,6 +51,7 @@ public class MangoBoss : MonoBehaviour, IDamagable
     [SerializeField] float enragedOozeDuration = 4f;
     [SerializeField] float spreadRadius = 4f;
     [SerializeField] float puddleYOffset = 0f;
+    [SerializeField] ParticleSystem juiceFountain;
 
     BossState currentState = BossState.Idle;
     Coroutine attackRoutine;
@@ -141,6 +140,9 @@ public class MangoBoss : MonoBehaviour, IDamagable
         Vector3 risePos = startPos + Vector3.up * jumpHeight;
         Vector3 fallStartPos = new Vector3(bossLandingPos.x, risePos.y, bossLandingPos.z);
 
+        if (animator != null)
+            animator.SetTrigger("Jump");
+
         StartCoroutine(GrowShadow(shadowPos, shadowGrowDuration));
 
         float elapsed = 0f;
@@ -156,6 +158,9 @@ public class MangoBoss : MonoBehaviour, IDamagable
             yield return new WaitForSeconds(remainingHangTime);
 
         Flip();
+
+        if (animator != null)
+            animator.SetTrigger("Smash");
 
         elapsed = 0f;
         while (elapsed < currentFallDuration)
@@ -189,6 +194,12 @@ public class MangoBoss : MonoBehaviour, IDamagable
 
     IEnumerator JuiceSqueezeAttack()
     {
+        if (animator != null)
+            animator.SetTrigger("JuiceSqueeze");
+
+        if (juiceFountain != null)
+            juiceFountain.Play();
+
         int puddleCount = isEnraged ? enragedPuddleCount : normalPuddleCount;
         float oozeDuration = isEnraged ? enragedOozeDuration : normalOozeDuration;
 
@@ -203,6 +214,9 @@ public class MangoBoss : MonoBehaviour, IDamagable
 
             yield return new WaitForSeconds(intervalBetweenPuddles);
         }
+
+        if (juiceFountain != null)
+            juiceFountain.Stop();
 
         foreach (GameObject puddle in spawnedPuddles)
         {
@@ -233,12 +247,6 @@ public class MangoBoss : MonoBehaviour, IDamagable
         Vector3 spawnPos = new Vector3(hit.point.x, hit.point.y + puddleYOffset, transform.position.z);
 
         return Instantiate(puddlePrefab, spawnPos, Quaternion.identity);
-    }
-
-    [ContextMenu("Test Shadow Grow")]
-    void TestShadowGrow()
-    {
-        StartCoroutine(GrowShadow(transform.position, shadowGrowDuration));
     }
 
     IEnumerator GrowShadow(Vector3 landingPosition, float duration)
@@ -293,6 +301,9 @@ public class MangoBoss : MonoBehaviour, IDamagable
 
         if (attackRoutine != null)
             StopCoroutine(attackRoutine);
+
+        if (animator != null)
+            animator.SetTrigger("Die");
 
         Debug.Log("Mango Boss died");
     }
