@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Mango Boss
+  m_Name: MangoBoss_Jump
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,7 +21,15 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: -2597993837716592621, guid: 7678dbc328df51c47900bdb44bd60f41, type: 3}
+      value: {fileID: -8578418458684398838, guid: d83618bb2fa8a544da8668787862ea7e, type: 3}
+    - time: 0.1
+      value: {fileID: 1824004404925082231, guid: ecd8580372c15d14c84b469bfb7719ac, type: 3}
+    - time: 0.25
+      value: {fileID: -6470460504253458178, guid: f646fa180a5bb2d4faab2a4c3c7ea644, type: 3}
+    - time: 0.36666667
+      value: {fileID: -4178046375966092550, guid: 9b15e59206f288446938c47bfe1be2ed, type: 3}
+    - time: 0.5
+      value: {fileID: 4130640169021434097, guid: 91c3851095d8c5f40a6b2cbe9edbe905, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -44,18 +52,22 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: -2597993837716592621, guid: 7678dbc328df51c47900bdb44bd60f41, type: 3}
+    - {fileID: -8578418458684398838, guid: d83618bb2fa8a544da8668787862ea7e, type: 3}
+    - {fileID: 1824004404925082231, guid: ecd8580372c15d14c84b469bfb7719ac, type: 3}
+    - {fileID: -6470460504253458178, guid: f646fa180a5bb2d4faab2a4c3c7ea644, type: 3}
+    - {fileID: -4178046375966092550, guid: 9b15e59206f288446938c47bfe1be2ed, type: 3}
+    - {fileID: 4130640169021434097, guid: 91c3851095d8c5f40a6b2cbe9edbe905, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.016666668
+    m_StopTime: 0.51666665
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
     m_HasAdditiveReferencePose: 0
-    m_LoopTime: 1
+    m_LoopTime: 0
     m_LoopBlend: 0
     m_LoopBlendOrientation: 0
     m_LoopBlendPositionY: 0
