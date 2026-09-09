@@ -24,22 +24,32 @@ public class TripleBFollowPlayer : MonoBehaviour
     Rigidbody2D rb;
     Vector2 smoothVelocity;
 
+    TripleBLaser tripleBLaser;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        
-       
+        tripleBLaser = GetComponent<TripleBLaser>();   
     }
  
 
     private void FixedUpdate()
     {
-        
+        if (tripleBLaser != null && tripleBLaser.IsAttacking)
+        {
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
         FollowPlayer();
     }
 
     private void Update()
     {
+        if (tripleBLaser != null && tripleBLaser.IsAttacking)
+        {
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
         Flip();
     }
     void FollowPlayer()

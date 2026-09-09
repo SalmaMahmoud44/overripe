@@ -28,6 +28,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float meleeDamage = 10f;
     [SerializeField] LayerMask enemyLayer ;
 
+    [Header("Laser Settings")]
+    [SerializeField] TripleBLaser tripleBLaserPrefab;
+    [SerializeField] float maxLaserAngle = 45f;
+
+
     public bool isFacingRight = true;
 
 
@@ -72,6 +77,8 @@ public class PlayerController : MonoBehaviour
 
         if (levelManager == null)
             levelManager = FindObjectOfType<LevelManager>();
+        if(tripleBLaserPrefab == null)
+            tripleBLaserPrefab = GameObject.Find("TripleB").GetComponent<TripleBLaser>();
     }
 
     void Update()
@@ -142,8 +149,6 @@ public class PlayerController : MonoBehaviour
 
     void OnShoot(InputValue value)
     {
-
-
         if (value.isPressed && (levelManager.curreLevel == "Peach" || levelManager.currentLevelIndex == 4) )
         {
             ShootArrow();
@@ -166,6 +171,45 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void OnLaser(InputValue value)
+    {
+
+        Debug.Log("Laser input received. Current Level: " + levelManager.curreLevel + ", Level Index: " + levelManager.currentLevelIndex);
+        if (controlsLocked)
+            return;
+
+        if (value.isPressed)
+        {
+            if (tripleBLaserPrefab != null)
+            {
+                worldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+                mousePos = new Vector2(worldPos.x, worldPos.y);
+                Vector2 shootDirection = (mousePos - (Vector2)tripleBLaserPrefab.transform.position);
+
+                if (shootDirection.sqrMagnitude <= 0.001f)
+                    return;
+
+                shootDirection.Normalize();
+
+                float angle = Mathf.Atan2(shootDirection.y, shootDirection.x) * Mathf.Rad2Deg;
+
+                float facingAngle = isFacingRight ? 0f : 180f;
+
+                float angleDifferance = Mathf.DeltaAngle(facingAngle,angle);
+
+                if (Mathf.Abs(angleDifferance) > maxLaserAngle)
+                {
+                    Debug.Log("Laser blocked Angle: " + angleDifferance);
+                    return;
+                }
+                  
+
+                tripleBLaserPrefab.ShootLaser(shootDirection);
+
+
+            }
+        }
+    }
     public void SetControlsLocked(bool locked)
     {
         controlsLocked = locked;
