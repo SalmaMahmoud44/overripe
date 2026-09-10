@@ -54,7 +54,7 @@ public class MangoBoss : MonoBehaviour, IDamagable
     [SerializeField] float spreadRadius = 4f;
     [SerializeField] float puddleYOffset = 0f;
     [SerializeField] ParticleSystem juiceFountain;
-
+    [SerializeField] ParticleSystem juiceRain;
     BossState currentState = BossState.Idle;
     Coroutine attackRoutine;
 
@@ -205,6 +205,9 @@ public class MangoBoss : MonoBehaviour, IDamagable
         if (juiceFountain != null)
             juiceFountain.Play();
 
+        if (juiceRain != null)
+            juiceRain.Play();
+
         int puddleCount = isEnraged ? enragedPuddleCount : normalPuddleCount;
         float oozeDuration = isEnraged ? enragedOozeDuration : normalOozeDuration;
 
@@ -222,6 +225,9 @@ public class MangoBoss : MonoBehaviour, IDamagable
 
         if (juiceFountain != null)
             juiceFountain.Stop();
+
+        if (juiceRain != null)
+            juiceRain.Stop();
 
         foreach (GameObject puddle in spawnedPuddles)
         {
