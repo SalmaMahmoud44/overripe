@@ -13,7 +13,10 @@ public class TripleBLaser : MonoBehaviour
     [SerializeField] float laserTime = 0.15f;
     [SerializeField] float laserWidth = 0.2f;
 
-    [SerializeField] LayerMask laserHitLayer;
+    [SerializeField] LayerMask[] laserHitLayers;
+
+    [SerializeField] RotTimer rotTimer;
+    [SerializeField] float laserTimeCost = 3f;
 
     [Header("Attack Movement")]
     [SerializeField] Transform attackPos;
@@ -21,28 +24,25 @@ public class TripleBLaser : MonoBehaviour
     [SerializeField] float moveForwardTime = 0.15f;
     [SerializeField] float moveBackTime = 0.15f;
 
-     private float laserTimer;
-     private float laserElapsed;
-
-     private Vector3 followPositionBeforeAttack;
-
-     public bool IsAttacking { get; private set; }
+    [Header("Animation")]
+    [SerializeField] Animator animator;
     
+    private float laserTimer;
+    private float laserElapsed;
 
+    private Vector3 followPositionBeforeAttack;
+    private Vector2 currentLaserDir;
 
-    public float StaminaProgress
-    { 
-        get
-        {
-            if (IsAttacking)
-                return 1f - Mathf.Clamp01(laserElapsed/laserTime);
+    private Rigidbody2D rigidbody2;
 
-            if (laserCooldown <= 0f)
-                return 1f;
+    private bool laserFired;
+    private bool returning;
+    private bool animationHeld;
+    public bool IsAttacking { get; private set; }
 
-            return 1f - Mathf.Clamp01(laserTimer / laserCooldown);
-        } 
-    }
+    private float staminaProgress = 1f;
+
+    public float StaminaProgress => staminaProgress;
 
     public bool CanShoot
     {
@@ -53,6 +53,13 @@ public class TripleBLaser : MonoBehaviour
 
     }
 
+    private void Awake()
+    {
+        if(animator == null) 
+             animator = GetComponentInChildren<Animator>();
+
+        rigidbody2 = GetComponent<Rigidbody2D>();
+    }
     private void Start()
     {
         if(laserLine != null)
@@ -64,9 +71,10 @@ public class TripleBLaser : MonoBehaviour
         {
             laserTimer -= Time.deltaTime;
             if(laserTimer < 0f)
-            {
                 laserTimer = 0f;
-            }
+
+            if(laserCooldown > 0f)
+                staminaProgress = 1f - (laserTimer / laserCooldown);
         }
     }
 
@@ -87,29 +95,29 @@ public class TripleBLaser : MonoBehaviour
             return;
         }
 
-        direction.Normalize();
+        currentLaserDir = direction.normalized;
 
         followPositionBeforeAttack = transform.position;
 
 
-        StartCoroutine(LaserAttack(direction));
+        StartCoroutine(LaserAttack());
 
-
-     
         
     }
 
-    private IEnumerator LaserAttack(Vector2 direction)
+    private IEnumerator LaserAttack()
     {
         IsAttacking = true;
+        returning = false;
+        laserFired = false;
+        animationHeld = false;
 
-        laserElapsed = 0f;
-        Rigidbody2D rigidbody2D = GetComponent<Rigidbody2D>();
+        staminaProgress = 1f;
 
-        if (rigidbody2D != null) 
-            rigidbody2D.linearVelocity = Vector2.zero;
 
-       
+        if (rigidbody2 != null) 
+            rigidbody2.linearVelocity = Vector2.zero;
+
 
         Vector3 startPosition = transform.position;
 
@@ -120,7 +128,7 @@ public class TripleBLaser : MonoBehaviour
         {
             elapsed += Time.deltaTime;
 
-            float t = elapsed / moveForwardTime;
+            float t = Mathf.Clamp01(elapsed / moveForwardTime);
 
             transform.position = Vector3.Lerp(startPosition, attackPos.position, t);
 
@@ -129,29 +137,55 @@ public class TripleBLaser : MonoBehaviour
 
         transform.position = attackPos.position;
 
-        FireLaser(direction);
+        if (rigidbody2 != null)
+            rigidbody2.linearVelocity = Vector2.zero;
 
-        laserElapsed = 0f;
-        while(laserElapsed < laserTime)
+        if (animator != null)
         {
-            laserElapsed += Time.deltaTime;
+            animator.speed = 1f;
+            animator.ResetTrigger("StartLaser");
+            animator.SetTrigger("StartLaser");
+        }
+
+        while (!laserFired)
+        {
             yield return null;
         }
 
+        laserElapsed = 0f;
+        while (laserElapsed < laserTime)
+        {
+            laserElapsed += Time.deltaTime;
+            staminaProgress = 1f - Mathf.Clamp01(laserElapsed / laserTime);
+            yield return null;
+        }
         if(laserLine != null)
         {
             laserLine.enabled = false;
-            laserElapsed = 0f;
         }
 
-        elapsed = 0f;
+        laserFired = false;
+        laserElapsed = 0f;
+
+        if (animator != null)
+            animator.speed = 1f;
+
+        while (!animationHeld)
+        {
+            yield return null;
+        }
+
+    
+
+        returning = true;   
 
         startPosition = transform.position;
+        elapsed = 0f;
 
         while (elapsed < moveBackTime)
         {
             elapsed += Time.deltaTime;
-            float t = elapsed / moveBackTime;
+            float t = Mathf.Clamp01(elapsed / moveBackTime);
             transform.position = Vector3.Lerp(startPosition, followPositionBeforeAttack, t);
 
             yield return null;
@@ -159,17 +193,51 @@ public class TripleBLaser : MonoBehaviour
         
         transform.position = followPositionBeforeAttack;
 
-        laserTimer = laserCooldown;
+        if (animator != null)
+        {
+            animator.speed = 1;
+            animator.Play("TripleBFloat", 0, 0f);
+        }
 
+        returning = false;
+
+
+        laserTimer = laserCooldown;
+        staminaProgress = 0f;
         IsAttacking = false;
     }
+
+    public void AnimationFireLaser()
+    {
+        if(!IsAttacking) return;
+        if(laserFired) return;
+        laserFired = true;
+        FireLaser(currentLaserDir);
+
+        if (animator != null)
+            animator.speed = 0f;
+    }
+
+
+    public void HoldAttackAnimation()
+    {
+        animationHeld = true;
+        if (animator != null)
+            animator.speed = 0f;
+    }
+
 
     void FireLaser(Vector2 direction)
     {
         Debug.Log("Shooting laser in direction: " + direction);
         Vector2 startPosition = laserSpawnPoint.position;
 
-        RaycastHit2D hit = Physics2D.Raycast(laserSpawnPoint.position, direction, laserRange, laserHitLayer);
+        int combinedLayerMask =0;
+        foreach (LayerMask layer in laserHitLayers)
+        {
+            combinedLayerMask |= layer.value;
+        }
+        RaycastHit2D hit = Physics2D.Raycast(laserSpawnPoint.position, direction, laserRange, combinedLayerMask);
 
         Vector2 endPosition;
 
@@ -199,7 +267,10 @@ public class TripleBLaser : MonoBehaviour
         laserLine.SetPosition(1, endPosition);
 
         laserLine.enabled = true;
-
+        if(rotTimer != null)
+        {
+            rotTimer.AddTime(-laserTimeCost);
+        }
 
         Debug.Log("Laser Start: " + startPosition);
         Debug.Log("Laser End: " + endPosition);

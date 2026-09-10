@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 3748650622572502504}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.0015020615, w: 0.99999887}
-  m_LocalPosition: {x: 1.49, y: 0.24, z: 0}
+  m_LocalPosition: {x: 1.514, y: 0.258, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -167,13 +167,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TripleBLaser
   laserSpawnPoint: {fileID: 4018444098509664486}
   laserLine: {fileID: 4565575006467243874}
-  laserRange: 8
-  laserCooldown: 0
+  laserRange: 10
+  laserCooldown: 15
   laserDamage: 30
-  laserTime: 12.68
-  laserHitLayer:
-    serializedVersion: 2
-    m_Bits: 0
+  laserTime: 2
+  laserWidth: 0.2
+  laserHitLayers:
+  - serializedVersion: 2
+    m_Bits: 128
+  - serializedVersion: 2
+    m_Bits: 64
+  rotTimer: {fileID: 0}
+  laserTimeCost: 3
+  attackPos: {fileID: 0}
+  moveForwardTime: 1
+  moveBackTime: 1
+  animator: {fileID: 8360344617209748042}
 --- !u!1 &8775202197563453227
 GameObject:
   m_ObjectHideFlags: 0
@@ -184,6 +193,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8675937784342022905}
   - component: {fileID: 7397049974804018250}
+  - component: {fileID: 8360344617209748042}
+  - component: {fileID: 2049978368784204553}
   m_Layer: 0
   m_Name: TripleB_Visual
   m_TagString: Untagged
@@ -255,7 +266,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -6470460504253458178, guid: d865f90e6d86c8943b07e424ed2df7e3, type: 3}
+  m_Sprite: {fileID: 7319861399735315513, guid: 07fb69e652c5a514c9fac0e9014bb66d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -265,6 +276,41 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!95 &8360344617209748042
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8775202197563453227}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: fc4b764ccdc43864da6c8cf765005d5f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2049978368784204553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8775202197563453227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a7473dfee1414f479b7aab50671905d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TripleBAnimationEvents
+  tripleBLaser: {fileID: 5253102543998237560}
 --- !u!1001 &7443157920245403333
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -275,11 +321,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3876646731742532159, guid: ed20a5ce00307cd40a06677485ce1cf3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 22.253645
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3876646731742532159, guid: ed20a5ce00307cd40a06677485ce1cf3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.154596
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3876646731742532159, guid: ed20a5ce00307cd40a06677485ce1cf3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -287,19 +333,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3876646731742532159, guid: ed20a5ce00307cd40a06677485ce1cf3, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.99999887
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3876646731742532159, guid: ed20a5ce00307cd40a06677485ce1cf3, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3876646731742532159, guid: ed20a5ce00307cd40a06677485ce1cf3, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3876646731742532159, guid: ed20a5ce00307cd40a06677485ce1cf3, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0015020615
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3876646731742532159, guid: ed20a5ce00307cd40a06677485ce1cf3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
