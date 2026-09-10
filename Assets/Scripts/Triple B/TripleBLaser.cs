@@ -26,6 +26,8 @@ public class TripleBLaser : MonoBehaviour
 
     [Header("Animation")]
     [SerializeField] Animator animator;
+    [SerializeField] string LaserTrigger = "StartLaser";
+    [SerializeField] string floatingClipName = "TripleBFloat";
     
     private float laserTimer;
     private float laserElapsed;
@@ -143,8 +145,8 @@ public class TripleBLaser : MonoBehaviour
         if (animator != null)
         {
             animator.speed = 1f;
-            animator.ResetTrigger("StartLaser");
-            animator.SetTrigger("StartLaser");
+            animator.ResetTrigger(LaserTrigger);
+            animator.SetTrigger(LaserTrigger);
         }
 
         while (!laserFired)
@@ -196,7 +198,7 @@ public class TripleBLaser : MonoBehaviour
         if (animator != null)
         {
             animator.speed = 1;
-            animator.Play("TripleBFloat", 0, 0f);
+            animator.Play(floatingClipName, 0, 0f);
         }
 
         returning = false;
