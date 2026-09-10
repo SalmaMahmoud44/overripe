@@ -980,7 +980,7 @@ PrefabInstance:
     - target: {fileID: 6183291168645385503, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
       propertyPath: tripleBLaserPrefab
       value: 
-      objectReference: {fileID: 1868642892}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -4752,6 +4752,7 @@ GameObject:
   - component: {fileID: 2003711609}
   - component: {fileID: 2003711611}
   - component: {fileID: 2003711610}
+  - component: {fileID: 2003711612}
   m_Layer: 5
   m_Name: TripleBStaminaBar
   m_TagString: Untagged
@@ -4817,6 +4818,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2003711608}
   m_CullTransparentMesh: 1
+--- !u!114 &2003711612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2003711608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e39c1744ee994a642ba9c337ab0d6f32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TripleBLaserUI
+  tripleBLaser: {fileID: 1868642892}
+  staminaFill: {fileID: 1525957061}
 --- !u!1 &2104496154
 GameObject:
   m_ObjectHideFlags: 0
@@ -5055,81 +5070,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4018444098509664486, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.53
-      objectReference: {fileID: 0}
-    - target: {fileID: 4018444098509664486, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.38
-      objectReference: {fileID: 0}
+    - target: {fileID: 5253102543998237560, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
+      propertyPath: rotTimer
+      value: 
+      objectReference: {fileID: 1817522600}
     - target: {fileID: 5253102543998237560, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
       propertyPath: attackPos
       value: 
       objectReference: {fileID: 740123351}
-    - target: {fileID: 5253102543998237560, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
-      propertyPath: laserTime
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5253102543998237560, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
-      propertyPath: laserRange
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 5253102543998237560, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
-      propertyPath: moveBackTime
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5253102543998237560, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
-      propertyPath: laserCooldown
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 5253102543998237560, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
-      propertyPath: attackDistance
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5253102543998237560, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
-      propertyPath: moveForwardTime
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5946991319186251002, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5946991319186251002, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5946991319186251002, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5946991319186251002, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5946991319186251002, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5946991319186251002, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6310524382593506485, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
       propertyPath: m_Name
       value: TripleB
-      objectReference: {fileID: 0}
-    - target: {fileID: 7397049974804018250, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 7319861399735315513, guid: 07fb69e652c5a514c9fac0e9014bb66d, type: 3}
-    - target: {fileID: 8675937784342022905, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8675937784342022905, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
