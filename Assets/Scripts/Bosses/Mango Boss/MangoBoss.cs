@@ -322,6 +322,12 @@ public class MangoBoss : MonoBehaviour, IDamagable
         if (attackRoutine != null)
             StopCoroutine(attackRoutine);
 
+        if (juiceFountain != null)
+            juiceFountain.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
+        if (juiceRain != null)
+            juiceRain.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
         if (animator != null)
             animator.SetTrigger("Die");
 
