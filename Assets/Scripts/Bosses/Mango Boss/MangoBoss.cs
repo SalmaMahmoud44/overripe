@@ -27,6 +27,7 @@ public class MangoBoss : MonoBehaviour, IDamagable
     [SerializeField] Collider2D bossRoomBounds;
     [SerializeField] ParticleSystem explosionEffect;
     [SerializeField] float deathAnimDelay = 1f;
+    [SerializeField] GameObject artifactToReveal;
     Collider2D originalBounds;
     bool roomLocked = false;
 
@@ -344,7 +345,11 @@ public class MangoBoss : MonoBehaviour, IDamagable
 
         Debug.Log("Mango Boss died");
 
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(2f);
+
+        if (artifactToReveal != null)
+            artifactToReveal.SetActive(true);
+
         Destroy(gameObject);
     }
 

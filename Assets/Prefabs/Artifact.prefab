@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1663594980951944062}
   - component: {fileID: 4016397425620103224}
+  - component: {fileID: 1030995288607694087}
   m_Layer: 0
   m_Name: Artifact
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.5817, y: -15.36836, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 3.0606, y: 3.0606, z: 3.0606}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1609456369104744968}
@@ -45,6 +46,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac3ab6b5352d2ab419a7c20fe9b87249, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArtiifactCollect
+  dialougeManager: {fileID: 0}
+  messages: []
+  actors: []
+--- !u!58 &1030995288607694087
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2212139751821455205}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0.02886939}
+  m_Radius: 0.22113061
 --- !u!1 &7162094362318786921
 GameObject:
   m_ObjectHideFlags: 0
