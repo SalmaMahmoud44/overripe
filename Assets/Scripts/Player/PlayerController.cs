@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
     Vector2 mousePos;
     RaycastHit2D[] hits;
     Animator myAnimator;
-    PlayerAudio playerAudio;
+    AudioManager playerAudio;
     KnockBack knockBack;
 
 
@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
         meleeSpawnPoint = transform.Find("MeleeSpawnPoint");
         enemyLayer = LayerMask.GetMask("Enemy");
         myAnimator = GetComponentInChildren<Animator>();
-        playerAudio = GetComponent<PlayerAudio>();
+        playerAudio = GetComponent<AudioManager>();
         knockBack = GetComponent<KnockBack>();
 
         if (levelManager == null)
@@ -133,8 +133,9 @@ public class PlayerController : MonoBehaviour
             myRigidbody.linearVelocity += new Vector2(0f,jumpSpeed);
 
             myAnimator.SetBool("isJumping", true);
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.jumpClip);
 
-            playerAudio.PlayJump(); 
 
             OnPlayerJumped?.Invoke(); 
         }
@@ -259,7 +260,8 @@ public class PlayerController : MonoBehaviour
             footstepTimer += Time.deltaTime;
             if (footstepTimer >= footstepInterval)
             {
-                playerAudio.PlayFootstep(); 
+                if (AudioManager.Instance != null)
+                    AudioManager.Instance.PlaySFX(AudioManager.Instance.footstepClip);
                 footstepTimer = 0f; 
             }
         }
@@ -309,9 +311,10 @@ public class PlayerController : MonoBehaviour
             else
                 myAnimator.SetTrigger("Melee2");
 
-            playerAudio.PlayMelee(); 
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.meleeClip);
 
-            nextMeleeFirst = !nextMeleeFirst; 
+        nextMeleeFirst = !nextMeleeFirst; 
 
 
             hits = Physics2D.CircleCastAll(meleeSpawnPoint.position, meleeRange, Vector2.right, 0f, enemyLayer);

@@ -122,6 +122,10 @@ public class MangoBoss : MonoBehaviour, IDamagable
 
         LockCameraToBossRoom();
 
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayBossMusic();
+
+
         attackRoutine = StartCoroutine(AttackLoop());
     }
 
@@ -196,6 +200,10 @@ public class MangoBoss : MonoBehaviour, IDamagable
 
     void CheckLandingHit()
     {
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.mangoSmash);
+
         if (impulseSource != null)
             impulseSource.GenerateImpulse();
 
@@ -362,6 +370,9 @@ public class MangoBoss : MonoBehaviour, IDamagable
 
         if (explosionEffect != null)
             explosionEffect.Play();
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.mangoDeath);
 
         Debug.Log("Mango Boss died");
 

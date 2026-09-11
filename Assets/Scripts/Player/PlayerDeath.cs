@@ -10,14 +10,14 @@ public class PlayerDeath : MonoBehaviour , IDamagable
     Animator animator;
     Rigidbody2D myrigidbody;
     bool isDead = false;
-    PlayerAudio playerAudio;
+    AudioManager playerAudio;
     void Start()
     {
         rotTimer = GameObject.Find("RotTimerCanvas").GetComponent<RotTimer>();
         animator = GetComponentInChildren<Animator>();
         playerController = GetComponent<PlayerController>();
         myrigidbody = GetComponent<Rigidbody2D>();
-        playerAudio = GetComponent<PlayerAudio>();
+        playerAudio = GetComponent<AudioManager>();
     }
 
     void Update()
@@ -52,7 +52,8 @@ public class PlayerDeath : MonoBehaviour , IDamagable
     {
         if (collision.CompareTag("Juice"))
         {
-            playerAudio.PlayJuiceSound();
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.juiceClip);
             Die();
         }
     }

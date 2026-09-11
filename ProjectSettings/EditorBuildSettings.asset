@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/mango.unity
     guid: 7e35f2c1d20dc164eb619367a9494fca
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Orange.unity
     guid: 4fce53a250a16dd4bb34e9f371b4694d
   m_configObjects:
