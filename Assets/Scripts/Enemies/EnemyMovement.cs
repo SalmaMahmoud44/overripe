@@ -13,6 +13,10 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] float damageCooldown = 1f;
     float damageTimer = 0f;
 
+    [Header("Knockback")]
+    [SerializeField] float knockbackForce = 5f;
+    [SerializeField] float knockbackUpwardForce = 1.5f;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -55,6 +59,18 @@ public class EnemyMovement : MonoBehaviour
             if (damagable != null)
             {
                 damagable.TakeDamage(damageAmount);
+
+                KnockBack knockBack = collision.gameObject.GetComponent<KnockBack>();
+
+                if (knockBack != null)
+                {
+                    Vector2 direction =(Vector2)collision.transform.position - (Vector2)transform.position;
+
+                    direction = new Vector2(Mathf.Sign(direction.x),0f );
+
+                    knockBack.ApplyKnockback(direction,knockbackForce,knockbackUpwardForce);
+                }
+
                 damageTimer = damageCooldown;
             }
         }

@@ -61,6 +61,7 @@ public class PlayerController : MonoBehaviour
     RaycastHit2D[] hits;
     Animator myAnimator;
     PlayerAudio playerAudio;
+    KnockBack knockBack;
 
 
 
@@ -74,6 +75,7 @@ public class PlayerController : MonoBehaviour
         enemyLayer = LayerMask.GetMask("Enemy");
         myAnimator = GetComponentInChildren<Animator>();
         playerAudio = GetComponent<PlayerAudio>();
+        knockBack = GetComponent<KnockBack>();
 
         if (levelManager == null)
             levelManager = FindObjectOfType<LevelManager>();
@@ -88,6 +90,11 @@ public class PlayerController : MonoBehaviour
         if(meleeTimer > 0f)
             meleeTimer -= Time.deltaTime;
 
+        if (IsKnockedBack())
+        {
+            CheckJumpAnimation();
+            return;
+        }
 
         Run();
         Flip();
@@ -110,6 +117,9 @@ public class PlayerController : MonoBehaviour
     }
     void OnJump(InputValue value)
     {
+        if (IsKnockedBack())
+            return;
+
         if (isDashing)
             return; 
 
@@ -131,6 +141,9 @@ public class PlayerController : MonoBehaviour
     }
     void OnDash(InputValue value)
     {
+        if (IsKnockedBack())
+            return;
+
         if (!canDash)
             return; 
 
@@ -156,7 +169,10 @@ public class PlayerController : MonoBehaviour
     }
     void OnMelee(InputValue value)
     {
-        if(!value.isPressed)
+        if (IsKnockedBack())
+            return;
+
+        if (!value.isPressed)
             return; 
 
         if (controlsLocked)
@@ -262,7 +278,8 @@ public class PlayerController : MonoBehaviour
 
     void ShootArrow()
     {
-        if(arrowPrefab == null || arrowSpawnPoint == null)
+
+        if (arrowPrefab == null || arrowSpawnPoint == null)
         {
             Debug.LogWarning("Arrow prefab or spawn point is not assigned.");
             return;
@@ -281,34 +298,39 @@ public class PlayerController : MonoBehaviour
     }   
 
       bool MeleeAttack()
-    {
-        if (meleeTimer > 0f)
-            return false; 
+      {
+            if (meleeTimer > 0f)
+                return false; 
 
-        meleeTimer = meleeCooldown; 
+            meleeTimer = meleeCooldown; 
 
-        if (nextMeleeFirst)
-            myAnimator.SetTrigger("Melee1");
-        else
-            myAnimator.SetTrigger("Melee2");
+            if (nextMeleeFirst)
+                myAnimator.SetTrigger("Melee1");
+            else
+                myAnimator.SetTrigger("Melee2");
 
-        playerAudio.PlayMelee(); 
+            playerAudio.PlayMelee(); 
 
-        nextMeleeFirst = !nextMeleeFirst; 
+            nextMeleeFirst = !nextMeleeFirst; 
 
 
-        hits = Physics2D.CircleCastAll(meleeSpawnPoint.position, meleeRange, Vector2.right, 0f, enemyLayer);
-        for (int i = 0; i < hits.Length; i++)
-        {
-            IDamagable damagable = hits[i].collider.gameObject.GetComponent<IDamagable>();
-            Debug.Log("Hit: " + hits[i].collider.gameObject.name);
-            if (damagable != null)
+            hits = Physics2D.CircleCastAll(meleeSpawnPoint.position, meleeRange, Vector2.right, 0f, enemyLayer);
+            for (int i = 0; i < hits.Length; i++)
             {
-                Debug.Log("Damaging: " + hits[i].collider.gameObject.name);
-                damagable.TakeDamage(meleeDamage);
+                IDamagable damagable = hits[i].collider.gameObject.GetComponent<IDamagable>();
+                Debug.Log("Hit: " + hits[i].collider.gameObject.name);
+                if (damagable != null)
+                {
+                    Debug.Log("Damaging: " + hits[i].collider.gameObject.name);
+                    damagable.TakeDamage(meleeDamage);
+                }
             }
-        }
-        return true; 
+            return true; 
+      }
+
+    bool IsKnockedBack()
+    {
+        return knockBack != null && knockBack.IsKnockedBack;
     }
     void CheckJumpAnimation()
     {

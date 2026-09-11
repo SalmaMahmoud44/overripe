@@ -15,11 +15,13 @@ public class EnemyHealth : MonoBehaviour, IDamagable
     [SerializeField] float deathDelay = 2f;
     [SerializeField] float flyingDeathGravityScale = 3f;
 
+   
     Animator anim;
     bool isDead = false;
 
     Collider2D col;
     Rigidbody2D rb;
+    SoliderHitFeedback hitFeedback;
 
     public event Action OnEnemyDied;
 
@@ -30,6 +32,7 @@ public class EnemyHealth : MonoBehaviour, IDamagable
         anim = GetComponent<Animator>();
         col = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
+        hitFeedback = GetComponent<SoliderHitFeedback>();
     }
 
     public new void TakeDamage(float damage)
@@ -46,7 +49,10 @@ public class EnemyHealth : MonoBehaviour, IDamagable
         }
         else
         {
-            anim.SetTrigger("Hit");
+            if(anim != null)
+              anim.SetTrigger("Hit");
+            if (hitFeedback != null)
+                hitFeedback.PlayHitFeedback();
         }
     }
 
