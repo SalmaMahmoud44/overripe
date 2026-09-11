@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 1309170352071636450}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.22, y: 0.09, z: 0}
+  m_LocalPosition: {x: 0.83, y: 0.09, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 3409880110786988337}
   - component: {fileID: 4410736930357738023}
   - component: {fileID: 2495899831795144147}
+  - component: {fileID: 8569756162482123466}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -72,6 +73,7 @@ Transform:
   - {fileID: 731650840178208189}
   - {fileID: 9004734824301314033}
   - {fileID: 152925524487991507}
+  - {fileID: 409065313521140530}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!70 &4013685350287569201
@@ -182,7 +184,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveSpeed: 7
   jumpSpeed: 20
-  footstepInterval: 0.5
+  footstepInterval: 0.4
   dashSpeed: 20
   dashDuration: 0.2
   dashCooldown: 1
@@ -192,11 +194,13 @@ MonoBehaviour:
   levelManager: {fileID: 4468910176655245706, guid: 11083b29bb44fd04db47c21601809af0, type: 3}
   meleeCooldown: 1
   meleeSpawnPoint: {fileID: 9004734824301314033}
-  meleeRange: 1.6
+  meleeRange: 1.5
   meleeDamage: 10
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
+  tripleBLaserPrefab: {fileID: 0}
+  maxLaserAngle: 45
   isFacingRight: 1
 --- !u!114 &8457654514636322652
 MonoBehaviour:
@@ -338,6 +342,24 @@ MonoBehaviour:
   jumpClip: {fileID: 8300000, guid: 8510a1bde72366245aacf7e8b1917a33, type: 3}
   meleeClip: {fileID: 8300000, guid: 2705332ee4b22ed459d7306c832dcb48, type: 3}
   juiceClip: {fileID: 8300000, guid: dbc5ee52eb78cae40ad31a81edcd57eb, type: 3}
+--- !u!114 &8569756162482123466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4095186360861652686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec50096e3b4ce9149aff3510996a6f89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KnockBack
+  knockbackDuration: 0.2
+  defaultVerticalBoost: 2
+  decayRate: 5
+  animator: {fileID: 2416653852725260582}
+  knockbackAnimTrigger: Hit
+  canReceiveKnockback: 1
 --- !u!1 &4835226886487152954
 GameObject:
   m_ObjectHideFlags: 0
@@ -363,7 +385,38 @@ Transform:
   m_GameObject: {fileID: 4835226886487152954}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.94, y: 1.21, z: 0}
+  m_LocalPosition: {x: -2.19, y: 1.35, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 315650049332018269}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5412128022643129715
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 409065313521140530}
+  m_Layer: 0
+  m_Name: 'TripleB_AttackPos '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &409065313521140530
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5412128022643129715}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.11, y: 0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

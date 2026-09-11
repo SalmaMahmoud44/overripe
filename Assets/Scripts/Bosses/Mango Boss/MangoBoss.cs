@@ -48,6 +48,10 @@ public class MangoBoss : MonoBehaviour, IDamagable
     [SerializeField] float landDamage = 5f;
     [SerializeField] float enragedSpeedMultiplier = 0.6f;
 
+    [Header("Jump Slam Knockback")]
+    [SerializeField] float knockbackForce = 8f;
+    [SerializeField] float knockbackUpwardForce = 5f;
+
     [Header("Attack Cycle Settings")]
     [SerializeField] int normalJumpCount = 2;
     [SerializeField] int enragedJumpCount = 4;
@@ -203,6 +207,16 @@ public class MangoBoss : MonoBehaviour, IDamagable
             PlayerDeath playerDeath = player.GetComponent<PlayerDeath>();
             if (playerDeath != null)
                 playerDeath.TakeDamage(landDamage);
+            KnockBack knockBack = player.GetComponent<KnockBack>();
+
+            if (knockBack != null)
+            {
+                Vector2 direction = (Vector2)player.position -(Vector2)transform.position;
+
+                direction = new Vector2(Mathf.Sign(direction.x), 0f);
+
+                knockBack.ApplyKnockback(direction,knockbackForce,knockbackUpwardForce );
+            }
         }
     }
 

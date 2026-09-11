@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1140689488529360776}
   - component: {fileID: 8705918510988612240}
+  - component: {fileID: 2172963578978578020}
   m_Layer: 7
   m_Name: OrangeSoliderVisual
   m_TagString: Untagged
@@ -91,6 +92,28 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!95 &2172963578978578020
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6273431285834253669}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c0bf35665b41ca14d847b89e6232a547, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7368166959569054858
 GameObject:
   m_ObjectHideFlags: 0
@@ -104,6 +127,7 @@ GameObject:
   - component: {fileID: 59691936748405165}
   - component: {fileID: 836880972776856432}
   - component: {fileID: 8237868941953178761}
+  - component: {fileID: 8130410130810175476}
   m_Layer: 7
   m_Name: OrangeSolider
   m_TagString: Untagged
@@ -140,7 +164,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OrangeSolider
   moveSpeed: 3
-  damage: 5
+  attackRange: 0.8
+  attackDamage: 5
+  attackCooldown: 1.5
+  hitFeedback: {fileID: 8130410130810175476}
+  knockbackForce: 6
+  knockbackUpwardForce: 2
 --- !u!50 &59691936748405165
 Rigidbody2D:
   serializedVersion: 5
@@ -217,8 +246,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b66a0f43927a1242b18d3538f6b9d51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 100
+  maxHealth: 20
   currentHealth: 0
   timeToAdd: 2
   rotTimer: {fileID: 0}
   deathDelay: 2
+  flyingDeathGravityScale: 3
+--- !u!114 &8130410130810175476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7368166959569054858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0af7638f6f9983c41b1e70d701841f63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoliderHitFeedback
+  spriteRenderer: {fileID: 8705918510988612240}
+  hitColor: {r: 0.9339623, g: 0.6828498, b: 0.6828498, a: 1}
+  flashDuration: 0.15
+  stunDuration: 0.35

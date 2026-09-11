@@ -26,6 +26,14 @@ public class JuiceSqueeze : MonoBehaviour
         if (playerDeath != null)
             playerDeath.TakeDamage(2f);
 
+        KnockBack knockBack = playerController.GetComponent<KnockBack>();
+
+        if (knockBack != null)
+        {
+            knockBack.PlayHitAnimation();
+        }
+
+
         playerController.SetControlsLocked(true);
         yield return new WaitForSeconds(rootDuration);
         playerController.SetControlsLocked(false);

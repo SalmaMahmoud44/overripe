@@ -10,7 +10,12 @@ public class FlyEnemy : MonoBehaviour
     [Header("Damage Settings")]
     [SerializeField] float damageAmount = 5f;
     [SerializeField] float damageCooldown = 1f;
+
     float damageTimer = 0f;
+
+    [Header("Knockback")]
+    [SerializeField] float knockbackForce = 5f;
+    [SerializeField] float knockbackUpwardForce = 2f;
 
     private Transform player;
     private Animator animator;
@@ -72,6 +77,17 @@ public class FlyEnemy : MonoBehaviour
             if (damagable != null)
             {
                 damagable.TakeDamage(damageAmount);
+                KnockBack knockBack = collision.gameObject.GetComponent<KnockBack>();
+
+                if (knockBack != null)
+                {
+                    Vector2 direction =(Vector2)collision.transform.position -(Vector2)transform.position;
+
+                    direction = new Vector2(Mathf.Sign(direction.x),0f);
+
+                    knockBack.ApplyKnockback(direction,knockbackForce,knockbackUpwardForce);
+                }
+
                 damageTimer = damageCooldown;
             }
         }
