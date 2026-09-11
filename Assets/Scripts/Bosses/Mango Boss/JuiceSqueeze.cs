@@ -16,6 +16,9 @@ public class JuiceSqueeze : MonoBehaviour
         if (playerController != null)
         {
             IsTriggered = true;
+
+            if (AudioManager.Instance != null)AudioManager.Instance.PlaySFX(AudioManager.Instance.juiceHit);
+
             StartCoroutine(RootPlayerThenDisappear(playerController));
         }
     }

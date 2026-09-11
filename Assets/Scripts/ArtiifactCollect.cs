@@ -25,12 +25,22 @@ public class ArtiifactCollect : MonoBehaviour
 
         collected = true;
         
-       artifactCollider.enabled = false; 
+       artifactCollider.enabled = false;
+
+        if (AudioManager.Instance != null)AudioManager.Instance.PlaySFX(AudioManager.Instance.artifactCollect);
+
+        if(LevelManager.Instance.curreLevel == "Banana" || LevelManager.Instance.currentLevelIndex == 1)
+        {
+            if (dialougeManager == null)
+                dialougeManager = GameObject.Find("DialougeManager").GetComponent<DialougeManager>();
+            dialougeManager.OnDialougeFinished += GoToNextLevel;
+            dialougeManager.OpenDialouge(messages, actors);
+        }
+        else
+        {
+            StartCoroutine(NextLevel());
+        }
        
-        if (dialougeManager == null)
-            dialougeManager = GameObject.Find("DialougeManager").GetComponent<DialougeManager>();
-        dialougeManager.OnDialougeFinished += GoToNextLevel;
-        dialougeManager.OpenDialouge(messages, actors);
     }
 
     private void GoToNextLevel()
