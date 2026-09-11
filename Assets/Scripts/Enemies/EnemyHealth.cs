@@ -13,6 +13,7 @@ public class EnemyHealth : MonoBehaviour, IDamagable
 
     [Header("Death Settings")]
     [SerializeField] float deathDelay = 2f;
+    [SerializeField] float flyingDeathGravityScale = 3f;
 
     Animator anim;
     bool isDead = false;
@@ -63,10 +64,18 @@ public class EnemyHealth : MonoBehaviour, IDamagable
 
         FlyEnemy flyEnemy = GetComponent<FlyEnemy>();
         if (flyEnemy != null)
+        {
             flyEnemy.OnDeath();
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            rb.gravityScale = flyingDeathGravityScale;
+            rb.linearVelocity = Vector2.zero;
+        }
+        else
+        {
+            col.isTrigger = true;
+            rb.bodyType = RigidbodyType2D.Static;
+        }
 
-        col.isTrigger = true;
-        rb.bodyType = RigidbodyType2D.Static;
         Destroy(gameObject, deathDelay);
     }
 }

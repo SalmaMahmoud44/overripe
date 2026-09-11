@@ -87,6 +87,7 @@ public class FlyEnemy : MonoBehaviour
     public void OnDeath()
     {
         isDead = true;
+        enabled = false; 
     }
 
     private void OnDrawGizmosSelected()
