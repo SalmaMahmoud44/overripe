@@ -23,6 +23,12 @@ public class MangoBoss : MonoBehaviour, IDamagable
     [Header("References")]
     [SerializeField] Animator animator;
     [SerializeField] CinemachineImpulseSource impulseSource;
+    [SerializeField] CinemachineConfiner2D cameraConfiner;
+    [SerializeField] Collider2D bossRoomBounds;
+    [SerializeField] ParticleSystem explosionEffect;
+    [SerializeField] float deathAnimDelay = 1f;
+    Collider2D originalBounds;
+    bool roomLocked = false;
 
     [Header("Jump Shadow Settings")]
     [SerializeField] SpriteRenderer jumpShadow;
@@ -108,6 +114,8 @@ public class MangoBoss : MonoBehaviour, IDamagable
 
         if (healthSlider != null)
             healthSlider.gameObject.SetActive(true);
+
+        LockCameraToBossRoom();
 
         attackRoutine = StartCoroutine(AttackLoop());
     }
@@ -224,7 +232,7 @@ public class MangoBoss : MonoBehaviour, IDamagable
         }
 
         if (juiceFountain != null)
-            juiceFountain.Stop();
+            juiceFountain.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
 
         if (juiceRain != null)
             juiceRain.Stop();
@@ -316,12 +324,43 @@ public class MangoBoss : MonoBehaviour, IDamagable
         if (animator != null)
             animator.SetTrigger("Die");
 
+        StartCoroutine(DeathSequence());
+    }
+
+    IEnumerator DeathSequence()
+    {
+        yield return new WaitForSeconds(deathAnimDelay);
+
+        SpriteRenderer sprite = GetComponent<SpriteRenderer>();
+        if (sprite != null)
+            sprite.enabled = false;
+
+        Collider2D col = GetComponent<Collider2D>();
+        if (col != null)
+            col.enabled = false;
+
+        if (explosionEffect != null)
+            explosionEffect.Play();
+
         Debug.Log("Mango Boss died");
+
+        yield return new WaitForSeconds(5f);
+        Destroy(gameObject);
     }
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, detectRange);
+    }
+
+    void LockCameraToBossRoom()
+    {
+        if (roomLocked || cameraConfiner == null || bossRoomBounds == null)
+            return;
+
+        originalBounds = cameraConfiner.BoundingShape2D;
+        cameraConfiner.BoundingShape2D = bossRoomBounds;
+        roomLocked = true;
     }
 }
