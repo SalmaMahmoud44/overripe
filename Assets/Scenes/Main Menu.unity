@@ -1960,7 +1960,7 @@ MonoBehaviour:
   juiceClip: {fileID: 8300000, guid: dbc5ee52eb78cae40ad31a81edcd57eb, type: 3}
   juiceHit: {fileID: 8300000, guid: 1313d4ec45f31a247807928716d935bd, type: 3}
   artifactCollect: {fileID: 8300000, guid: 0f025d8f7fb9319459f321ac8b951f90, type: 3}
-  musicVolume: 0.5
+  musicVolume: 0.396
   sfxVolume: 1
 --- !u!4 &2010671055
 Transform:

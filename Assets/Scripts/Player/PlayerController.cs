@@ -153,8 +153,6 @@ public class PlayerController : MonoBehaviour
         if (meleeTimer > 0f)
             meleeTimer -= Time.deltaTime;
 
-        if (footstepTimer > 0f)
-            footstepTimer -= Time.deltaTime;
     }
       void OnMove(InputValue value)
       {
@@ -293,8 +291,8 @@ public class PlayerController : MonoBehaviour
     }
     void Run()
     {
-        if(isDashing) 
-            return; 
+        if (isDashing)
+            return;
 
         Vector2 playerVelocity = new Vector2(moveInput.x * moveSpeed, myRigidbody.linearVelocity.y);
         myRigidbody.linearVelocity = playerVelocity;
@@ -302,17 +300,18 @@ public class PlayerController : MonoBehaviour
         bool isMoving = Mathf.Abs(myRigidbody.linearVelocity.x) > Mathf.Epsilon;
         myAnimator.SetBool("isRunning", isMoving);
 
-        if(isMoving && isGrounded)
+        if (isMoving && isGrounded)
         {
-            footstepTimer += Time.deltaTime;
-            if (footstepTimer >= footstepInterval)
+            if (footstepTimer <= 0f)
             {
                 if (AudioManager.Instance != null)
                     AudioManager.Instance.PlaySFX(AudioManager.Instance.footstepClip);
-                footstepTimer = 0f; 
+                footstepTimer = footstepInterval;
             }
+
+            footstepTimer -= Time.deltaTime;
         }
-        else if (!isMoving)
+        else
         {
             footstepTimer = 0f;
         }
