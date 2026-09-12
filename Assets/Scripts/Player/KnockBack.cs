@@ -5,9 +5,7 @@ using UnityEngine;
 public class KnockBack : MonoBehaviour
 {
     [Header("Knockback Settings")]
-    [SerializeField] float knockbackDuration = 0.2f;
-    [SerializeField] float defaultVerticalBoost = 2f;
-    [SerializeField] float decayRate = 5f;
+    [SerializeField] float knockbackDuration = 0.45f;
 
     [Header("Animation")]
     [SerializeField] Animator animator;
@@ -19,7 +17,10 @@ public class KnockBack : MonoBehaviour
     Rigidbody2D rb;
     Coroutine knockbackRoutine;
 
+    bool isFalling;
+
     public bool IsKnockedBack { get; private set; }
+    public bool CanReceiveKnockback => canReceiveKnockback;
 
     private void Awake()
     {
@@ -29,67 +30,96 @@ public class KnockBack : MonoBehaviour
             animator = GetComponentInChildren<Animator>();
     }
 
-    public void ApplyKnockback(Vector2 direction, float force)
-    {
-        ApplyKnockback(direction, force, defaultVerticalBoost);
-    }
-
-    public void ApplyKnockback(Vector2 direction,float horizontalForce,float verticalForce)
+    public void ApplyKnockback(
+        Vector2 direction,
+        float horizontalForce,
+        float verticalForce)
     {
         if (!canReceiveKnockback || rb == null)
             return;
-
-        direction = direction.sqrMagnitude > 0.001f? direction.normalized: Vector2.right;
 
         if (knockbackRoutine != null)
         {
             StopCoroutine(knockbackRoutine);
             knockbackRoutine = null;
         }
-         IsKnockedBack = false;
 
-        knockbackRoutine = StartCoroutine( KnockbackRoutine(direction,horizontalForce,verticalForce));
+        direction = direction.sqrMagnitude > 0.001f
+            ? direction.normalized
+            : Vector2.right;
+
+        knockbackRoutine = StartCoroutine(
+            KnockbackRoutine(
+                direction,
+                horizontalForce,
+                verticalForce
+            )
+        );
     }
 
-    public void ApplyKnockbackFromSource(Vector2 sourcePosition,float force)
+    public void ApplyKnockback(Vector2 direction, float force)
     {
-        Vector2 direction =(Vector2)transform.position - sourcePosition;
-
-        ApplyKnockback(direction, force);
-    }
-    public void PlayHitAnimation()
-    {
-        if (animator != null &&
-            !string.IsNullOrEmpty(knockbackAnimTrigger))
-        {
-            animator.SetTrigger(knockbackAnimTrigger);
-        }
+        ApplyKnockback(direction, force, force);
     }
 
-    IEnumerator KnockbackRoutine(Vector2 direction,float horizontalForce,float verticalForce)
+    IEnumerator KnockbackRoutine(
+        Vector2 direction,
+        float horizontalForce,
+        float verticalForce)
     {
         IsKnockedBack = true;
+        isFalling = false;
 
-        PlayHitAnimation();
-
-        Vector2 velocity =direction * horizontalForce +Vector2.up * verticalForce;
-
-        float elapsed = 0f;
-
-        while (elapsed < knockbackDuration)
+        // Play the ONE Hit animation
+        if (animator != null)
         {
-            rb.linearVelocity = velocity;
-
-            velocity = Vector2.Lerp(velocity, Vector2.zero,decayRate * Time.deltaTime);
-
-            elapsed += Time.deltaTime;
-
-            yield return null;
+            animator.ResetTrigger(knockbackAnimTrigger);
+            animator.SetTrigger(knockbackAnimTrigger);
         }
 
-        rb.linearVelocity = Vector2.zero;
+        // Apply the knockback immediately
+        rb.linearVelocity = new Vector2(
+            direction.x * horizontalForce,
+            verticalForce
+        );
+
+        // Wait for Animation Event
+        yield return new WaitUntil(() => isFalling);
+
+        // Give the last 3 frames time to play
+        yield return new WaitForSeconds(0.15f);
 
         IsKnockedBack = false;
         knockbackRoutine = null;
+    }
+
+    // Animation Event placed after Frame 2
+    public void OnKnockbackFall()
+    {
+        if (!IsKnockedBack)
+            return;
+
+        isFalling = true;
+    }
+
+    public void DisableKnockback()
+    {
+        canReceiveKnockback = false;
+        IsKnockedBack = false;
+        isFalling = false;
+
+        if (knockbackRoutine != null)
+        {
+            StopCoroutine(knockbackRoutine);
+            knockbackRoutine = null;
+        }
+
+        if (rb != null)
+            rb.linearVelocity = Vector2.zero;
+    }
+
+    public void EnableKnockback()
+    {
+        canReceiveKnockback = true;
     }
 }

@@ -9,8 +9,11 @@ public class PlayerDeath : MonoBehaviour , IDamagable
     RotTimer rotTimer;
     Animator animator;
     Rigidbody2D myrigidbody;
-    bool isDead = false;
     AudioManager playerAudio;
+
+    bool isDead = false;
+    public bool IsDead => isDead;
+
     void Start()
     {
         rotTimer = GameObject.Find("RotTimerCanvas").GetComponent<RotTimer>();
@@ -30,11 +33,17 @@ public class PlayerDeath : MonoBehaviour , IDamagable
     }
 
    public void Die()
-    {
+   {
         isDead = true;
 
-        if(playerController != null)
+        KnockBack knockBack = GetComponent<KnockBack>();
+
+        if (knockBack != null)
+            knockBack.DisableKnockback();
+
+        if (playerController != null)
             playerController.SetControlsLocked(true); 
+
         myrigidbody.linearVelocity = Vector2.zero; 
         myrigidbody.bodyType = RigidbodyType2D.Kinematic; 
 
