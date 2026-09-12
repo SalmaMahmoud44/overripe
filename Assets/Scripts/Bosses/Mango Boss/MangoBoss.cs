@@ -231,7 +231,7 @@ public class MangoBoss : MonoBehaviour, IDamagable
     IEnumerator JuiceSqueezeAttack()
     {
         if (animator != null)
-            animator.SetTrigger("JuiceSqueeze");
+            animator.SetBool("IsSqueezing", true);
 
         if (juiceFountain != null)
             juiceFountain.Play();
@@ -259,6 +259,9 @@ public class MangoBoss : MonoBehaviour, IDamagable
 
         if (juiceRain != null)
             juiceRain.Stop();
+
+        if (animator != null)
+            animator.SetBool("IsSqueezing", false);
 
         foreach (GameObject puddle in spawnedPuddles)
         {
