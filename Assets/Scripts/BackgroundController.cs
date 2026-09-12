@@ -2,37 +2,30 @@ using UnityEngine;
 
 public class BackgroundController : MonoBehaviour
 {
-    [System.Serializable]
-    public class ParallaxLayer
-    {
-        public Transform layer;
-        [Range(0, 1)] public float parallaxFactor;
-    }
+    private float startPos, length;
 
-    public ParallaxLayer[] layers;
-
-    public Transform camTransform;
-    private Vector3 lastCameraPosition;
-
+    public Transform cam;
+    public float parallaxEffect; 
     void Start()
     {
-        lastCameraPosition = camTransform.position;
+        startPos = transform.position.x;
+        length = GetComponent<SpriteRenderer>().bounds.size.x;
     }
-
 
     void LateUpdate()
     {
-        Vector3 cameraDelta = camTransform.position - lastCameraPosition;
+        float distance = cam.position.x * parallaxEffect;
+        float movement = cam.position.x * (1 - parallaxEffect);
 
-        foreach (ParallaxLayer layer in layers)
+        transform.position = new Vector3(startPos + distance, transform.position.y, transform.position.z);
+
+        if (movement > startPos + length)
         {
-            float moveX = cameraDelta.x * layer.parallaxFactor;
-            float moveY = cameraDelta.y * layer.parallaxFactor;
-
-            layer.layer.position += new Vector3(moveX, moveY, 0);
+            startPos += length;
         }
-
-        lastCameraPosition = camTransform.position;
+        else if (movement < startPos - length)
+        {
+            startPos -= length;
+        }
     }
 }
-
