@@ -47,7 +47,6 @@ GameObject:
   - component: {fileID: 8457654514636322652}
   - component: {fileID: 3409880110786988337}
   - component: {fileID: 4410736930357738023}
-  - component: {fileID: 2495899831795144147}
   - component: {fileID: 8569756162482123466}
   m_Layer: 0
   m_Name: Player
@@ -74,6 +73,7 @@ Transform:
   - {fileID: 9004734824301314033}
   - {fileID: 152925524487991507}
   - {fileID: 409065313521140530}
+  - {fileID: 6440563252567317461}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!70 &4013685350287569201
@@ -185,6 +185,15 @@ MonoBehaviour:
   moveSpeed: 7
   jumpSpeed: 20
   footstepInterval: 0.4
+  groundCheck: {fileID: 6440563252567317461}
+  groundCheckRadius: 0.15
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  coyoteTime: 0.12
+  jumpBufferTime: 0.12
+  fallMultiplier: 2.5
+  lowJumpMultiplier: 2
   dashSpeed: 20
   dashDuration: 0.2
   dashCooldown: 1
@@ -325,23 +334,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &2495899831795144147
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4095186360861652686}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91967ccb133e87749a4b040402629a20, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerAudio
-  audioSource: {fileID: 4410736930357738023}
-  footstepClip: {fileID: 8300000, guid: f6030d8b461ddb74796b85ae756d93d5, type: 3}
-  jumpClip: {fileID: 8300000, guid: 8510a1bde72366245aacf7e8b1917a33, type: 3}
-  meleeClip: {fileID: 8300000, guid: 2705332ee4b22ed459d7306c832dcb48, type: 3}
-  juiceClip: {fileID: 8300000, guid: dbc5ee52eb78cae40ad31a81edcd57eb, type: 3}
 --- !u!114 &8569756162482123466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -417,6 +409,37 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.11, y: 0.1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 315650049332018269}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6621580448905937682
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6440563252567317461}
+  m_Layer: 0
+  m_Name: GroundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6440563252567317461
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6621580448905937682}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -1.735, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

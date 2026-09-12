@@ -8,7 +8,18 @@ public class PlayerController : MonoBehaviour
     [Header("Player Movement Settings")]
     [SerializeField] float moveSpeed = 10f;
     [SerializeField] float jumpSpeed = 15f;
-    [SerializeField] float footstepInterval = 0.5f; 
+    [SerializeField] float footstepInterval = 0.5f;
+
+    [Header("Ground Check")]
+    [SerializeField] Transform groundCheck;
+    [SerializeField] float groundCheckRadius = 0.15f;
+    [SerializeField] LayerMask groundLayer;
+
+    [Header("Jump Feel")]
+    [SerializeField] float coyoteTime = 0.12f;
+    [SerializeField] float jumpBufferTime = 0.12f;
+    [SerializeField] float fallMultiplier = 2.5f;
+    [SerializeField] float lowJumpMultiplier = 2f;
 
     [Header("Dash Settings")]
     [SerializeField] float dashSpeed = 20f;
@@ -36,7 +47,6 @@ public class PlayerController : MonoBehaviour
     public bool isFacingRight = true;
 
 
-    // Events for player actions
     public event Action<KeyCode> OnPlayerMoved;
     public event Action OnPlayerJumped;
     public event Action OnPlayerDashed;
@@ -53,16 +63,22 @@ public class PlayerController : MonoBehaviour
     bool nextMeleeFirst = true;
 
     Vector2 moveInput;
+
+    float coyoteTimeCounter;
+    float jumpBufferCounter;
+    bool isGrounded;
+
+
     Rigidbody2D myRigidbody;
     Transform myTransform;
     CapsuleCollider2D myCollider;
-    Vector2 worldPos;
-    Vector2 mousePos;
-    RaycastHit2D[] hits;
     Animator myAnimator;
     AudioManager playerAudio;
     KnockBack knockBack;
 
+    Vector2 worldPos;
+    Vector2 mousePos;
+    RaycastHit2D[] hits;
 
 
     void Start()
@@ -70,51 +86,91 @@ public class PlayerController : MonoBehaviour
         myRigidbody = GetComponent<Rigidbody2D>();
         myTransform = GetComponent<Transform>();
         myCollider = GetComponent<CapsuleCollider2D>();
-        arrowSpawnPoint = transform.Find("ArrowSpawnPoint");
-        meleeSpawnPoint = transform.Find("MeleeSpawnPoint");
         enemyLayer = LayerMask.GetMask("Enemy");
         myAnimator = GetComponentInChildren<Animator>();
         playerAudio = GetComponent<AudioManager>();
         knockBack = GetComponent<KnockBack>();
 
+        arrowSpawnPoint = transform.Find("ArrowSpawnPoint");
+        meleeSpawnPoint = transform.Find("MeleeSpawnPoint");
+
+        if (groundLayer == 0)
+            groundLayer = LayerMask.GetMask("Ground");
+
+        if (enemyLayer == 0)
+            enemyLayer = LayerMask.GetMask("Enemy");
+
         if (levelManager == null)
             levelManager = FindObjectOfType<LevelManager>();
+
         if(tripleBLaserPrefab == null)
             tripleBLaserPrefab = GameObject.Find("TripleB").GetComponent<TripleBLaser>();
     }
 
     void Update()
     {
-        if (shootTimer > 0f)
-            shootTimer -= Time.deltaTime; 
-        if(meleeTimer > 0f)
-            meleeTimer -= Time.deltaTime;
+        UpdateTimers();
+
+        CheckGround();
+
+        UpdateJumpTimers();
 
         if (IsKnockedBack())
         {
-            CheckJumpAnimation();
+            UpdateAnimation();
             return;
         }
 
-        Run();
-        Flip();
-        CheckJumpAnimation();
+        if (!controlsLocked && !isDashing)
+        {
+            Run();
+            Flip();
+        }
+
+        UpdateAnimation();
     }
-    void OnMove(InputValue value)
+
+    private void FixedUpdate()
     {
-        moveInput = value.Get<Vector2>();
-
-        if (controlsLocked)
-        {
-            moveInput = Vector2.zero; 
+        if (isDashing)
             return;
-        }
-        if (moveInput.x != 0f)
+
+        if (myRigidbody.linearVelocity.y < 0f)
         {
-            KeyCode keyPressed = moveInput.x > 0f ? KeyCode.D : KeyCode.A;
-            OnPlayerMoved?.Invoke(keyPressed); 
-        }     
+            myRigidbody.linearVelocity +=Vector2.up *Physics2D.gravity.y *(fallMultiplier - 1f) *Time.fixedDeltaTime;
+        }
+        else if (myRigidbody.linearVelocity.y > 0f &&!Keyboard.current.spaceKey.isPressed)
+        {
+            myRigidbody.linearVelocity += Vector2.up * Physics2D.gravity.y *(lowJumpMultiplier - 1f) * Time.fixedDeltaTime;
+        }
     }
+
+    void UpdateTimers()
+    {
+        if (shootTimer > 0f)
+            shootTimer -= Time.deltaTime;
+
+        if (meleeTimer > 0f)
+            meleeTimer -= Time.deltaTime;
+
+        if (footstepTimer > 0f)
+            footstepTimer -= Time.deltaTime;
+    }
+      void OnMove(InputValue value)
+      {
+           moveInput = value.Get<Vector2>();
+
+           if (controlsLocked)
+           {
+               moveInput = Vector2.zero; 
+               return;
+           }
+           if (moveInput.x != 0f)
+           {
+               KeyCode keyPressed = moveInput.x > 0f ? KeyCode.D : KeyCode.A;
+               OnPlayerMoved?.Invoke(keyPressed); 
+           }     
+      }
     void OnJump(InputValue value)
     {
         if (IsKnockedBack())
@@ -128,16 +184,9 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (value.isPressed && myCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
+        if (value.isPressed)
         {
-            myRigidbody.linearVelocity += new Vector2(0f,jumpSpeed);
-
-            myAnimator.SetBool("isJumping", true);
-            if (AudioManager.Instance != null)
-                AudioManager.Instance.PlaySFX(AudioManager.Instance.jumpClip);
-
-
-            OnPlayerJumped?.Invoke(); 
+            jumpBufferCounter = jumpBufferTime;
         }
     }
     void OnDash(InputValue value)
@@ -237,11 +286,9 @@ public class PlayerController : MonoBehaviour
 
             if (myRigidbody != null)
             {
-                myRigidbody.linearVelocity = new Vector2(
-                    0f,
-                    myRigidbody.linearVelocity.y
-                );
+                myRigidbody.linearVelocity = new Vector2(0f,myRigidbody.linearVelocity.y);
             }
+            myAnimator.SetBool("isRunning", false);
         }
     }
     void Run()
@@ -255,7 +302,7 @@ public class PlayerController : MonoBehaviour
         bool isMoving = Mathf.Abs(myRigidbody.linearVelocity.x) > Mathf.Epsilon;
         myAnimator.SetBool("isRunning", isMoving);
 
-        if(isMoving && myCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
+        if(isMoving && isGrounded)
         {
             footstepTimer += Time.deltaTime;
             if (footstepTimer >= footstepInterval)
@@ -264,6 +311,10 @@ public class PlayerController : MonoBehaviour
                     AudioManager.Instance.PlaySFX(AudioManager.Instance.footstepClip);
                 footstepTimer = 0f; 
             }
+        }
+        else if (!isMoving)
+        {
+            footstepTimer = 0f;
         }
     }
 
@@ -278,6 +329,52 @@ public class PlayerController : MonoBehaviour
             isFacingRight = false;  
     }
 
+    void CheckGround()
+    {
+        if(groundCheck == null)
+        {
+            isGrounded =myCollider != null && myCollider.IsTouchingLayers(groundLayer);
+
+            return;
+        }
+
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position,groundCheckRadius,groundLayer );
+    }
+
+    void UpdateJumpTimers()
+    {
+        if (isGrounded)
+        {
+            coyoteTimeCounter = coyoteTime;
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
+        }
+
+        if (jumpBufferCounter > 0f)
+        {
+            jumpBufferCounter -= Time.deltaTime;
+        }
+
+        if (jumpBufferCounter > 0f &&coyoteTimeCounter > 0f &&!isDashing &&!controlsLocked)
+        {
+            PerformJump();
+        }
+    }
+    void PerformJump()
+    {
+        myRigidbody.linearVelocity = new Vector2(myRigidbody.linearVelocity.x,jumpSpeed);
+
+        coyoteTimeCounter = 0f;
+        jumpBufferCounter = 0f;
+
+        if (AudioManager.Instance != null)
+        {AudioManager.Instance.PlaySFX( AudioManager.Instance.jumpClip);
+        }
+
+        OnPlayerJumped?.Invoke();
+    }
     void ShootArrow()
     {
 
@@ -331,33 +428,53 @@ public class PlayerController : MonoBehaviour
             return true; 
       }
 
+    void UpdateAnimation()
+    {
+        if (myAnimator == null)
+            return;
+
+        bool isFalling =
+            myRigidbody.linearVelocity.y < -0.1f;
+
+        bool isRising =
+            myRigidbody.linearVelocity.y > 0.1f;
+
+        myAnimator.SetBool("isDashing", isDashing);
+
+        if (isDashing)
+        {
+            myAnimator.SetBool("isJumping", false);
+            return;
+        }
+
+        bool shouldJump =
+            !isGrounded &&
+            (isRising || isFalling);
+
+        myAnimator.SetBool("isJumping", shouldJump);
+
+        bool isRunning =
+            isGrounded &&
+            Mathf.Abs(moveInput.x) > 0.01f;
+
+        myAnimator.SetBool("isRunning", isRunning);
+    }
+
     bool IsKnockedBack()
     {
         return knockBack != null && knockBack.IsKnockedBack;
     }
-    void CheckJumpAnimation()
-    {
-        if (myCollider.IsTouchingLayers(LayerMask.GetMask("Ground")) && myRigidbody.linearVelocity.y <= 0f)
-        {
-            myAnimator.SetBool("isJumping", false);
-        }
-    }
 
-
-    void OnDrawGizmos()
-    {
-        if (meleeSpawnPoint != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(meleeSpawnPoint.position, meleeRange);
-        }
-    }
+   
     System.Collections.IEnumerator Dash()
     {
         isDashing = true;
+        canDash = false;
 
         myAnimator.SetBool("isDashing", true);
-        canDash = false;
+        myAnimator.SetBool("isJumping", false);
+        myAnimator.SetBool("isRunning", false);
+
         float originalGravity = myRigidbody.gravityScale;
         myRigidbody.gravityScale = 0f; 
         myRigidbody.linearVelocity = new Vector2(Mathf.Sign(myTransform.localScale.x) * dashSpeed, 0f); 
@@ -370,5 +487,15 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(dashCooldown); 
         canDash = true;
 
+    }
+
+
+    void OnDrawGizmos()
+    {
+        if (meleeSpawnPoint != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(meleeSpawnPoint.position, meleeRange);
+        }
     }
 }
