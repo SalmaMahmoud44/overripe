@@ -347,8 +347,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KnockBack
   knockbackDuration: 0.2
-  defaultVerticalBoost: 2
-  decayRate: 5
   animator: {fileID: 2416653852725260582}
   knockbackAnimTrigger: Hit
   canReceiveKnockback: 1
@@ -456,6 +454,7 @@ GameObject:
   - component: {fileID: 512615423204088587}
   - component: {fileID: 5686983594025846849}
   - component: {fileID: 2416653852725260582}
+  - component: {fileID: 1103054155422389414}
   m_Layer: 0
   m_Name: PlayerVisual
   m_TagString: Untagged
@@ -559,6 +558,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1103054155422389414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7086515663351076259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 122e00471763839449f6c7f7035f52e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KnockBackAnimationEvent
+  knockBack: {fileID: 8569756162482123466}
 --- !u!1 &7782297264280884967
 GameObject:
   m_ObjectHideFlags: 0

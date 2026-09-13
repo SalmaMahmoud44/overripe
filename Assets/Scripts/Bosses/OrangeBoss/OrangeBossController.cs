@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection.Metadata;
 using UnityEngine;
+using Unity.Cinemachine;
 
 public class OrangeBossController : MonoBehaviour
 {
@@ -17,22 +18,16 @@ public class OrangeBossController : MonoBehaviour
     [SerializeField] Animator animator;
     [SerializeField] SpriteRenderer spriteRenderer;
     [SerializeField] Rigidbody2D orangeRigidbody2D;
+    [SerializeField] CinemachineImpulseSource impulseSource;
 
     [Header("Animator")]
     [SerializeField] string rollingTrigger = "Rolling";
     [SerializeField] string deathTrigger = "Death";
+    [SerializeField] string idleStateName = "Idle";
 
     [Header("Flip")]
     [SerializeField] bool spriteFacesLeftByDefault = false;
 
-    [Header("Visual Feedback")]
-    [SerializeField] Color summonTelegraphColor = Color.yellow;
-    [SerializeField] Color chargeTelegraphColor = Color.red;
-    [SerializeField] Color recoveryColor = Color.blue;
-    [SerializeField] Color phaseTransitionColor = Color.white;
-
-    [SerializeField] float pulseScaleAmount = 0.08f;
-    [SerializeField] float pulseSpeed = 6f;
 
     [Header("Phase Threshold")]
     [SerializeField] float phase2Threshold = 0.5f;
@@ -51,8 +46,8 @@ public class OrangeBossController : MonoBehaviour
     [SerializeField] float chargeDamage = 10f;
 
     [Header("Charge Knockback")]
-    [SerializeField] float chargeKnockbackForce = 12f;
-    [SerializeField] float chargeKnockbackUpwardForce = 4f;
+    [SerializeField] float chargeKnockbackForce = 20f;
+    [SerializeField] float chargeKnockbackUpwardForce = 7f;
 
     [Header("Wall Stun")]
     [SerializeField] float wallStunTimeP1 = 1.2f;
@@ -92,10 +87,32 @@ public class OrangeBossController : MonoBehaviour
     [SerializeField] float breathingRoomP3 = 0.6f;
     [SerializeField] float breathingRoomFrenzy = 0.5f;
 
+    [Header("Polish - Charge")]
+    [SerializeField] float telegraphSquashAmount = 0.12f;
+    [SerializeField] float telegraphPulseSpeed = 12f;
 
-    [Header("Tranition VFX")]
-    [SerializeField] GameObject phaseTransitionVFX;
-    [SerializeField] float phaseTransitionDuration = 1.5f;
+    [Header("Polish - Hit")]
+    [SerializeField] float hitStopTime = 0.04f;
+    [SerializeField] float hitSquashAmount = 0.15f;
+
+    [Header("Polish - VFX")]
+    [SerializeField] ParticleSystem chargeDust;
+    [SerializeField] ParticleSystem impactDust;
+    [SerializeField] ParticleSystem hitParticles;
+
+    [Header("Phase Transition")]
+    [SerializeField] float phaseTransitionDuration = 0.8f;
+    [SerializeField] float enrageDuration = 0.45f;
+
+    [Header("Enrage Polish")]
+    [SerializeField] float enrageSquashAmount = 0.18f;
+    [SerializeField] float enragePulseSpeed = 18f;
+    [SerializeField] float enrageScalePunch = 1.12f;
+
+    [Header("Phase Charge Boost")]
+    [SerializeField] float phase2FirstChargeMultiplier = 1.25f;
+    [SerializeField] float phase3FirstChargeMultiplier = 1.35f;
+    [SerializeField] float frenzyFirstChargeMultiplier = 1.5f;
 
     public event Action<BossPhase> OnPhaseChanged;
     public event Action OnBossDied;
@@ -104,7 +121,8 @@ public class OrangeBossController : MonoBehaviour
     public BossState currentState { get; private set; } = BossState.Idle;
 
     Coroutine fightRoutine;
-    Coroutine visualFeedbackRoutine;
+    Coroutine transitionRoutine;
+    Coroutine squashRoutine;
 
     Vector3 baseScale;
     Color baseColor;
@@ -113,6 +131,7 @@ public class OrangeBossController : MonoBehaviour
     bool isTransitioning = false;
     bool hasHitPlayerThisCharge = false;
     bool isCharging =false;
+    bool isFirstChargeAfterPhase = false;
 
     int currentSoldierCount = 0;
     float summonTimer=0f;
@@ -122,13 +141,20 @@ public class OrangeBossController : MonoBehaviour
     {
         if(bossHealth == null) 
             bossHealth = GetComponent<BossHealth>();
+
         if (spriteRenderer == null)
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
         if(orangeRigidbody2D == null)
-            orangeRigidbody2D = GetComponentInChildren<Rigidbody2D>();
+            orangeRigidbody2D = GetComponent<Rigidbody2D>();
+
+        if (impulseSource == null)
+            impulseSource = GetComponent<CinemachineImpulseSource>();
 
         baseScale = transform.localScale;
-        baseColor = spriteRenderer!=null ? spriteRenderer.color : Color.white;
+
+        if (spriteRenderer != null)
+            baseColor = spriteRenderer.color;
     }
 
     private void Update()
@@ -139,9 +165,7 @@ public class OrangeBossController : MonoBehaviour
         if(isDead || player == null)
             return;
 
-        if (currentState == BossState.Idle ||
-            currentState == BossState.Telegraph ||
-            currentState == BossState.Summon)
+        if (currentState == BossState.Idle ||currentState == BossState.Telegraph ||currentState == BossState.Summon)
         {
             FacePlayer();
         }
@@ -172,118 +196,6 @@ public class OrangeBossController : MonoBehaviour
         fightRoutine = StartCoroutine(FightLoop());
     }
 
-    int GetMaxSoliders()
-    {
-        switch (currentPhase)
-        {
-            case BossPhase.Phase1:
-                return maxSoldiersP1;
-            case BossPhase.Phase2:
-                return maxSoldiersP2;
-            case BossPhase.Phase3:
-                return maxSoldiersP3;
-            case BossPhase.Frenzy:
-                return maxSoldiersFrenzy;
-            default:
-                return 0;
-        }
-    }
-
-    float GetSummonCooldown()
-    {
-        switch (currentPhase)
-        {
-            case BossPhase.Phase1:
-                return summonCooldownP1;
-
-            case BossPhase.Phase2:
-                return summonCooldownP2;
-
-            case BossPhase.Phase3:
-                return summonCooldownP3;
-
-            case BossPhase.Frenzy:
-                return summonCooldownFrenzy;
-
-            default:
-                return 999f;
-        }
-    }
-    float GetRecoveryTime()
-    {
-        switch (currentPhase)
-        {
-            case BossPhase.Phase1:
-                return recoveryTimeP1;
-
-            case BossPhase.Phase2:
-                return recoveryTimeP2;
-
-            case BossPhase.Phase3:
-                return recoveryTimeP3;
-
-            case BossPhase.Frenzy:
-                return recoveryTimeFrenzy;
-
-            default:
-                return 0f;
-        }
-    }
-
-    float GetBreathingRoom()
-    {
-        switch (currentPhase)
-        {
-            case BossPhase.Phase1:
-                return breathingRoomP1;
-
-            case BossPhase.Phase2:
-                return breathingRoomP2;
-
-            case BossPhase.Phase3:
-                return breathingRoomP3;
-
-            case BossPhase.Frenzy:
-                return breathingRoomFrenzy;
-
-            default:
-                return 0f;
-        }
-    }
-
-    float GetWallStunTime()
-    {
-        switch (currentPhase)
-        {
-            case BossPhase.Phase1:
-                return wallStunTimeP1;
-
-            case BossPhase.Phase2:
-                return wallStunTimeP2;
-
-            case BossPhase.Phase3:
-                return wallStunTimeP3;
-
-            case BossPhase.Frenzy:
-                return wallStunTimeFrenzy;
-
-            default:
-                return 0f;
-        }
-    }
-
-    bool CanSummon()
-    {
-        return summonTimer <= 0f && currentSoldierCount < GetMaxSoliders();
-    }
-
-    bool ShouldSummon()
-    {
-        if(!CanSummon()) return false;
-        int maxSoliders = GetMaxSoliders();
-
-        return currentSoldierCount <= Mathf.FloorToInt(maxSoliders*0.5f);
-    }
 
     IEnumerator FightLoop()
     {
@@ -396,7 +308,6 @@ public class OrangeBossController : MonoBehaviour
 
         FacePlayer()
 ;
-        StartVisualFeedback(FlashAndPulse(summonTelegraphColor, summonTelegraphTime));
         yield return new WaitForSeconds(summonTelegraphTime);
 
         if (isDead || isTransitioning)
@@ -449,45 +360,84 @@ public class OrangeBossController : MonoBehaviour
 
     IEnumerator DoCharge(float speed, float telegraphTime)
     {
-        if (player == null)
+        if (player == null || isDead || isTransitioning)
             yield break;
+
+        if (isFirstChargeAfterPhase)
+        {
+            speed *= GetFirstChargeMultiplier();
+            isFirstChargeAfterPhase = false;
+        }
 
         currentState = BossState.Telegraph;
 
         FacePlayer();
 
-        StartVisualFeedback( FlashAndPulse(chargeTelegraphColor,telegraphTime));
-
-        Vector2 chargeDirection = Vector2.zero;
-
         float timer = 0f;
 
         while (timer < telegraphTime)
         {
-            if (player == null)
+            if (isDead || isTransitioning)
                 yield break;
 
-            chargeDirection =((Vector2)player.position -(Vector2)transform.position).normalized;
+            float pulse =
+                1f + Mathf.Sin(Time.time * telegraphPulseSpeed) * telegraphSquashAmount;
 
-            FaceDirection(chargeDirection.x);
+            transform.localScale = new Vector3(baseScale.x * (2f - pulse),baseScale.y * pulse,baseScale.z);
 
             timer += Time.deltaTime;
-
             yield return null;
         }
 
-        if (chargeDirection == Vector2.zero)
-            chargeDirection = Vector2.right;
+        transform.localScale = baseScale;
+
+
+        float differenceX = player.position.x - transform.position.x;
+
+        float directionX;
+
+        if (Mathf.Abs(differenceX) > 0.05f)
+        {
+
+            directionX = Mathf.Sign(differenceX);
+        }
+        else
+        {
+            directionX =
+                spriteRenderer != null && !spriteRenderer.flipX? 1f: -1f;
+        }
+
+        Vector2 chargeDirection = new Vector2(directionX, 0f);
+
+
+        FaceDirection(directionX);
 
         currentState = BossState.Charge;
 
         isCharging = true;
         hasHitPlayerThisCharge = false;
 
-        FaceDirection(chargeDirection.x);
+
+
+        float oldGravityScale = orangeRigidbody2D.gravityScale;
+        RigidbodyConstraints2D oldConstraints = orangeRigidbody2D.constraints;
+
+
+        orangeRigidbody2D.gravityScale = 0f;
+
+        orangeRigidbody2D.constraints = oldConstraints | RigidbodyConstraints2D.FreezePositionY;
+
 
         if (animator != null)
+        {
+            animator.ResetTrigger(rollingTrigger);
             animator.SetTrigger(rollingTrigger);
+        }
+
+        if (chargeDust != null)
+            chargeDust.Play();
+
+     
 
         float elapsed = 0f;
         bool hitWall = false;
@@ -497,9 +447,9 @@ public class OrangeBossController : MonoBehaviour
             if (isDead || isTransitioning)
                 yield break;
 
-            orangeRigidbody2D.linearVelocity = chargeDirection * speed;
+            orangeRigidbody2D.linearVelocity =new Vector2(directionX * speed, 0f);
 
-            RaycastHit2D wallCheck =Physics2D.Raycast(transform.position,chargeDirection, wallCheckDistance,groundLayer );
+            RaycastHit2D wallCheck = Physics2D.Raycast(transform.position,chargeDirection,wallCheckDistance,groundLayer);
 
             if (wallCheck.collider != null)
             {
@@ -512,14 +462,24 @@ public class OrangeBossController : MonoBehaviour
             yield return null;
         }
 
+
         orangeRigidbody2D.linearVelocity = Vector2.zero;
 
-        isCharging = false; 
+
+        orangeRigidbody2D.gravityScale = oldGravityScale;
+        orangeRigidbody2D.constraints = oldConstraints;
+
+        isCharging = false;
         hasHitPlayerThisCharge = false;
+
+        if (chargeDust != null)
+            chargeDust.Stop();
+
+        PlayIdleAnimation();
 
         if (hitWall)
         {
-            yield return StartCoroutine( WallStun() );
+            yield return StartCoroutine(WallStun());
         }
         else
         {
@@ -527,28 +487,33 @@ public class OrangeBossController : MonoBehaviour
         }
     }
 
-
     IEnumerator WallStun()
     {
         currentState = BossState.Recovery;
 
         orangeRigidbody2D.linearVelocity = Vector2.zero;
 
-        StartVisualFeedback(
-            FlashAndPulse(
-                recoveryColor,
-                GetWallStunTime(),
-                1.2f
-            )
-        );
+        if (impactDust != null)
+        {
+            impactDust.transform.position = transform.position + new Vector3(-Mathf.Sign(spriteRenderer.flipX ? -1f : 1f) * 0.5f,0f, 0f );
+
+            impactDust.Play();
+        }
+
+        CameraShake(0.12f);
+
+        StartSquash(new Vector3(baseScale.x * 1.15f, baseScale.y * 0.75f, baseScale.z), 0.12f);
+     
 
         bossHealth.SetVulnerable(true);
 
-        yield return new WaitForSeconds(GetWallStunTime() );
+        yield return new WaitForSeconds(GetWallStunTime());
 
         bossHealth.SetVulnerable(false);
 
         currentState = BossState.Idle;
+
+        transform.localScale = baseScale;
     }
 
 
@@ -559,14 +524,11 @@ public class OrangeBossController : MonoBehaviour
 
         orangeRigidbody2D.linearVelocity = Vector2.zero;
 
-        StartVisualFeedback(FlashAndPulse(recoveryColor,recoveryTime ));
-
+        PlayIdleAnimation();
 
         bossHealth.SetVulnerable(true);
 
-        yield return new WaitForSeconds(
-            recoveryTime
-        );
+        yield return new WaitForSeconds(recoveryTime);
 
         bossHealth.SetVulnerable(false);
 
@@ -574,6 +536,128 @@ public class OrangeBossController : MonoBehaviour
     }
 
 
+    int GetMaxSoliders()
+    {
+        switch (currentPhase)
+        {
+            case BossPhase.Phase1:
+                return maxSoldiersP1;
+            case BossPhase.Phase2:
+                return maxSoldiersP2;
+            case BossPhase.Phase3:
+                return maxSoldiersP3;
+            case BossPhase.Frenzy:
+                return maxSoldiersFrenzy;
+            default:
+                return 0;
+        }
+    }
+
+    float GetSummonCooldown()
+    {
+        switch (currentPhase)
+        {
+            case BossPhase.Phase1:
+                return summonCooldownP1;
+
+            case BossPhase.Phase2:
+                return summonCooldownP2;
+
+            case BossPhase.Phase3:
+                return summonCooldownP3;
+
+            case BossPhase.Frenzy:
+                return summonCooldownFrenzy;
+
+            default:
+                return 999f;
+        }
+    }
+    float GetRecoveryTime()
+    {
+        switch (currentPhase)
+        {
+            case BossPhase.Phase1:
+                return recoveryTimeP1;
+
+            case BossPhase.Phase2:
+                return recoveryTimeP2;
+
+            case BossPhase.Phase3:
+                return recoveryTimeP3;
+
+            case BossPhase.Frenzy:
+                return recoveryTimeFrenzy;
+
+            default:
+                return 0f;
+        }
+    }
+
+    float GetBreathingRoom()
+    {
+        switch (currentPhase)
+        {
+            case BossPhase.Phase1:
+                return breathingRoomP1;
+
+            case BossPhase.Phase2:
+                return breathingRoomP2;
+
+            case BossPhase.Phase3:
+                return breathingRoomP3;
+
+            case BossPhase.Frenzy:
+                return breathingRoomFrenzy;
+
+            default:
+                return 0f;
+        }
+    }
+
+    float GetWallStunTime()
+    {
+        switch (currentPhase)
+        {
+            case BossPhase.Phase1:
+                return wallStunTimeP1;
+
+            case BossPhase.Phase2:
+                return wallStunTimeP2;
+
+            case BossPhase.Phase3:
+                return wallStunTimeP3;
+
+            case BossPhase.Frenzy:
+                return wallStunTimeFrenzy;
+
+            default:
+                return 0f;
+        }
+    }
+
+    bool CanSummon()
+    {
+        return summonTimer <= 0f && currentSoldierCount < GetMaxSoliders();
+    }
+
+    bool ShouldSummon()
+    {
+        if (!CanSummon()) return false;
+        int maxSoliders = GetMaxSoliders();
+
+        return currentSoldierCount <= Mathf.FloorToInt(maxSoliders * 0.5f);
+    }
+
+    void PlayIdleAnimation()
+    {
+        if (animator == null)
+            return;
+
+        animator.ResetTrigger(rollingTrigger);
+
+        animator.Play(idleStateName);
+    }
     void FacePlayer()
     {
         if (player == null)
@@ -625,10 +709,55 @@ public class OrangeBossController : MonoBehaviour
 
         if (newPhase != currentPhase)
         {
-            StartCoroutine(TransitionToPhase(newPhase));
+            if (transitionRoutine != null)
+                StopCoroutine(transitionRoutine);
+
+            transitionRoutine =StartCoroutine(TransitionToPhase(newPhase));
         }
     }
 
+    void CameraShake(float force)
+    {
+        if (impulseSource == null)
+            return;
+
+        impulseSource.GenerateImpulse(force);
+    }
+
+    float GetPhaseShakeForce(BossPhase phase)
+    {
+        switch (phase)
+        {
+            case BossPhase.Phase2:
+                return 0.3f;
+
+            case BossPhase.Phase3:
+                return 0.4f;
+
+            case BossPhase.Frenzy:
+                return 0.5f;
+
+            default:
+                return 0.25f;
+        }
+    }
+    float GetFirstChargeMultiplier()
+    {
+        switch (currentPhase)
+        {
+            case BossPhase.Phase2:
+                return phase2FirstChargeMultiplier;
+
+            case BossPhase.Phase3:
+                return phase3FirstChargeMultiplier;
+
+            case BossPhase.Frenzy:
+                return frenzyFirstChargeMultiplier;
+
+            default:
+                return 1f;
+        }
+    }
     IEnumerator TransitionToPhase(BossPhase newPhase)
     {
         if (isDead || isTransitioning)
@@ -645,12 +774,18 @@ public class OrangeBossController : MonoBehaviour
         orangeRigidbody2D.linearVelocity = Vector3.zero;
         currentState = BossState.Transitioning;
 
+        PlayIdleAnimation();
 
-        StartVisualFeedback(FlashAndPulse(phaseTransitionColor, phaseTransitionDuration, pulseMultiplier: 1.5f));
-        if (phaseTransitionVFX != null)
-            Instantiate(phaseTransitionVFX, transform.position, Quaternion.identity);
 
-        // TODO: Screen Shake
+        yield return StartCoroutine(EnrageEffect());
+
+        if (isDead)
+            yield break;
+
+
+        CameraShake(GetPhaseShakeForce(newPhase));
+
+
 
         yield return new WaitForSeconds(phaseTransitionDuration);
 
@@ -670,7 +805,8 @@ public class OrangeBossController : MonoBehaviour
         {
             fightRoutine = StartCoroutine(FightLoop());
         }
-  
+        transitionRoutine = null;
+
     }
 
     void HandleDied()
@@ -687,59 +823,127 @@ public class OrangeBossController : MonoBehaviour
             fightRoutine = null;
         }
 
-        if (visualFeedbackRoutine != null)
+        if (transitionRoutine != null)
         {
-            StopCoroutine(visualFeedbackRoutine);
-            visualFeedbackRoutine = null;
+            StopCoroutine(transitionRoutine);
+            transitionRoutine = null;
+        }
+
+        if (squashRoutine != null)
+        {
+            StopCoroutine(squashRoutine);
+            squashRoutine = null;
         }
 
         orangeRigidbody2D.linearVelocity = Vector2.zero;
 
+        if (chargeDust != null)
+            chargeDust.Stop();
+
         currentState = BossState.Dead;
         currentPhase = BossPhase.Dead;
 
+        transform.localScale = baseScale;
+
+
         if (spriteRenderer != null)
             spriteRenderer.color = baseColor;
 
         transform.localScale = baseScale;
 
-        Collider2D col =GetComponent<Collider2D>();
+        Collider2D col = GetComponent<Collider2D>();
 
         if (col != null)
-            col.enabled = false;
+        {
+            col.isTrigger = false;
+            orangeRigidbody2D.bodyType = RigidbodyType2D.Static;
+        }
+           
 
         if (animator != null)
+        {
+            animator.ResetTrigger(rollingTrigger);
             animator.SetTrigger(deathTrigger);
+        }
 
         OnBossDied?.Invoke();
+        CameraShake(0.3f);
+
+
     }
 
-    void StartVisualFeedback(IEnumerator routine)
+    void StartSquash(Vector3 targetScale, float duration)
     {
-        if (visualFeedbackRoutine != null)
-            StopCoroutine(visualFeedbackRoutine);
-        visualFeedbackRoutine = StartCoroutine(routine);
+        if (squashRoutine != null)
+            StopCoroutine(squashRoutine);
+
+        squashRoutine = StartCoroutine(SquashRoutine(targetScale, duration));
     }
 
-    IEnumerator FlashAndPulse(Color targetColor, float duration, float pulseMultiplier = 1f)
+    IEnumerator SquashRoutine(Vector3 targetScale,float duration)
     {
-        float elapsed = 0f;
-        while (elapsed < duration)
+        Vector3 startScale =transform.localScale;
+
+        float timer = 0f;
+
+        while (timer < duration)
         {
-            if (spriteRenderer != null)
-                spriteRenderer.color = targetColor;
+            float t = timer / duration;
 
-            float pulse = 1f + Mathf.Sin(elapsed * pulseSpeed) * pulseScaleAmount * pulseMultiplier;
-            transform.localScale = baseScale * pulse;
+            t = Mathf.SmoothStep(0f, 1f, t);
 
-            elapsed += Time.deltaTime;
+            transform.localScale = Vector3.Lerp(startScale, targetScale,t );
+
+            timer += Time.deltaTime;
+
             yield return null;
         }
 
-        if (spriteRenderer != null)
-            spriteRenderer.color = baseColor;
         transform.localScale = baseScale;
-        visualFeedbackRoutine = null;
+
+        squashRoutine = null;
+    }
+
+    IEnumerator HitStop()
+    {
+        float previousTimeScale = Time.timeScale;
+
+        Time.timeScale = 0f;
+
+        yield return new WaitForSecondsRealtime(hitStopTime);
+
+        Time.timeScale = previousTimeScale;
+    }
+    IEnumerator EnrageEffect()
+    {
+        float timer = 0f;
+
+        Vector3 startScale = baseScale;
+
+        while (timer < enrageDuration)
+        {
+            if (isDead)
+                yield break;
+
+            float normalizedTime = timer / enrageDuration;
+
+            float pulse =1f + Mathf.Sin(timer * enragePulseSpeed) * enrageSquashAmount;
+
+            float strength = Mathf.Sin(normalizedTime * Mathf.PI);
+
+            float scaleX = startScale.x * (2f - pulse);
+            float scaleY = startScale.y * pulse;
+
+            scaleX += startScale.x * enrageScalePunch * strength;
+
+            transform.localScale = new Vector3(scaleX, scaleY, startScale.z);
+
+            timer += Time.unscaledDeltaTime;
+
+            yield return null;
+        }
+
+        transform.localScale = baseScale;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -759,13 +963,33 @@ public class OrangeBossController : MonoBehaviour
 
         KnockBack knockBack = playerDeath.GetComponent<KnockBack>();
 
-        if(knockBack != null)
+        if(knockBack != null && playerDeath.IsDead == false)
         {
-            Vector2 direction = playerDeath.transform.position - transform.position;
+            float directionX = Mathf.Sign(playerDeath.transform.position.x - transform.position.x);
 
-            direction = new Vector2(Mathf.Sign(direction.x), 0f);
+            if(Mathf.Abs(directionX) <0.01)
+            {
+                directionX = - Mathf.Sign(orangeRigidbody2D.linearVelocity.x);
+            }
 
-            knockBack.ApplyKnockback(direction, chargeKnockbackForce, chargeKnockbackUpwardForce);
+            Vector2 knockbackDirection = new Vector2(directionX,0);
+
+            knockBack.ApplyKnockback(knockbackDirection, chargeKnockbackForce, chargeKnockbackUpwardForce);
         }
+
+        if (hitParticles != null)
+        {
+            hitParticles.transform.position = playerDeath.transform.position;
+            hitParticles.Play();
+        }
+
+
+        StartSquash(new Vector3(baseScale.x * 1.12f,baseScale.y * 0.85f,baseScale.z),hitSquashAmount);
+
+        CameraShake(0.1f);
+
+        if (hitStopTime > 0f)
+            StartCoroutine(HitStop());
+
     }
 }
