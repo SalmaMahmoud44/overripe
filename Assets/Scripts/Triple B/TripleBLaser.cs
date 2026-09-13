@@ -247,7 +247,7 @@ public class TripleBLaser : MonoBehaviour
         {
             endPosition = hit.point;
 
-            IDamagable damagable = hit.collider.GetComponent<EnemyHealth>();
+            IDamagable damagable = hit.collider.GetComponent<IDamagable>();
 
             if (damagable != null)
             {
