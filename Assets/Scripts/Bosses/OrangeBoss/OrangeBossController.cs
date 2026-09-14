@@ -25,6 +25,16 @@ public class OrangeBossController : MonoBehaviour
     [SerializeField] string deathTrigger = "Death";
     [SerializeField] string idleStateName = "Idle";
 
+    [Header("Hit Reaction")]
+    [SerializeField] string hitTrigger = "Hit";
+    [SerializeField] string hitStateName = "OrangeHit";
+    [SerializeField] float normalHitCooldown = 0.12f;
+    [SerializeField] float normalHitDuration = 0.12f;
+
+    [Header("Laser Stun")]
+    [SerializeField] float laserHitCooldown = 0.7f;
+    [SerializeField] bool laserInterruptsCharge = true;
+
     [Header("Flip")]
     [SerializeField] bool spriteFacesLeftByDefault = false;
 
@@ -75,6 +85,10 @@ public class OrangeBossController : MonoBehaviour
     [SerializeField] int maxSoldiersP3 = 4;
     [SerializeField] int maxSoldiersFrenzy = 5;
 
+    [Header("Soldier Spawn Timing")]
+    [SerializeField] float soldierSpawnWarningTime = 0.35f;
+    [SerializeField] float delayBetweenSoldiers = 0.2f;
+
     [Header("Recovery Settings")]
     [SerializeField] float recoveryTimeP1 = 1.8f;
     [SerializeField] float recoveryTimeP2 = 1.3f;
@@ -100,6 +114,10 @@ public class OrangeBossController : MonoBehaviour
     [SerializeField] ParticleSystem impactDust;
     [SerializeField] ParticleSystem hitParticles;
 
+    [Header("Summon VFX")]
+    [SerializeField] ParticleSystem summonEffect;
+    [SerializeField] ParticleSystem soldierSpawnEffect;
+
     [Header("Phase Transition")]
     [SerializeField] float phaseTransitionDuration = 0.8f;
     [SerializeField] float enrageDuration = 0.45f;
@@ -120,6 +138,9 @@ public class OrangeBossController : MonoBehaviour
     public BossPhase currentPhase { get; private set; } = BossPhase.Phase1;
     public BossState currentState { get; private set; } = BossState.Idle;
 
+    public bool IsLaserStunned => isLaserStunned;
+
+
     Coroutine fightRoutine;
     Coroutine transitionRoutine;
     Coroutine squashRoutine;
@@ -132,9 +153,14 @@ public class OrangeBossController : MonoBehaviour
     bool hasHitPlayerThisCharge = false;
     bool isCharging =false;
     bool isFirstChargeAfterPhase = false;
+    bool isLaserStunned = false;
+
+  
 
     int currentSoldierCount = 0;
-    float summonTimer=0f;
+    float summonTimer = 0f;
+    float normalHitTimer = 0f;
+    float laserHitTimer = 0f;
 
 
     private void Awake()
@@ -162,7 +188,16 @@ public class OrangeBossController : MonoBehaviour
         if(summonTimer > 0)
             summonTimer -= Time.deltaTime;
 
-        if(isDead || player == null)
+        if (normalHitTimer > 0f)
+            normalHitTimer -= Time.deltaTime;
+
+        if (laserHitTimer > 0f)
+            laserHitTimer -= Time.deltaTime;
+
+        if (isDead || player == null)
+            return;
+
+        if (isLaserStunned)
             return;
 
         if (currentState == BossState.Idle ||currentState == BossState.Telegraph ||currentState == BossState.Summon)
@@ -176,6 +211,7 @@ public class OrangeBossController : MonoBehaviour
         if (bossHealth != null)
         {
             bossHealth.OnDamaged += HandleDamaged;
+            bossHealth.OnHit += HandleBossHit;
             bossHealth.OnDied += HandleDied;
         }
     }
@@ -184,6 +220,7 @@ public class OrangeBossController : MonoBehaviour
         if (bossHealth != null)
         {
             bossHealth.OnDamaged -= HandleDamaged;
+            bossHealth.OnHit -= HandleBossHit;
             bossHealth.OnDied -= HandleDied;
         }
     }
@@ -242,13 +279,17 @@ public class OrangeBossController : MonoBehaviour
                     }
                     yield return StartCoroutine(DoCharge(chargeSpeed * 1.15f, chargeTelegraphTime * 0.9f));
                 }
-                else if (randomVal <0.66f)
+                else if (randomVal < 0.66f)
                 {
-                    yield return StartCoroutine(DoCharge(chargeSpeed * 1.15f, chargeTelegraphTime * 0.9f));
+                    yield return StartCoroutine(DoCharge(chargeSpeed * 1.15f,chargeTelegraphTime * 0.9f));
+
+                    yield return StartCoroutine(DoRecovery(GetRecoveryTime()));
+
                     if (ShouldSummon())
                     {
-                        yield return new WaitForSeconds(0.5f);
                         yield return StartCoroutine(DoSummon(soldiersToSummonP2));
+
+                        yield return new WaitForSeconds(1.5f);
                     }
                 }
                 else
@@ -298,27 +339,60 @@ public class OrangeBossController : MonoBehaviour
 
     IEnumerator DoSummon(int count)
     {
-        if (!CanSummon()) 
-        { 
+
+        if (isDead || isTransitioning || isLaserStunned)
+        {
+            currentState = BossState.Idle;
+            yield break;
+        }
+
+        if (!CanSummon())
+        {
             currentState = BossState.Idle;
             yield break;
         }
 
         currentState = BossState.Telegraph;
 
-        FacePlayer()
-;
-        yield return new WaitForSeconds(summonTelegraphTime);
+        FacePlayer();
+
+        if (summonEffect != null)
+        {
+            summonEffect.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            summonEffect.Play();
+        }
+
+        float timer = 0f;
+
+        while (timer < summonTelegraphTime)
+        {
+            if (isDead || isTransitioning||isLaserStunned)
+            {
+                transform.localScale = baseScale;
+                currentState = BossState.Idle;
+                yield break;
+            }
+
+            float pulse = 1f + Mathf.Sin(Time.time * 10f) * 0.06f;
+
+            transform.localScale = new Vector3(baseScale.x * (2f - pulse),baseScale.y * pulse,baseScale.z);
+
+            timer += Time.deltaTime;
+
+            yield return null;
+        }
+
+        transform.localScale = baseScale;
 
         if (isDead || isTransitioning)
             yield break;
 
         currentState = BossState.Summon;
 
-        int maxSoliders = GetMaxSoliders();
-        int avaliableSlots = maxSoliders - currentSoldierCount;
-        int spawnCount = Mathf.Min(count,avaliableSlots);
-        
+        int maxSoldiers = GetMaxSoliders();
+        int availableSlots = maxSoldiers - currentSoldierCount;
+        int spawnCount = Mathf.Min(count, availableSlots);
+
         if (spawnCount <= 0)
         {
             currentState = BossState.Idle;
@@ -329,11 +403,37 @@ public class OrangeBossController : MonoBehaviour
 
         for (int i = 0; i < spawnCount; i++)
         {
-            if (soliderSpawnPoints == null || soliderSpawnPoints.Length == 0)
-                   break;
+            if (isDead || isTransitioning || isLaserStunned)
+            {
+                transform.localScale = baseScale;
+                currentState = BossState.Idle;
+                yield break;
+            }
 
-            Transform spawnPoint = soliderSpawnPoints[UnityEngine.Random.Range(0, soliderSpawnPoints.Length )];
-            
+            if (soliderSpawnPoints == null || soliderSpawnPoints.Length == 0)
+                break;
+
+            Transform spawnPoint =soliderSpawnPoints[UnityEngine.Random.Range(0, soliderSpawnPoints.Length)];
+
+
+            if (soldierSpawnEffect != null)
+            {
+                soldierSpawnEffect.transform.position = spawnPoint.position;
+
+                soldierSpawnEffect.Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);
+
+                soldierSpawnEffect.Play();
+            }
+
+            yield return new WaitForSeconds(soldierSpawnWarningTime);
+
+            if (isDead || isTransitioning || isLaserStunned)
+            {
+                transform.localScale = baseScale;
+                currentState = BossState.Idle;
+                yield break;
+            }
+
             GameObject soldier = Instantiate(soliderPrefab,spawnPoint.position,Quaternion.identity);
 
             currentSoldierCount++;
@@ -343,11 +443,10 @@ public class OrangeBossController : MonoBehaviour
             if (orangeSolider != null)
             {
                 orangeSolider.SetTarget(player);
-
                 orangeSolider.OnDied += HandleSoldierDied;
             }
 
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(delayBetweenSoldiers);
         }
 
         currentState = BossState.Idle;
@@ -447,6 +546,14 @@ public class OrangeBossController : MonoBehaviour
             if (isDead || isTransitioning)
                 yield break;
 
+            if (isLaserStunned)
+            {
+                orangeRigidbody2D.linearVelocity = Vector2.zero;
+
+                yield return null;
+                continue;
+            }
+
             orangeRigidbody2D.linearVelocity =new Vector2(directionX * speed, 0f);
 
             RaycastHit2D wallCheck = Physics2D.Raycast(transform.position,chargeDirection,wallCheckDistance,groundLayer);
@@ -495,7 +602,11 @@ public class OrangeBossController : MonoBehaviour
 
         if (impactDust != null)
         {
-            impactDust.transform.position = transform.position + new Vector3(-Mathf.Sign(spriteRenderer.flipX ? -1f : 1f) * 0.5f,0f, 0f );
+            float wallDirection = spriteRenderer != null && spriteRenderer.flipX? -1f: 1f;
+
+            impactDust.transform.position =transform.position + new Vector3(wallDirection * 0.5f, 0f, 0f);
+
+            impactDust.Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);
 
             impactDust.Play();
         }
@@ -782,33 +893,31 @@ public class OrangeBossController : MonoBehaviour
         if (isDead)
             yield break;
 
-
         CameraShake(GetPhaseShakeForce(newPhase));
-
-
-
-        yield return new WaitForSeconds(phaseTransitionDuration);
-
-        if (isDead)
-            yield break;
 
         currentPhase = newPhase;
         OnPhaseChanged?.Invoke(newPhase);
 
+        isFirstChargeAfterPhase = true;
+
         currentState = BossState.Idle;
 
-        yield return new WaitForSeconds(0.5f);
-        
+        yield return new WaitForSeconds(0.2f);
+
         isTransitioning = false;
 
         if (!isDead)
         {
             fightRoutine = StartCoroutine(FightLoop());
         }
+
         transitionRoutine = null;
 
     }
-
+    private void HandleBossHit()
+    {
+        PlayNormalHitReaction();
+    }
     void HandleDied()
     {
         if (isDead)
@@ -880,6 +989,7 @@ public class OrangeBossController : MonoBehaviour
         squashRoutine = StartCoroutine(SquashRoutine(targetScale, duration));
     }
 
+
     IEnumerator SquashRoutine(Vector3 targetScale,float duration)
     {
         Vector3 startScale =transform.localScale;
@@ -944,6 +1054,109 @@ public class OrangeBossController : MonoBehaviour
         }
 
         transform.localScale = baseScale;
+    }
+    public void PlayNormalHitReaction()
+    {
+        if (isDead || isTransitioning || isLaserStunned)
+            return;
+
+        if (normalHitTimer > 0f)
+            return;
+
+        normalHitTimer = normalHitCooldown;
+
+        StartCoroutine(NormalHitReactionRoutine());
+    }
+
+    private IEnumerator NormalHitReactionRoutine()
+    {
+        if (animator == null)
+            yield break;
+
+        animator.speed = 1f;
+
+        animator.ResetTrigger(hitTrigger);
+        animator.SetTrigger(hitTrigger);
+
+        yield return new WaitForSeconds(normalHitDuration);
+
+        if (!isDead && !isLaserStunned)
+        {
+            animator.speed = 1f;
+            animator.Play(idleStateName, 0, 0f);
+        }
+    }
+
+    public void StartLaserStun()
+    {
+        if (isDead || isTransitioning)
+            return;
+
+        if (laserHitTimer > 0f)
+            return;
+
+        laserHitTimer = laserHitCooldown;
+
+        StartCoroutine(LaserStunRoutine());
+    }
+
+    private IEnumerator LaserStunRoutine()
+    {
+        if (isDead || isTransitioning)
+            yield break;
+
+        isLaserStunned = true;
+
+        if (orangeRigidbody2D != null)
+            orangeRigidbody2D.linearVelocity = Vector2.zero;
+
+        if (chargeDust != null)
+            chargeDust.Stop();
+
+        if (animator != null)
+        {
+            animator.speed = 1f;
+
+            animator.ResetTrigger(rollingTrigger);
+            animator.ResetTrigger(hitTrigger);
+
+            animator.Play(hitStateName, 0, 0f);
+        }
+
+        while (isLaserStunned)
+        {
+            if (orangeRigidbody2D != null)
+                orangeRigidbody2D.linearVelocity = Vector2.zero;
+
+            yield return null;
+        }
+
+        if (isDead)
+            yield break;
+
+        if (animator != null)
+        {
+            animator.speed = 1f;
+            animator.Play(idleStateName, 0, 0f);
+        }
+
+        currentState = BossState.Idle;
+    }
+    public void EndLaserStun()
+    {
+        if (!isLaserStunned)
+            return;
+
+        isLaserStunned = false;
+
+        if (animator != null)
+        {
+            animator.speed = 1f;
+            animator.Play(idleStateName, 0, 0f);
+        }
+
+        if (currentState != BossState.Dead)
+            currentState = BossState.Idle;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

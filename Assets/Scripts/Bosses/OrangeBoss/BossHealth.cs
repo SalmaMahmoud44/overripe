@@ -10,6 +10,7 @@ public class BossHealth : MonoBehaviour, IDamagable
     bool isVulnerable = false;
 
     public event Action<float> OnDamaged;
+    public event Action OnHit;
     public event Action OnDied;
 
     void Awake()
@@ -24,6 +25,8 @@ public class BossHealth : MonoBehaviour, IDamagable
         float finalDamage = isVulnerable ? amount * vulnerableDamageMultiplier : amount;
         currentHealth -= finalDamage;
         currentHealth = Mathf.Max(currentHealth, 0f);
+
+        OnHit?.Invoke();
 
         OnDamaged?.Invoke(currentHealth / maxHealth);
 

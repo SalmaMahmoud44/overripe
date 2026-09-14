@@ -268,7 +268,7 @@ public class PlayerController : MonoBehaviour
                 }
                   
 
-                tripleBLaserPrefab.ShootLaser(shootDirection);
+                tripleBLaserPrefab.ShootLaser(shootDirection );
 
 
             }

@@ -30,10 +30,7 @@ public class KnockBack : MonoBehaviour
             animator = GetComponentInChildren<Animator>();
     }
 
-    public void ApplyKnockback(
-        Vector2 direction,
-        float horizontalForce,
-        float verticalForce)
+    public void ApplyKnockback(Vector2 direction,float horizontalForce,float verticalForce)
     {
         if (!canReceiveKnockback || rb == null)
             return;
@@ -44,17 +41,9 @@ public class KnockBack : MonoBehaviour
             knockbackRoutine = null;
         }
 
-        direction = direction.sqrMagnitude > 0.001f
-            ? direction.normalized
-            : Vector2.right;
+        direction = direction.sqrMagnitude > 0.001f? direction.normalized: Vector2.right;
 
-        knockbackRoutine = StartCoroutine(
-            KnockbackRoutine(
-                direction,
-                horizontalForce,
-                verticalForce
-            )
-        );
+        knockbackRoutine = StartCoroutine( KnockbackRoutine(direction,horizontalForce,verticalForce));
     }
 
     public void ApplyKnockback(Vector2 direction, float force)
@@ -62,38 +51,27 @@ public class KnockBack : MonoBehaviour
         ApplyKnockback(direction, force, force);
     }
 
-    IEnumerator KnockbackRoutine(
-        Vector2 direction,
-        float horizontalForce,
-        float verticalForce)
+    IEnumerator KnockbackRoutine(Vector2 direction,float horizontalForce,float verticalForce)
     {
         IsKnockedBack = true;
         isFalling = false;
 
-        // Play the ONE Hit animation
         if (animator != null)
         {
             animator.ResetTrigger(knockbackAnimTrigger);
             animator.SetTrigger(knockbackAnimTrigger);
         }
 
-        // Apply the knockback immediately
-        rb.linearVelocity = new Vector2(
-            direction.x * horizontalForce,
-            verticalForce
-        );
+        rb.linearVelocity = new Vector2(direction.x * horizontalForce, verticalForce);
 
-        // Wait for Animation Event
         yield return new WaitUntil(() => isFalling);
 
-        // Give the last 3 frames time to play
         yield return new WaitForSeconds(0.15f);
 
         IsKnockedBack = false;
         knockbackRoutine = null;
     }
 
-    // Animation Event placed after Frame 2
     public void OnKnockbackFall()
     {
         if (!IsKnockedBack)
