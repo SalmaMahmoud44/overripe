@@ -26,6 +26,9 @@ public class OrangeSolider : MonoBehaviour
 
     float attackTimer;
 
+    bool isAttacking;
+    bool isDead;
+
     public event Action OnDied;
 
     private void Awake()
@@ -41,7 +44,9 @@ public class OrangeSolider : MonoBehaviour
     public void SetTarget(Transform playerTransform)
     {
         target = playerTransform;
-        targetDamagable = playerTransform.GetComponent<IDamagable>();
+
+        if (target != null)
+           targetDamagable = target.GetComponent<IDamagable>();
     }
 
     private void Update()
@@ -49,16 +54,18 @@ public class OrangeSolider : MonoBehaviour
         if (attackTimer > 0f)
             attackTimer -= Time.deltaTime;
 
-        if (target == null)
+        if (target == null || isDead)
             return;
 
         if (hitFeedback != null && !hitFeedback.CanAct)
         {
-            rb.linearVelocity = Vector2.zero;
+            StopMoving();
+            return;
+        }
 
-            if (animator != null)
-                animator.SetBool("isWalking", false);
-
+        if (isAttacking)
+        {
+            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
             return;
         }
 
@@ -66,36 +73,56 @@ public class OrangeSolider : MonoBehaviour
 
         if (distance > attackRange)
         {
-      
-            if (animator != null)
-                animator.SetBool("isWalking", true);
-
-            float directionX = Mathf.Sign(target.position.x - transform.position.x);
-
-            rb.linearVelocity = new Vector2(directionX * moveSpeed,rb.linearVelocity.y);
-
-            Flip(-directionX);
+            WalkTowardsPlayer();
         }
         else
         {
-            rb.linearVelocity = new Vector2(  0f, rb.linearVelocity.y );
 
-            if (animator != null)
-                animator.SetBool("isWalking", false);
-
-            Attack();
+            StopMoving();
+            TryAttack();      
         }
     }
-
-    void Attack()
+    void WalkTowardsPlayer()
     {
-        if (attackTimer > 0f)
+        if (animator != null)
+            animator.SetBool("isWalking", true);
+
+        float directionX = Mathf.Sign(target.position.x - transform.position.x);
+
+        rb.linearVelocity = new Vector2(directionX * moveSpeed, rb.linearVelocity.y);
+
+        Flip(-directionX);
+    }
+
+    void StopMoving()
+    {
+        rb.linearVelocity = new Vector2(0f,rb.linearVelocity.y);
+
+        if(animator != null)
+            animator.SetBool("isWalking",false);
+    }
+  
+    void TryAttack()
+    {
+        if (attackTimer > 0f || isAttacking)
             return;
 
         attackTimer = attackCooldown;
+        isAttacking = true;
 
         if (animator != null)
             animator.SetTrigger("Attack");
+    }
+    public void DealAttackDamage()
+    {
+       if(target == null || isDead) return;
+
+        float distance = Vector2.Distance(transform.position, target.position);
+
+        if(distance > attackRange+0.25f)
+            return;
+
+        Debug.Log("Orange Soldier ATTACK HIT!");
 
         if (targetDamagable != null)
             targetDamagable.TakeDamage(attackDamage);
@@ -104,14 +131,17 @@ public class OrangeSolider : MonoBehaviour
 
         if (knockBack != null)
         {
-            Vector2 direction =(Vector2)target.position -(Vector2)transform.position;
+            Vector2 direction =target.position -transform.position;
 
             direction = new Vector2(Mathf.Sign(direction.x),0f );
 
             knockBack.ApplyKnockback(direction,knockbackForce,knockbackUpwardForce);
         }
     }
-
+    public void FinishAttack()
+    {
+        isAttacking = false;
+    }
     void Flip(float directionX)
     {
         if (Mathf.Abs(directionX) < 0.01f)
@@ -126,6 +156,7 @@ public class OrangeSolider : MonoBehaviour
 
     public void NotifyDeath()
     {
+        isDead = true;
         OnDied?.Invoke();
     }
 }

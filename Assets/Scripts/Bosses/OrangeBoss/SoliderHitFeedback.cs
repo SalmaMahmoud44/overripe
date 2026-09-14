@@ -4,7 +4,7 @@ using UnityEngine;
 public class SoliderHitFeedback : MonoBehaviour
 {
     [SerializeField] SpriteRenderer spriteRenderer;
-    [SerializeField] Color hitColor = Color.white;
+    [SerializeField] Color hitColor = Color.darkRed;
     [SerializeField] float flashDuration = 0.15f;
     [SerializeField] float stunDuration = 0.35f;
 
@@ -28,6 +28,20 @@ public class SoliderHitFeedback : MonoBehaviour
         routine = StartCoroutine(FeedbackRoutine());
     }
 
+    public void StopFeedback()
+    {
+        if (routine != null)
+        {
+            StopCoroutine(routine);
+            routine = null;
+        }
+
+        CanAct = true;
+
+        if (spriteRenderer != null)
+            spriteRenderer.color = baseColor;
+    }
+
     IEnumerator FeedbackRoutine()
     {
         CanAct = false;
@@ -47,4 +61,5 @@ public class SoliderHitFeedback : MonoBehaviour
         CanAct = true;
         routine = null;
     }
+  
 }
