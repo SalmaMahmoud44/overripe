@@ -1,6 +1,7 @@
+using System.Collections;
 using UnityEngine;
 
-public class FlyEnemy : MonoBehaviour
+public class FlyEnemy : MonoBehaviour,ILaserStunnable
 {
     public float speed;
     public float lineOfSite;
@@ -10,6 +11,7 @@ public class FlyEnemy : MonoBehaviour
     [Header("Damage Settings")]
     [SerializeField] float damageAmount = 5f;
     [SerializeField] float damageCooldown = 1f;
+    [SerializeField] float knockbackDuration = 0.12f;
 
     float damageTimer = 0f;
 
@@ -19,19 +21,32 @@ public class FlyEnemy : MonoBehaviour
 
     private Transform player;
     private Animator animator;
+
     private bool isDead = false;
     private bool isAttacking = false;
+    private bool isLaserStunned = false;
     private float attackTimer = 0f;
+
+    private bool isKnockedBack = false;
+    private Coroutine knockbackRoutine;
+
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         animator = GetComponent<Animator>();
+
     }
 
     void Update()
     {
         if (isDead) return;
+;
+        if (isLaserStunned)
+            return;
+        
+        if (isKnockedBack)
+            return;
 
         if (damageTimer > 0f)
             damageTimer -= Time.deltaTime;
@@ -93,6 +108,37 @@ public class FlyEnemy : MonoBehaviour
         }
     }
 
+    public void ApplyHitPush(Vector2 direction)
+    {
+        if(isDead) return;
+        if(knockbackRoutine != null)
+            StopCoroutine(knockbackRoutine);
+
+        knockbackRoutine = StartCoroutine(HitPushRoutine(direction));
+
+    }
+
+    IEnumerator HitPushRoutine(Vector2 direction)
+    {
+        isKnockedBack = true;
+
+        direction = direction.sqrMagnitude > 0.001f ? direction.normalized : Vector2.left;
+
+        float timer =0f;
+
+        while (timer < knockbackDuration)
+        {
+            Vector2 movement = direction * knockbackForce;
+
+            transform.position += (Vector3)(movement * Time.deltaTime);
+
+            timer += Time.deltaTime;
+
+            yield return null;
+        }
+        isKnockedBack = false;
+        knockbackRoutine = null;
+    }
     void Flip()
     {
         Vector3 scale = transform.localScale;
@@ -113,5 +159,38 @@ public class FlyEnemy : MonoBehaviour
 
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+
+    public void StartLaserStun()
+    {
+        if (isDead)
+            return;
+
+        isLaserStunned = true;
+
+        if (knockbackRoutine != null)
+        {
+            StopCoroutine(knockbackRoutine);
+            knockbackRoutine = null;
+        }
+
+        isKnockedBack = false;
+        isAttacking = false;
+
+        if (animator != null)
+        {
+            animator.ResetTrigger("Attack");
+            animator.ResetTrigger("StopAttack");
+        }
+    }
+
+    public void EndLaserStun()
+    {
+        if (!isLaserStunned)
+            return;
+
+        isLaserStunned = false;
+
+        isAttacking = false;
     }
 }

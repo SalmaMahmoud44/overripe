@@ -7,7 +7,7 @@ public class TripleBLaser : MonoBehaviour
     [SerializeField] Transform laserSpawnPoint;
     [SerializeField] LineRenderer laserLine;
 
-    [SerializeField] float laserRange = 8f;
+    [SerializeField] float laserRange = 10f;
     [SerializeField] float laserCooldown = 3f;
     [SerializeField] float laserDamage = 20f;
     [SerializeField] float laserTime = 1f;
@@ -18,16 +18,20 @@ public class TripleBLaser : MonoBehaviour
     [SerializeField] RotTimer rotTimer;
     [SerializeField] float laserTimeCost = 3f;
 
+    [Header("Target Selection")]
+    [SerializeField] float cursorTargetRadius = 0.15f;
+
     [Header("Attack Movement")]
-    [SerializeField] float attackDistance = 2.5f;
-    [SerializeField] float moveForwardTime = 0.25f;
+    [SerializeField] float standOffDistance = 1.2f;
+    [SerializeField] float attackMoveSpeed = 10f;
+    [SerializeField] float targetStopDistance = 0.05f;
     [SerializeField] float moveBackTime = 0.25f;
 
     [Header("Animation")]
     [SerializeField] Animator animator;
-    [SerializeField] string LaserTrigger = "StartLaser";
+    [SerializeField] string laserTrigger = "StartLaser";
     [SerializeField] string floatingClipName = "TripleBFloat";
-    
+
     private float laserTimer;
     private float laserElapsed;
 
@@ -35,9 +39,13 @@ public class TripleBLaser : MonoBehaviour
     private Vector2 currentLaserDir;
 
     private Rigidbody2D rigidbody2;
-    private OrangeBossController currentOrangeBoss;
+
+
     private IDamagable currentDamageable;
+    private ILaserStunnable currentLaserStunnable;
+
     private Transform currentTarget;
+    private Collider2D currentTargetCollider;
 
     private bool laserFired;
     private bool returning;
@@ -51,41 +59,42 @@ public class TripleBLaser : MonoBehaviour
     public bool CanShoot
     {
         get
-        { 
-            return laserTimer <= 0f && !IsAttacking;
+        {
+            bool hasTime = rotTimer == null || rotTimer.currentTime >= laserTimeCost;
+            return laserTimer <= 0f && !IsAttacking && hasTime;
         }
 
     }
 
     private void Awake()
     {
-        if(animator == null) 
-             animator = GetComponentInChildren<Animator>();
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>();
 
         rigidbody2 = GetComponent<Rigidbody2D>();
     }
     private void Start()
     {
-        if(laserLine != null)
+        if (laserLine != null)
             laserLine.enabled = false;
     }
     void Update()
     {
-        if(laserTimer > 0f)
+        if (laserTimer > 0f)
         {
             laserTimer -= Time.deltaTime;
-            if(laserTimer < 0f)
+            if (laserTimer < 0f)
                 laserTimer = 0f;
 
-            if(laserCooldown > 0f)
+            if (laserCooldown > 0f)
                 staminaProgress = 1f - (laserTimer / laserCooldown);
         }
     }
 
-    public void ShootLaser(Vector2 direction)
+    public void ShootLaser(Vector2 direction, Vector2 mouseWorldPosision)
     {
 
-        if(!CanShoot) return;
+        if (!CanShoot) return;
 
 
         if (laserSpawnPoint == null || laserLine == null)
@@ -99,66 +108,90 @@ public class TripleBLaser : MonoBehaviour
 
         followPositionBeforeAttack = transform.position;
 
-        currentTarget = FindLaserTarget(currentLaserDir);
+        if (!FindTargetUnderCursor(mouseWorldPosision))
+        {
+            Debug.Log("No Valid IDamagable under cursor");
+            return;
+        }
+
 
         StartCoroutine(LaserAttack());
- 
+
     }
 
     private IEnumerator LaserAttack()
     {
         IsAttacking = true;
+
         returning = false;
         laserFired = false;
         animationHeld = false;
 
         staminaProgress = 1f;
 
-
-        if (rigidbody2 != null) 
-            rigidbody2.linearVelocity = Vector2.zero;
-
-
-        Vector3 startPosition = transform.position;
-
-        Vector3 attackPosition = startPosition;
-
-        if (currentTarget != null)
+        if (rigidbody2 != null)
         {
-            Vector3 directionToTarget =(currentTarget.position - startPosition).normalized;
-
-            attackPosition = currentTarget.position - directionToTarget * attackDistance;
+            rigidbody2.linearVelocity =
+                Vector2.zero;
         }
 
-        float elapsed = 0f;
 
-        while (elapsed < moveForwardTime)
+
+        while (IsTargetValid())
         {
-            elapsed += Time.deltaTime;
+            Vector3 targetPosition = CalculateStandOffPosition();
 
-            float t = Mathf.Clamp01(elapsed / moveForwardTime);
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, attackMoveSpeed * Time.deltaTime);
 
-            transform.position = Vector3.Lerp(startPosition, attackPosition, t);
+            if (rigidbody2 != null)
+            {
+                rigidbody2.linearVelocity = Vector2.zero;
+            }
+
+            float distance = Vector2.Distance(transform.position, targetPosition);
+
+            if (distance <= targetStopDistance)
+                break;
 
             yield return null;
         }
 
-        transform.position = attackPosition;
+        if (!IsTargetValid())
+        {
+            CancelLaserAttack();
+            yield break;
+        }
+
+        transform.position = CalculateStandOffPosition();
 
         if (rigidbody2 != null)
+        {
             rigidbody2.linearVelocity = Vector2.zero;
+        }
+
+
 
         if (animator != null)
         {
             animator.speed = 1f;
-            animator.ResetTrigger(LaserTrigger);
-            animator.SetTrigger(LaserTrigger);
+
+            animator.ResetTrigger(laserTrigger);
+
+            animator.SetTrigger(laserTrigger);
         }
 
         while (!laserFired)
         {
+            if (!IsTargetValid())
+            {
+                CancelLaserAttack();
+                yield break;
+            }
+
             yield return null;
         }
+
+
 
         laserElapsed = 0f;
 
@@ -170,10 +203,9 @@ public class TripleBLaser : MonoBehaviour
 
             staminaProgress = 1f - Mathf.Clamp01(laserElapsed / laserTime);
 
-            if (currentDamageable != null)
+            if (IsTargetValid() && currentDamageable != null)
             {
-                float damageThisFrame =
-                    (laserDamage / laserTime) * deltaTime;
+                float damageThisFrame = (laserDamage / laserTime) * deltaTime;
 
                 currentDamageable.TakeDamage(damageThisFrame);
             }
@@ -181,12 +213,11 @@ public class TripleBLaser : MonoBehaviour
             yield return null;
         }
 
+
         EndLaserHit();
 
         if (laserLine != null)
-        {
             laserLine.enabled = false;
-        }
 
         laserFired = false;
         laserElapsed = 0f;
@@ -194,32 +225,39 @@ public class TripleBLaser : MonoBehaviour
         if (animator != null)
             animator.speed = 1f;
 
+
         while (!animationHeld)
         {
             yield return null;
         }
 
-    
 
-        returning = true;   
+        returning = true;
 
-        startPosition = transform.position;
-        elapsed = 0f;
+        Vector3 startPosition = transform.position;
+
+        float elapsed = 0f;
 
         while (elapsed < moveBackTime)
         {
             elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / moveBackTime);
+
+            float t =
+                Mathf.Clamp01(elapsed / moveBackTime);
+
             transform.position = Vector3.Lerp(startPosition, followPositionBeforeAttack, t);
 
             yield return null;
         }
-        
-        transform.position = followPositionBeforeAttack;
+
+        transform.position =
+            followPositionBeforeAttack;
+
 
         if (animator != null)
         {
-            animator.speed = 1;
+            animator.speed = 1f;
+
             animator.Play(floatingClipName, 0, 0f);
         }
 
@@ -227,19 +265,212 @@ public class TripleBLaser : MonoBehaviour
 
 
         laserTimer = laserCooldown;
+
         staminaProgress = 0f;
+
         IsAttacking = false;
 
-        currentTarget = null;
-        currentDamageable = null;
+        ClearTarget();
+    }
+
+    private bool FindTargetUnderCursor(Vector2 mouseWorldPosition)
+    {
+        ClearTarget();
+
+        int combinedLayerMask = GetCombinedLayerMask();
+
+        if (combinedLayerMask == 0)
+        {
+            Debug.LogWarning("Triple B Laser: No Laser Hit Layers assigned.");
+
+            return false;
+        }
+
+
+        Collider2D[] colliders = Physics2D.OverlapPointAll(mouseWorldPosition, combinedLayerMask);
+
+        IDamagable bestDamageable = null;
+        Collider2D bestCollider = null;
+
+        float bestDistance = float.MaxValue;
+
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider == null)
+                continue;
+
+            if (TryGetDamageable(collider, out IDamagable damageable, out Transform targetTransform))
+            {
+                float distance = Vector2.Distance(mouseWorldPosition, collider.ClosestPoint(mouseWorldPosition));
+
+                if (distance < bestDistance)
+                {
+                    bestDistance = distance;
+                    bestDamageable = damageable;
+                    bestCollider = collider;
+                }
+            }
+        }
+
+
+
+        if (bestDamageable == null && cursorTargetRadius > 0f)
+        {
+            Collider2D[] nearbyColliders = Physics2D.OverlapCircleAll(mouseWorldPosition, cursorTargetRadius, combinedLayerMask);
+
+            foreach (Collider2D collider in nearbyColliders)
+            {
+                if (collider == null)
+                    continue;
+
+                if (TryGetDamageable(collider, out IDamagable damageable, out Transform targetTransform))
+                {
+                    float distance = Vector2.Distance(mouseWorldPosition, collider.ClosestPoint(mouseWorldPosition));
+
+                    if (distance < bestDistance)
+                    {
+                        bestDistance = distance;
+                        bestDamageable = damageable;
+                        bestCollider = collider;
+                    }
+                }
+            }
+        }
+
+        if (bestDamageable == null)
+            return false;
+
+        currentDamageable = bestDamageable;
+
+        currentTargetCollider = bestCollider;
+
+        if (!TryGetDamageable(bestCollider,out IDamagable finalDamageable,out Transform finalTargetTransform))
+        {
+            ClearTarget();
+            return false;
+        }
+
+        currentDamageable = finalDamageable;
+        currentTarget = finalTargetTransform;
+        currentLaserStunnable = GetLaserStunnable(bestCollider);
+
+
+        return currentTarget != null;
+    }
+
+    private bool TryGetDamageable(Collider2D collider, out IDamagable damageable, out Transform targetTransform)
+    {
+        damageable = null;
+        targetTransform = null;
+
+        if (collider == null)
+            return false;
+
+
+        damageable = collider.GetComponent<IDamagable>();
+
+        if (damageable != null)
+        {
+            Component component = damageable as Component;
+
+            if (component != null)
+            {
+                targetTransform =
+                    component.transform;
+
+                return true;
+            }
+        }
+
+        damageable = collider.GetComponentInParent<IDamagable>();
+
+        if (damageable != null)
+        {
+            Component component = damageable as Component;
+
+            if (component != null)
+            {
+                targetTransform = component.transform;
+
+                return true;
+            }
+        }
+
+
+        damageable = collider.GetComponentInChildren<IDamagable>();
+
+        if (damageable != null)
+        {
+            Component component = damageable as Component;
+
+            if (component != null)
+            {
+                targetTransform = component.transform;
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    private ILaserStunnable GetLaserStunnable(Collider2D collider)
+    {
+        if (collider == null) return null;
+
+        ILaserStunnable stunnable = collider.GetComponent<ILaserStunnable>();
+
+        if (stunnable != null)
+            return stunnable;
+
+        stunnable = collider.GetComponentInParent<ILaserStunnable>();
+
+        if(stunnable != null)
+            return stunnable;
+
+        stunnable = collider .GetComponentInChildren<ILaserStunnable>();
+
+        return stunnable;
+    }
+    private Vector3 CalculateStandOffPosition()
+    {
+        if (currentTarget == null || currentTargetCollider == null
+        )
+        {
+            return transform.position;
+        }
+
+        Vector2 targetCenter = currentTarget.position;
+
+        Vector2 tripleBPosition = transform.position;
+
+        Vector2 closestPoint = currentTargetCollider.ClosestPoint(tripleBPosition);
+
+        Vector2 direction = tripleBPosition - targetCenter;
+
+        if (direction.sqrMagnitude < 0.0001f)
+        {
+            direction = Vector2.right;
+        }
+        else
+        {
+            direction.Normalize();
+        }
+
+        Vector2 desiredPosition = closestPoint + direction * standOffDistance;
+
+        return new Vector3(desiredPosition.x, desiredPosition.y, transform.position.z);
     }
 
     public void AnimationFireLaser()
     {
-        if(!IsAttacking) return;
-        if(laserFired) return;
+        if (!IsAttacking) return;
+        if (laserFired) return;
 
         laserFired = true;
+
+        UpdateLaserDirection();
 
         FireLaser(currentLaserDir);
 
@@ -250,43 +481,62 @@ public class TripleBLaser : MonoBehaviour
 
     public void HoldAttackAnimation()
     {
+        if (!IsAttacking)
+            return;
+
         animationHeld = true;
+
         if (animator != null)
             animator.speed = 0f;
     }
 
+    private void UpdateLaserDirection()
+    {
+        if (laserSpawnPoint == null || currentTarget == null)
+            return;
+
+        Vector2 direction = (Vector2)currentTarget.position - (Vector2)laserSpawnPoint.position;
+
+        if (direction.sqrMagnitude > 0.001f)
+        {
+            currentLaserDir = direction.normalized;
+        }
+    }
 
     void FireLaser(Vector2 direction)
     {
-        Debug.Log("Shooting laser in direction: " + direction);
+        if (laserSpawnPoint == null || laserLine == null)
+            return;
+
+
         Vector2 startPosition = laserSpawnPoint.position;
 
-        int combinedLayerMask =0;
-        foreach (LayerMask layer in laserHitLayers)
-        {
-            combinedLayerMask |= layer.value;
-        }
-        RaycastHit2D hit = Physics2D.Raycast(laserSpawnPoint.position, direction, laserRange, combinedLayerMask);
 
         Vector2 endPosition;
 
-        if (hit.collider != null)
+
+        if (IsTargetValid())
         {
-            endPosition = hit.point;
+            direction = ((Vector2)currentTarget.position - startPosition).normalized;
 
-            IDamagable damagable = hit.collider.GetComponent<IDamagable>();
+            currentLaserDir = direction;
 
-            if (damagable != null)
+            Vector2 targetPoint = currentTargetCollider.ClosestPoint(startPosition);
+
+            float distance = Vector2.Distance(startPosition, targetPoint);
+
+            if (distance > laserRange)
             {
-                currentDamageable = damagable;
+                endPosition = startPosition + direction * laserRange;
+            }
+            else
+            {
+                endPosition = targetPoint;
             }
 
-            OrangeBossController orangeBoss = hit.collider.GetComponentInParent<OrangeBossController>();
-
-            if (orangeBoss != null)
+           if(currentLaserStunnable != null)
             {
-                currentOrangeBoss = orangeBoss;
-                currentOrangeBoss.StartLaserStun();
+                currentLaserStunnable.StartLaserStun();
             }
         }
         else
@@ -306,7 +556,8 @@ public class TripleBLaser : MonoBehaviour
         laserLine.SetPosition(1, endPosition);
 
         laserLine.enabled = true;
-        if(rotTimer != null)
+
+        if (rotTimer != null)
         {
             rotTimer.AddTime(-laserTimeCost);
         }
@@ -320,34 +571,76 @@ public class TripleBLaser : MonoBehaviour
 
     private void EndLaserHit()
     {
-        if (currentOrangeBoss != null)
+        if(currentLaserStunnable != null)
         {
-            currentOrangeBoss.EndLaserStun();
-            currentOrangeBoss = null;
+            currentLaserStunnable.EndLaserStun();
+            currentLaserStunnable = null;
         }
     }
 
-  
+    private bool IsTargetValid()
+    {
+        if (currentTarget == null)
+            return false;
 
-    private Transform FindLaserTarget(Vector2 direction)
+        if (currentTargetCollider == null)
+            return false;
+
+        if (currentDamageable == null)
+            return false;
+
+        return true;
+    }
+
+    private void CancelLaserAttack()
+    {
+        EndLaserHit();
+
+        if (laserLine != null)
+            laserLine.enabled = false;
+
+        if (animator != null)
+        {
+            animator.speed = 1f;
+            animator.Play(floatingClipName, 0, 0f);
+        }
+        IsAttacking = false;
+        returning = false;
+        laserFired = false;
+        animationHeld = false;
+
+        laserElapsed = 0f;
+        staminaProgress = 1f;
+
+        ClearTarget();
+    }
+
+    private void ClearTarget()
+    {
+        currentTarget = null;
+        currentTargetCollider = null;
+        currentDamageable = null;
+        currentLaserStunnable = null ;
+    }
+
+    private int GetCombinedLayerMask()
     {
         int combinedLayerMask = 0;
 
-        foreach (LayerMask layer in laserHitLayers)
+        foreach(LayerMask layer in laserHitLayers)
         {
             combinedLayerMask |= layer.value;
         }
 
-        RaycastHit2D hit = Physics2D.Raycast(laserSpawnPoint.position,direction,laserRange,combinedLayerMask);
+        return combinedLayerMask;
+    }
 
-        if (hit.collider == null)
-            return null;
+    private void OnDrawGizmos()
+    {
+        if(laserSpawnPoint == null) return;
 
-        OrangeBossController orangeBoss = hit.collider.GetComponentInParent<OrangeBossController>();
+        Gizmos.color = Color.yellow;
 
-        if (orangeBoss != null)
-            return orangeBoss.transform;
-
-        return null;
+        Gizmos.DrawWireSphere(laserSpawnPoint.position,standOffDistance);
     }
 }

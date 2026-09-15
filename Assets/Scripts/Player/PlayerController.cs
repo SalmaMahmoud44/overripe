@@ -35,9 +35,13 @@ public class PlayerController : MonoBehaviour
     [Header("Melee Settings")]
     [SerializeField] float meleeCooldown = 1f;
     [SerializeField] Transform meleeSpawnPoint;
-    [SerializeField] float meleeRange = 1f;
+    [SerializeField] Vector2 meleeHitboxSize = new Vector2(1.4f, 1f);
     [SerializeField] float meleeDamage = 10f;
     [SerializeField] LayerMask enemyLayer ;
+
+    [Header("Melee Knockback")]
+    [SerializeField] float meleeKnockbackForce = 5f;
+    [SerializeField] float meleeKnockbackVerticalForce = 0.04f;
 
     [Header("Laser Settings")]
     [SerializeField] TripleBLaser tripleBLaserPrefab;
@@ -61,6 +65,7 @@ public class PlayerController : MonoBehaviour
     bool canDash = true;
     bool controlsLocked = false;
     bool nextMeleeFirst = true;
+
 
     Vector2 moveInput;
 
@@ -237,43 +242,59 @@ public class PlayerController : MonoBehaviour
 
     void OnLaser(InputValue value)
     {
+        if (!value.isPressed)
+            return;
 
-        Debug.Log("Laser input received. Current Level: " + levelManager.curreLevel + ", Level Index: " + levelManager.currentLevelIndex);
         if (controlsLocked)
             return;
 
-        if (value.isPressed)
+        if (tripleBLaserPrefab == null)
+            return;
+
+        if (!tripleBLaserPrefab.CanShoot)
+            return;
+
+        Camera mainCamera = Camera.main;
+
+        if (mainCamera == null)
+            return;
+
+
+        Vector3 screenMousePosition = Mouse.current.position.ReadValue();
+
+        worldPos = mainCamera.ScreenToWorldPoint(new Vector3(screenMousePosition.x,screenMousePosition.y, Mathf.Abs(mainCamera.transform.position.z)));
+
+        mousePos = new Vector2(worldPos.x,worldPos.y);
+
+   
+        Vector2 shootDirection =mousePos -(Vector2)tripleBLaserPrefab.transform.position;
+
+        if (shootDirection.sqrMagnitude <= 0.001f)
+            return;
+
+        shootDirection.Normalize();
+
+
+        float angle =Mathf.Atan2(shootDirection.y,shootDirection.x) * Mathf.Rad2Deg;
+
+        float facingAngle =isFacingRight ? 0f : 180f;
+
+        float angleDifference =Mathf.DeltaAngle(facingAngle,angle);
+
+        if (Mathf.Abs(angleDifference) > maxLaserAngle)
         {
-            if (tripleBLaserPrefab != null)
-            {
-                worldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-                mousePos = new Vector2(worldPos.x, worldPos.y);
-                Vector2 shootDirection = (mousePos - (Vector2)tripleBLaserPrefab.transform.position);
+            Debug.Log(
+                "Laser blocked. Angle difference: " +
+                angleDifference
+            );
 
-                if (shootDirection.sqrMagnitude <= 0.001f)
-                    return;
-
-                shootDirection.Normalize();
-
-                float angle = Mathf.Atan2(shootDirection.y, shootDirection.x) * Mathf.Rad2Deg;
-
-                float facingAngle = isFacingRight ? 0f : 180f;
-
-                float angleDifferance = Mathf.DeltaAngle(facingAngle,angle);
-
-                if (Mathf.Abs(angleDifferance) > maxLaserAngle)
-                {
-                    Debug.Log("Laser blocked Angle: " + angleDifferance);
-                    return;
-                }
-                  
-
-                tripleBLaserPrefab.ShootLaser(shootDirection );
-
-
-            }
+            return;
         }
+
+
+        tripleBLaserPrefab.ShootLaser(shootDirection,mousePos);
     }
+
     public void SetControlsLocked(bool locked)
     {
         controlsLocked = locked;
@@ -393,40 +414,85 @@ public class PlayerController : MonoBehaviour
         Vector2 shootDirection = (mousePos - (Vector2)arrowSpawnPoint.position).normalized; 
         ArrowProjectille arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, Quaternion.identity);
         arrow.Init(shootDirection);
-    }   
+    }
 
-      bool MeleeAttack()
-      {
-            if (meleeTimer > 0f)
-                return false; 
+    bool MeleeAttack()
+    {
+        if (meleeTimer > 0f)
+            return false;
 
-            meleeTimer = meleeCooldown; 
+        meleeTimer = meleeCooldown;
 
-            if (nextMeleeFirst)
-                myAnimator.SetTrigger("Melee1");
-            else
-                myAnimator.SetTrigger("Melee2");
+   
+        if (nextMeleeFirst)
+            myAnimator.SetTrigger("Melee1");
+        else
+            myAnimator.SetTrigger("Melee2");
 
+        nextMeleeFirst = !nextMeleeFirst;
+
+  
         if (AudioManager.Instance != null)
             AudioManager.Instance.PlaySFX(AudioManager.Instance.meleeClip);
 
-        nextMeleeFirst = !nextMeleeFirst; 
+        DealMeleeDamage();
+
+        return true;
+    }
+
+    void DealMeleeDamage()
+    {
+        if (meleeSpawnPoint == null)
+            return;
+
+        Vector2 attackCenter = meleeSpawnPoint.position;
+
+        Collider2D[] enemies = Physics2D.OverlapBoxAll(attackCenter,meleeHitboxSize,0f,enemyLayer);
+
+        if (enemies.Length == 0)
+            return;
 
 
-            hits = Physics2D.CircleCastAll(meleeSpawnPoint.position, meleeRange, Vector2.right, 0f, enemyLayer);
-            for (int i = 0; i < hits.Length; i++)
+
+        foreach (Collider2D enemy in enemies)
+        {
+            if (enemy == null)
+                continue;
+
+            IDamagable damagable = enemy.GetComponent<IDamagable>();
+
+            if (damagable == null)
+                continue;
+
+
+            damagable.TakeDamage(meleeDamage);
+
+            FlyEnemy flyEnemy = enemy.GetComponentInParent<FlyEnemy>();
+
+            if (flyEnemy != null)
             {
-                IDamagable damagable = hits[i].collider.gameObject.GetComponent<IDamagable>();
-                Debug.Log("Hit: " + hits[i].collider.gameObject.name);
-                if (damagable != null)
-                {
-                    Debug.Log("Damaging: " + hits[i].collider.gameObject.name);
-                    damagable.TakeDamage(meleeDamage);
-                }
-            }
-            return true; 
-      }
+                float direction = isFacingRight ? 1f : -1f;
 
+                flyEnemy.ApplyHitPush(new Vector2(direction, 0f));
+
+                continue;
+            }
+
+            KnockBack enemyKnockback = enemy.GetComponent<KnockBack>();
+
+            if (enemyKnockback != null &&
+            enemyKnockback.CanReceiveKnockback)
+            {
+                float direction = isFacingRight ? 1f : -1f;
+
+                enemyKnockback.ApplyHitPushback(new Vector2(direction, 0f),meleeKnockbackForce);
+            }
+
+   
+
+            Debug.Log("Melee hit: " + enemy.name);
+        }
+    }
     void UpdateAnimation()
     {
         if (myAnimator == null)
@@ -491,10 +557,11 @@ public class PlayerController : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        if (meleeSpawnPoint != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(meleeSpawnPoint.position, meleeRange);
-        }
+        if (meleeSpawnPoint == null)
+            return;
+
+        Gizmos.color = Color.red;
+
+        Gizmos.DrawWireCube(meleeSpawnPoint.position,meleeHitboxSize);
     }
 }

@@ -5,7 +5,7 @@ using System.Reflection.Metadata;
 using UnityEngine;
 using Unity.Cinemachine;
 
-public class OrangeBossController : MonoBehaviour
+public class OrangeBossController : MonoBehaviour, ILaserStunnable
 {
     public enum BossPhase { Phase1, Phase2 ,Phase3,Frenzy,Dead};
     public enum BossState { Idle,Telegraph , Summon , Charge, Recovery, AttackWindow,Transitioning,Dead };
@@ -31,18 +31,15 @@ public class OrangeBossController : MonoBehaviour
     [SerializeField] float normalHitCooldown = 0.12f;
     [SerializeField] float normalHitDuration = 0.12f;
 
-    [Header("Laser Stun")]
-    [SerializeField] float laserHitCooldown = 0.7f;
-    [SerializeField] bool laserInterruptsCharge = true;
 
     [Header("Flip")]
     [SerializeField] bool spriteFacesLeftByDefault = false;
 
 
     [Header("Phase Threshold")]
-    [SerializeField] float phase2Threshold = 0.5f;
-    [SerializeField] float phase3Threshold = 0.2f;
-    [SerializeField] float frenzyThreshold = 0.1f;
+    [SerializeField] float phase2Threshold = 0.7f;
+    [SerializeField] float phase3Threshold = 0.4f;
+    [SerializeField] float frenzyThreshold = 0.15f;
 
     [Header("Charge Settings")]
     [SerializeField] float chargeTelegraphTime = 1f;
@@ -160,7 +157,6 @@ public class OrangeBossController : MonoBehaviour
     int currentSoldierCount = 0;
     float summonTimer = 0f;
     float normalHitTimer = 0f;
-    float laserHitTimer = 0f;
 
 
     private void Awake()
@@ -190,9 +186,6 @@ public class OrangeBossController : MonoBehaviour
 
         if (normalHitTimer > 0f)
             normalHitTimer -= Time.deltaTime;
-
-        if (laserHitTimer > 0f)
-            laserHitTimer -= Time.deltaTime;
 
         if (isDead || player == null)
             return;
@@ -479,8 +472,12 @@ public class OrangeBossController : MonoBehaviour
             if (isDead || isTransitioning)
                 yield break;
 
-            float pulse =
-                1f + Mathf.Sin(Time.time * telegraphPulseSpeed) * telegraphSquashAmount;
+            if (isLaserStunned)
+            {
+                yield return null;
+                continue;
+            }
+            float pulse = 1f + Mathf.Sin(Time.time * telegraphPulseSpeed) * telegraphSquashAmount;
 
             transform.localScale = new Vector3(baseScale.x * (2f - pulse),baseScale.y * pulse,baseScale.z);
 
@@ -882,6 +879,13 @@ public class OrangeBossController : MonoBehaviour
             fightRoutine = null;
         }
 
+
+        while (isLaserStunned && !isDead)
+            yield return null;
+
+        if (isDead)
+            yield break;
+
         orangeRigidbody2D.linearVelocity = Vector3.zero;
         currentState = BossState.Transitioning;
 
@@ -889,9 +893,6 @@ public class OrangeBossController : MonoBehaviour
 
 
         yield return StartCoroutine(EnrageEffect());
-
-        if (isDead)
-            yield break;
 
         CameraShake(GetPhaseShakeForce(newPhase));
 
@@ -925,6 +926,15 @@ public class OrangeBossController : MonoBehaviour
 
         isDead = true;
         isTransitioning = false;
+
+        if (animator != null)
+        {
+            animator.ResetTrigger(rollingTrigger);
+            animator.ResetTrigger(hitTrigger);
+
+            animator.speed = 1f;
+            animator.SetTrigger(deathTrigger);
+        }
 
         if (fightRoutine != null)
         {
@@ -967,17 +977,9 @@ public class OrangeBossController : MonoBehaviour
             col.isTrigger = false;
             orangeRigidbody2D.bodyType = RigidbodyType2D.Static;
         }
-           
-
-        if (animator != null)
-        {
-            animator.ResetTrigger(rollingTrigger);
-            animator.SetTrigger(deathTrigger);
-        }
 
         OnBossDied?.Invoke();
         CameraShake(0.3f);
-
 
     }
 
@@ -1092,10 +1094,9 @@ public class OrangeBossController : MonoBehaviour
         if (isDead || isTransitioning)
             return;
 
-        if (laserHitTimer > 0f)
-            return;
+       if(isLaserStunned)
+            return ;
 
-        laserHitTimer = laserHitCooldown;
 
         StartCoroutine(LaserStunRoutine());
     }
@@ -1149,14 +1150,20 @@ public class OrangeBossController : MonoBehaviour
 
         isLaserStunned = false;
 
+        if (orangeRigidbody2D != null)
+            orangeRigidbody2D.linearVelocity = Vector2.zero;
+
+         if (isDead)
+            return;
+
         if (animator != null)
         {
             animator.speed = 1f;
             animator.Play(idleStateName, 0, 0f);
         }
 
-        if (currentState != BossState.Dead)
-            currentState = BossState.Idle;
+   
+        currentState = BossState.Idle;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

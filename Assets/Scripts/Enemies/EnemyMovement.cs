@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyMovement : MonoBehaviour
+public class EnemyMovement : MonoBehaviour,ILaserStunnable
 {
     public GameObject pointA;
     public GameObject pointB;
@@ -17,16 +17,32 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] float knockbackForce = 5f;
     [SerializeField] float knockbackUpwardForce = 1.5f;
 
+    KnockBack knockBack;
+
+    bool isLaserStunned = false;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+
         currentPoint = pointB.transform;
+
+        knockBack = GetComponent<KnockBack>();
     }
 
     void Update()
     {
         if (damageTimer > 0f)
             damageTimer -= Time.deltaTime;
+
+        if(isLaserStunned)
+        {
+            rb.linearVelocity = Vector3.zero;
+            return;
+        }
+
+        if (knockBack != null && (knockBack.IsKnockedBack || knockBack.IsHitPushed))
+            return;
+
 
         Vector2 point = currentPoint.position - transform.position;
 
@@ -88,5 +104,25 @@ public class EnemyMovement : MonoBehaviour
         Gizmos.DrawWireSphere(pointA.transform.position, 0.5f);
         Gizmos.DrawWireSphere(pointB.transform.position, 0.5f);
         Gizmos.DrawLine(pointA.transform.position, pointB.transform.position);
+    }
+
+    public void StartLaserStun()
+    {
+       isLaserStunned = true;
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+        }
+    }
+
+    public void EndLaserStun()
+    {
+        if (!isLaserStunned)
+            return;
+
+        isLaserStunned = false;
+
+        if (rb != null)
+            rb.linearVelocity = Vector2.zero;
     }
 }

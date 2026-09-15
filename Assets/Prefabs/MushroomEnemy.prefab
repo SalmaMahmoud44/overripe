@@ -111,6 +111,7 @@ GameObject:
   - component: {fileID: 1773531156704138171}
   - component: {fileID: 5003040353476594667}
   - component: {fileID: 6055698812318141176}
+  - component: {fileID: 5805740756377150779}
   m_Layer: 7
   m_Name: Mushroom-Run_0 (1)
   m_TagString: Untagged
@@ -304,6 +305,8 @@ MonoBehaviour:
   speed: 5
   damageAmount: 5
   damageCooldown: 1
+  knockbackForce: 5
+  knockbackUpwardForce: 1.5
 --- !u!114 &6055698812318141176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -321,3 +324,21 @@ MonoBehaviour:
   timeToAdd: 10
   rotTimer: {fileID: 6917241684926676987, guid: 5b6573c3b63f51f4fa6648c26c8993c8, type: 3}
   deathDelay: 2
+  flyingDeathGravityScale: 3
+--- !u!114 &5805740756377150779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6000573064207092417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec50096e3b4ce9149aff3510996a6f89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KnockBack
+  knockbackDuration: 0.45
+  hitPushDuration: 0.12
+  animator: {fileID: 3416270933903989860}
+  knockbackAnimTrigger: Hit
+  canReceiveKnockback: 1
