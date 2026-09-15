@@ -136,6 +136,9 @@ MonoBehaviour:
   attackCooldown: 1.5
   damageAmount: 5
   damageCooldown: 1
+  knockbackDuration: 0.12
+  knockbackForce: 5
+  knockbackUpwardForce: 2
 --- !u!61 &6497194824810700489
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -226,3 +229,4 @@ MonoBehaviour:
   timeToAdd: 10
   rotTimer: {fileID: 6917241684926676987, guid: 5b6573c3b63f51f4fa6648c26c8993c8, type: 3}
   deathDelay: 0.5
+  flyingDeathGravityScale: 3

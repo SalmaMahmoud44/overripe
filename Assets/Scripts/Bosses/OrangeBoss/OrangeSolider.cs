@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class OrangeSolider : MonoBehaviour
+public class OrangeSolider : MonoBehaviour,ILaserStunnable
 {
     [Header("Movement Settings")]
     [SerializeField] float moveSpeed = 3f;
@@ -23,11 +23,13 @@ public class OrangeSolider : MonoBehaviour
 
     Rigidbody2D rb;
     Animator animator;
+    KnockBack knockBack;
 
     float attackTimer;
 
     bool isAttacking;
     bool isDead;
+    bool isLaserStunned;
 
     public event Action OnDied;
 
@@ -39,6 +41,8 @@ public class OrangeSolider : MonoBehaviour
             hitFeedback = GetComponent<SoliderHitFeedback>();
 
         animator = GetComponentInChildren<Animator>();
+
+        knockBack = GetComponent<KnockBack>();
     }
 
     public void SetTarget(Transform playerTransform)
@@ -54,8 +58,23 @@ public class OrangeSolider : MonoBehaviour
         if (attackTimer > 0f)
             attackTimer -= Time.deltaTime;
 
+        if (isLaserStunned)
+        {
+            StopMoving();
+            isAttacking = false;
+            return;
+        }
+
         if (target == null || isDead)
             return;
+
+        if (knockBack != null && knockBack.IsHitPushed)
+        {
+            if (animator != null)
+                animator.SetBool("isWalking", false);
+
+            return;
+        }
 
         if (hitFeedback != null && !hitFeedback.CanAct)
         {
@@ -158,5 +177,38 @@ public class OrangeSolider : MonoBehaviour
     {
         isDead = true;
         OnDied?.Invoke();
+    }
+
+    public void StartLaserStun()
+    {
+        if(isDead) 
+            return;
+
+        isLaserStunned = true;
+
+        isAttacking = false ;
+
+        if(rb != null)
+            rb.linearVelocity = Vector3.zero;
+
+        if(animator != null)
+        {
+            animator.SetBool("isWalking",false);
+            animator.ResetTrigger("Attack");
+        }
+    }
+
+    public void EndLaserStun()
+    {
+        if(!isLaserStunned)
+            return;
+
+        isLaserStunned = false; 
+
+        if(rb != null)
+            rb.linearVelocity =Vector2.zero;
+
+        if (animator != null)
+            animator.SetBool("isWalking", false);
     }
 }

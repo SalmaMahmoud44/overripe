@@ -21,20 +21,36 @@ public class TripleBFollowPlayer : MonoBehaviour
     [Header("Offset Settings")]
     [SerializeField] float verticalMultiplier = 0.5f;
 
+    [Header("Animation")]
+    [SerializeField] private Animator animator;
+    [SerializeField] private string floatingAnimationName = "TripleBFloat";
+
     Rigidbody2D rb;
     Vector2 smoothVelocity;
 
     TripleBLaser tripleBLaser;
 
+    bool followEnabled = false;
+
+    public bool IsFollowing => followEnabled;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         tripleBLaser = GetComponent<TripleBLaser>();   
+
+        if(animator == null )
+            animator = GetComponentInChildren<Animator>();
     }
  
 
     private void FixedUpdate()
     {
+        if (!followEnabled)
+        {
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
         if (tripleBLaser != null && tripleBLaser.IsAttacking)
         {
             rb.linearVelocity = Vector2.zero;
@@ -45,6 +61,9 @@ public class TripleBFollowPlayer : MonoBehaviour
 
     private void Update()
     {
+        if (!followEnabled)
+            return;
+
         if (tripleBLaser != null && tripleBLaser.IsAttacking)
         {
             rb.linearVelocity = Vector2.zero;
@@ -52,6 +71,33 @@ public class TripleBFollowPlayer : MonoBehaviour
         }
         Flip();
     }
+
+    public void StartFollowing()
+    {
+        followEnabled = true;
+
+        smoothVelocity = Vector2.zero;
+
+        if (rb != null)
+            rb.linearVelocity = Vector2.zero;
+
+        if (animator != null)
+        {
+            animator.Play(floatingAnimationName, 0, 0f);
+            animator.speed = 1f;
+        }
+    }
+
+    public void StopFollowing()
+    {
+        followEnabled = false;
+
+        smoothVelocity = Vector2.zero;
+
+        if (rb != null)
+            rb.linearVelocity = Vector2.zero;
+    }
+
     void FollowPlayer()
     {
         if (followPoint == null)

@@ -142,6 +142,7 @@ GameObject:
   - component: {fileID: 3968040886267849789}
   - component: {fileID: 8130410130810175476}
   - component: {fileID: 7453758385658738475}
+  - component: {fileID: 5652986208318833158}
   m_Layer: 7
   m_Name: OrangeSolider
   m_TagString: Untagged
@@ -279,3 +280,22 @@ MonoBehaviour:
   maxHealth: 30
   currentHealth: 0
   deathDelay: 1
+  rotTimer: {fileID: 0}
+  timeToAdd: 5
+--- !u!114 &5652986208318833158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7368166959569054858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec50096e3b4ce9149aff3510996a6f89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KnockBack
+  knockbackDuration: 0.45
+  hitPushDuration: 0.12
+  animator: {fileID: 0}
+  knockbackAnimTrigger: Hit
+  canReceiveKnockback: 1

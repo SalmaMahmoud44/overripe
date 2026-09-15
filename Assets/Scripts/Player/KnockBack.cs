@@ -7,6 +7,9 @@ public class KnockBack : MonoBehaviour
     [Header("Knockback Settings")]
     [SerializeField] float knockbackDuration = 0.45f;
 
+    [Header("Hit Pushback")]
+    [SerializeField] float hitPushDuration = 0.12f;
+
     [Header("Animation")]
     [SerializeField] Animator animator;
     [SerializeField] string knockbackAnimTrigger = "Hit";
@@ -16,10 +19,12 @@ public class KnockBack : MonoBehaviour
 
     Rigidbody2D rb;
     Coroutine knockbackRoutine;
+    Coroutine hitPushRoutine;
 
     bool isFalling;
 
     public bool IsKnockedBack { get; private set; }
+    public bool IsHitPushed { get; private set; }
     public bool CanReceiveKnockback => canReceiveKnockback;
 
     private void Awake()
@@ -34,6 +39,8 @@ public class KnockBack : MonoBehaviour
     {
         if (!canReceiveKnockback || rb == null)
             return;
+
+        StopHitPush();
 
         if (knockbackRoutine != null)
         {
@@ -71,7 +78,56 @@ public class KnockBack : MonoBehaviour
         IsKnockedBack = false;
         knockbackRoutine = null;
     }
+    public void ApplyHitPushback(Vector2 direction, float force)
+    {
+        if (!canReceiveKnockback || rb == null)
+            return;
 
+        if (knockbackRoutine != null)
+        {
+            StopCoroutine(knockbackRoutine);
+            knockbackRoutine = null;
+            IsKnockedBack = false;
+        }
+
+        StopHitPush();
+
+        direction = direction.sqrMagnitude > 0.001f ? direction.normalized : Vector2.right;
+
+        hitPushRoutine = StartCoroutine(HitPushRoutine(direction, force));
+    }
+
+    IEnumerator HitPushRoutine(Vector2 direction, float force)
+    {
+        IsHitPushed = true;
+
+        Debug.Log("HIT PUSH START");
+        float timer = 0f;
+
+        while (timer < hitPushDuration)
+        {
+            rb.linearVelocity = new Vector2(direction.x * force,rb.linearVelocity.y);
+
+            Debug.Log("Push velocity: " + rb.linearVelocity);
+
+            timer += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+        IsHitPushed = false;
+        hitPushRoutine = null;
+
+        Debug.Log("HIT PUSH END");
+    }
+
+    void StopHitPush()
+    {
+        if (hitPushRoutine != null)
+        {
+            StopCoroutine(hitPushRoutine);
+            hitPushRoutine = null;
+        }
+        IsHitPushed= false;
+    }
     public void OnKnockbackFall()
     {
         if (!IsKnockedBack)
@@ -92,6 +148,7 @@ public class KnockBack : MonoBehaviour
             knockbackRoutine = null;
         }
 
+        StopHitPush();
         if (rb != null)
             rb.linearVelocity = Vector2.zero;
     }
@@ -100,4 +157,6 @@ public class KnockBack : MonoBehaviour
     {
         canReceiveKnockback = true;
     }
+
+
 }
