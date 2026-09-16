@@ -216,7 +216,9 @@ public class PlayerController : MonoBehaviour
 
     void OnShoot(InputValue value)
     {
-        if (value.isPressed && (levelManager.curreLevel == "Peach" || levelManager.currentLevelIndex == 4) )
+        //if(levelManager.currentLevelIndex == 1 || levelManager.currentLevelIndex == 2|| levelManager.currentLevelIndex == 3)
+        //    return;
+        if (value.isPressed) 
         {
             ShootArrow();
         }

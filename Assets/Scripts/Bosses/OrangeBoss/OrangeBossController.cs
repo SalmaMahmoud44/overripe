@@ -8,7 +8,7 @@ using Unity.Cinemachine;
 public class OrangeBossController : MonoBehaviour, ILaserStunnable
 {
     public enum BossPhase { Phase1, Phase2 ,Phase3,Frenzy,Dead};
-    public enum BossState { Idle,Telegraph , Summon , Charge, Recovery, AttackWindow,Transitioning,Dead };
+    public enum BossState { Idle,Telegraph , Summon , Charge, Recovery,Transitioning,Dead };
 
     [Header("References")]
     [SerializeField] Transform player;
@@ -31,19 +31,17 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable
     [SerializeField] float normalHitCooldown = 0.12f;
     [SerializeField] float normalHitDuration = 0.12f;
 
-
     [Header("Flip")]
     [SerializeField] bool spriteFacesLeftByDefault = false;
 
-
     [Header("Phase Threshold")]
-    [SerializeField] float phase2Threshold = 0.7f;
-    [SerializeField] float phase3Threshold = 0.4f;
-    [SerializeField] float frenzyThreshold = 0.15f;
+    [SerializeField] float phase2Threshold = 0.5f;
+    [SerializeField] float phase3Threshold = 0.2f;
+    [SerializeField] float frenzyThreshold = 0.1f;
 
     [Header("Charge Settings")]
     [SerializeField] float chargeTelegraphTime = 1f;
-    [SerializeField] float chargeSpeed = 14f;
+    [SerializeField] float chargeSpeed = 10f;
     [SerializeField] float chargeMaxDuration = 1.2f;
 
     [SerializeField] float wallCheckDistance = 0.6f;
@@ -57,46 +55,52 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable
     [SerializeField] float chargeKnockbackUpwardForce = 7f;
 
     [Header("Wall Stun")]
-    [SerializeField] float wallStunTimeP1 = 1.2f;
-    [SerializeField] float wallStunTimeP2 = 1f;
-    [SerializeField] float wallStunTimeP3 = 0.8f;
-    [SerializeField] float wallStunTimeFrenzy = 0.7f;
+    [SerializeField] float wallStunTimeP1 = 1.5f;
+    [SerializeField] float wallStunTimeP2 = 1.3f;
+    [SerializeField] float wallStunTimeP3 = 1.1f;
+    [SerializeField] float wallStunTimeFrenzy = 1f;
 
     [Header("Summon Settings")]
-    [SerializeField] int solidersToSummonP1 = 2;
-    [SerializeField] int soldiersToSummonP2 = 3;
-    [SerializeField] int soldiersToSummonP3 = 3;
+    [SerializeField] int solidersToSummonP1 = 1;
+    [SerializeField] int soldiersToSummonP2 = 2;
+    [SerializeField] int soldiersToSummonP3 = 2;
 
     [SerializeField] float summonTelegraphTime = 0.6f;
-    [SerializeField] float delayAfterSummon = 1.5f;
+    [SerializeField] float delayAfterSummon = 2.5f;
 
     [Header("Summon Cooldown")]
-    [SerializeField] float summonCooldownP1 = 8f;
-    [SerializeField] float summonCooldownP2 = 7f;
-    [SerializeField] float summonCooldownP3 = 6f;
-    [SerializeField] float summonCooldownFrenzy = 5f;
+    [SerializeField] float summonCooldownP1 = 10f;
+    [SerializeField] float summonCooldownP2 = 8.5f;
+    [SerializeField] float summonCooldownP3 = 7f;
+    [SerializeField] float summonCooldownFrenzy = 6f;
 
     [Header("Soldier Limits")]
-    [SerializeField] int maxSoldiersP1 = 2;
-    [SerializeField] int maxSoldiersP2 = 3;
-    [SerializeField] int maxSoldiersP3 = 4;
-    [SerializeField] int maxSoldiersFrenzy = 5;
+    [SerializeField] int maxSoldiersP1 = 1;
+    [SerializeField] int maxSoldiersP2 = 2;
+    [SerializeField] int maxSoldiersP3 = 2;
+    [SerializeField] int maxSoldiersFrenzy = 3;
 
     [Header("Soldier Spawn Timing")]
     [SerializeField] float soldierSpawnWarningTime = 0.35f;
     [SerializeField] float delayBetweenSoldiers = 0.2f;
 
+    [Header("Validate Spawn Point")]
+    [SerializeField] float spawnCheckRadius = 0.35f;
+    [SerializeField] LayerMask spawnBlockerLayers;
+    [SerializeField] float minDistanceFromPlayer = 3f;
+    [SerializeField] float minDistanceFromBoss = 2f;
+
     [Header("Recovery Settings")]
-    [SerializeField] float recoveryTimeP1 = 1.8f;
-    [SerializeField] float recoveryTimeP2 = 1.3f;
-    [SerializeField] float recoveryTimeP3 = 1.2f;
-    [SerializeField] float recoveryTimeFrenzy = 1f;
+    [SerializeField] float recoveryTimeP1 = 2.2f;
+    [SerializeField] float recoveryTimeP2 = 1.8f;
+    [SerializeField] float recoveryTimeP3 = 1.6f;
+    [SerializeField] float recoveryTimeFrenzy = 1.4f;
 
     [Header("Breathing Room")]
-    [SerializeField] float breathingRoomP1 = 0.8f;
-    [SerializeField] float breathingRoomP2 = 0.7f;
-    [SerializeField] float breathingRoomP3 = 0.6f;
-    [SerializeField] float breathingRoomFrenzy = 0.5f;
+    [SerializeField] float breathingRoomP1 = 1.2f;
+    [SerializeField] float breathingRoomP2 = 1f;
+    [SerializeField] float breathingRoomP3 = 0.9f;
+    [SerializeField] float breathingRoomFrenzy = 0.8f;
 
     [Header("Polish - Charge")]
     [SerializeField] float telegraphSquashAmount = 0.12f;
@@ -116,13 +120,12 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable
     [SerializeField] ParticleSystem soldierSpawnEffect;
 
     [Header("Phase Transition")]
-    [SerializeField] float phaseTransitionDuration = 0.8f;
-    [SerializeField] float enrageDuration = 0.45f;
+    [SerializeField] float enrageDuration = 0.3f;
 
     [Header("Enrage Polish")]
-    [SerializeField] float enrageSquashAmount = 0.18f;
-    [SerializeField] float enragePulseSpeed = 18f;
-    [SerializeField] float enrageScalePunch = 1.12f;
+    [SerializeField] float enrageSquashAmount = 0.3f;
+    [SerializeField] float enragePulseSpeed = 25f;
+    [SerializeField] float enrageScalePunch = 0.1f;
 
     [Header("Phase Charge Boost")]
     [SerializeField] float phase2FirstChargeMultiplier = 1.25f;
@@ -132,6 +135,8 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable
     [Header("Death Reward")]
     [SerializeField] GameObject artifactPrefab;
     [SerializeField] float artifactSpawnDelay = 0.5f;
+
+
 
 
     public event Action<BossPhase> OnPhaseChanged;
@@ -293,9 +298,9 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable
                 }
                 else
                 {
-                    yield return StartCoroutine( DoCharge(chargeSpeed * 1.1f,chargeTelegraphTime * 0.9f));
-                    yield return new WaitForSeconds(0.6f);
-                    yield return StartCoroutine(DoCharge(chargeSpeed * 1.1f,chargeTelegraphTime * 0.9f));
+                    yield return StartCoroutine( DoCharge(chargeSpeed * 1.1f, chargeTelegraphTime * 0.9f));
+
+                    yield return StartCoroutine(DoRecovery(GetRecoveryTime()));
                 }
 
                 yield return StartCoroutine(DoRecovery(GetRecoveryTime()));
@@ -311,7 +316,9 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable
                 else
                 {
                     yield return StartCoroutine(DoCharge(chargeSpeed * 1.2f, chargeTelegraphTime * 0.8f));
-                    yield return new WaitForSeconds(0.55f);
+
+                    yield return StartCoroutine(DoRecovery(0.8f));
+
                     yield return StartCoroutine(DoCharge(chargeSpeed * 1.2f, chargeTelegraphTime * 0.8f));
 
                 }
@@ -326,9 +333,9 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable
                     yield return new WaitForSeconds(1f);
 
                 }   
-                yield return StartCoroutine(DoCharge(chargeSpeed * 1.5f, chargeTelegraphTime * 0.6f));
-                yield return new WaitForSeconds(0.4f);
-                yield return StartCoroutine(DoCharge(chargeSpeed * 1.5f, chargeTelegraphTime * 0.6f));
+                yield return StartCoroutine(DoCharge(chargeSpeed * 1.5f, chargeTelegraphTime * 0.75f));
+                yield return StartCoroutine(DoRecovery(0.7f));
+                yield return StartCoroutine(DoCharge(chargeSpeed * 1.5f, chargeTelegraphTime * 0.75f));
                 yield return StartCoroutine(DoRecovery(GetRecoveryTime()));
                 break;
         }
@@ -412,7 +419,13 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable
             if (soliderSpawnPoints == null || soliderSpawnPoints.Length == 0)
                 break;
 
-            Transform spawnPoint =soliderSpawnPoints[UnityEngine.Random.Range(0, soliderSpawnPoints.Length)];
+            Transform spawnPoint = GetValidSpawnPoint();
+
+            if (spawnPoint == null)
+            {
+                currentState = BossState.Idle;
+                yield break;
+            }
 
 
             if (soldierSpawnEffect != null)
@@ -549,22 +562,16 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable
         while (elapsed < chargeMaxDuration)
         {
             if (isDead || isTransitioning)
+            {
+                StopChargePhysics(oldGravityScale,oldConstraints);
                 yield break;
+            }
+                
 
             if (isLaserStunned)
             {
                 orangeRigidbody2D.linearVelocity = Vector2.zero;
-
-                while (isLaserStunned && !isDead)
-                {
-                    yield return null;
-                }
-
-                if (isDead)
-                    yield break;
-
                 cancelCurrentCharge = true;
-
                 break;
             }
 
@@ -660,11 +667,21 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable
 
         bossHealth.SetVulnerable(true);
 
-        yield return new WaitForSeconds(recoveryTime);
+        float timer = 0f;
+
+        while (timer < recoveryTime)
+        {
+            if (isDead || isTransitioning)
+                yield break;
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
 
         bossHealth.SetVulnerable(false);
 
-        currentState = BossState.Idle;
+        if (!isDead && !isTransitioning)
+            currentState = BossState.Idle;
     }
 
 
@@ -1204,6 +1221,62 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable
 
    
         currentState = BossState.Idle;
+    }
+    void StopChargePhysics(float oldGravityScale, RigidbodyConstraints2D oldConstraints)
+    {
+        orangeRigidbody2D.linearVelocity = Vector2.zero;
+        orangeRigidbody2D.gravityScale = oldGravityScale;
+        orangeRigidbody2D.constraints = oldConstraints;
+
+        isCharging = false;
+        hasHitPlayerThisCharge = false;
+
+        if (chargeDust != null)
+            chargeDust.Stop();
+
+        transform.localScale = baseScale;
+    }
+
+    bool IsSpawnPointValid(Transform point)
+    {
+        if (point == null)
+            return false;
+
+        if (player == null)
+            return false;
+
+        if (Vector2.Distance(point.position, player.position) < minDistanceFromPlayer)
+            return false;
+
+        if (Vector2.Distance(point.position, transform.position) < minDistanceFromBoss)
+            return false;
+
+        Collider2D blocker = Physics2D.OverlapCircle(point.position,spawnCheckRadius,spawnBlockerLayers);
+
+        return blocker == null;
+    }
+    Transform GetValidSpawnPoint()
+    {
+        if (soliderSpawnPoints == null || soliderSpawnPoints.Length == 0)
+            return null;
+
+        List<Transform> validPoints = new List<Transform>();
+
+        foreach (Transform point in soliderSpawnPoints)
+        {
+            if (IsSpawnPointValid(point))
+            {
+                validPoints.Add(point);
+            }
+        }
+
+        if (validPoints.Count == 0)
+        {
+            Debug.LogWarning("No valid soldier spawn point found.");
+            return null;
+        }
+
+        return validPoints[UnityEngine.Random.Range(0, validPoints.Count)];
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

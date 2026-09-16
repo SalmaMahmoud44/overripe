@@ -52,7 +52,9 @@ public class TripleBFollowPlayer : MonoBehaviour
 
         if(!followEnabled )
             rb.bodyType = RigidbodyType2D.Static;
-    
+        else
+            StartFollowing();
+
     }
  
 
@@ -63,6 +65,7 @@ public class TripleBFollowPlayer : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
             return;
         }
+     
 
         if (tripleBLaser != null && tripleBLaser.IsAttacking)
         {
@@ -70,6 +73,7 @@ public class TripleBFollowPlayer : MonoBehaviour
             return;
         }
 
+       
         FollowPlayer();
     }
 
@@ -78,12 +82,13 @@ public class TripleBFollowPlayer : MonoBehaviour
         if (!followEnabled)
             return;
 
+        
         if (tripleBLaser != null && tripleBLaser.IsAttacking)
         {
             rb.linearVelocity = Vector2.zero;
             return;
         }
-
+       
         Flip();
     }
 
