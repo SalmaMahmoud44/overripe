@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,10 @@ public class KeyPromptUI : MonoBehaviour
     [Header("Key Prompt UI Elements")]
     [SerializeField] private GameObject keyPromptPanel;
     [SerializeField] private KeyIcon[] keyIcons;
+
+    [Header("Continue Prompt")]
+    [SerializeField] private TextMeshProUGUI continueText;
+    [SerializeField] private string continueMessage = "Press C for next";
 
     [Header("Key Icon Colors")]
     [SerializeField] private Color activeColor = Color.white;
@@ -34,6 +39,16 @@ public class KeyPromptUI : MonoBehaviour
             bool match = keyIcon.action == action;
             keyIcon.icon.gameObject.SetActive(match);
             if (match) keyIcon.icon.color = inactiveColor;
+        }
+
+        if (continueText != null)
+        {
+            bool showContinue = action == PlayerAction.Continue;
+
+            continueText.gameObject.SetActive(showContinue);
+
+            if (showContinue)
+                continueText.text = continueMessage;
         }
     }
         public void LightUpKey(KeyCode key)

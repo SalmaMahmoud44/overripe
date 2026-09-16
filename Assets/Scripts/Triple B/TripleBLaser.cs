@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.UIElements;
 
 public class TripleBLaser : MonoBehaviour
 {
@@ -27,6 +30,10 @@ public class TripleBLaser : MonoBehaviour
     [SerializeField] float targetStopDistance = 0.05f;
     [SerializeField] float moveBackTime = 0.25f;
 
+    [Header("Attack Collision")]
+    [SerializeField] private LayerMask attackBlockerLayers;
+    [SerializeField] private float attackCollisionBuffer = 0.05f;
+
     [Header("Animation")]
     [SerializeField] Animator animator;
     [SerializeField] string laserTrigger = "StartLaser";
@@ -46,6 +53,9 @@ public class TripleBLaser : MonoBehaviour
 
     private Transform currentTarget;
     private Collider2D currentTargetCollider;
+    private Collider2D tripleBCollider;
+    private ContactFilter2D attackContactFilter;
+    private RaycastHit2D[] attackCastResults = new RaycastHit2D[10];
 
     private bool laserFired;
     private bool returning;
@@ -55,6 +65,10 @@ public class TripleBLaser : MonoBehaviour
     private float staminaProgress = 1f;
 
     public float StaminaProgress => staminaProgress;
+
+    public event Action OnLaserUsed;
+    public event Action OnLaserFinished;
+   
 
     public bool CanShoot
     {
@@ -68,6 +82,12 @@ public class TripleBLaser : MonoBehaviour
 
     private void Awake()
     {
+        tripleBCollider = GetComponent<Collider2D>();
+
+        attackContactFilter = new ContactFilter2D();
+        attackContactFilter.SetLayerMask(attackBlockerLayers);
+        attackContactFilter.useTriggers = true;
+
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
 
@@ -116,6 +136,7 @@ public class TripleBLaser : MonoBehaviour
 
 
         StartCoroutine(LaserAttack());
+        OnLaserUsed?.Invoke();
 
     }
 
@@ -131,8 +152,7 @@ public class TripleBLaser : MonoBehaviour
 
         if (rigidbody2 != null)
         {
-            rigidbody2.linearVelocity =
-                Vector2.zero;
+            rigidbody2.linearVelocity = Vector2.zero;
         }
 
 
@@ -141,19 +161,37 @@ public class TripleBLaser : MonoBehaviour
         {
             Vector3 targetPosition = CalculateStandOffPosition();
 
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, attackMoveSpeed * Time.deltaTime);
+            Vector2 currentPosition = rigidbody2 != null ? rigidbody2.position : (Vector2)transform.position;
+
+            Vector2 offset = (Vector2)targetPosition - currentPosition;
+
+            float distance = offset.magnitude;
+
+            if (distance <= targetStopDistance)
+            {
+                if (rigidbody2 != null)
+                    rigidbody2.linearVelocity = Vector2.zero;
+
+                break;
+            }
+
+            Vector2 desiredVelocity = offset.normalized * attackMoveSpeed;
+
+            Vector2 safeVelocity = GetSafeAttackVelocity(desiredVelocity);
 
             if (rigidbody2 != null)
             {
-                rigidbody2.linearVelocity = Vector2.zero;
+                rigidbody2.MovePosition(
+                    rigidbody2.position + safeVelocity * Time.fixedDeltaTime
+                );
+            }
+            else
+            {
+                transform.position +=
+                    (Vector3)(safeVelocity * Time.deltaTime);
             }
 
-            float distance = Vector2.Distance(transform.position, targetPosition);
-
-            if (distance <= targetStopDistance)
-                break;
-
-            yield return null;
+            yield return new WaitForFixedUpdate();
         }
 
         if (!IsTargetValid())
@@ -162,7 +200,7 @@ public class TripleBLaser : MonoBehaviour
             yield break;
         }
 
-        transform.position = CalculateStandOffPosition();
+       
 
         if (rigidbody2 != null)
         {
@@ -242,16 +280,14 @@ public class TripleBLaser : MonoBehaviour
         {
             elapsed += Time.deltaTime;
 
-            float t =
-                Mathf.Clamp01(elapsed / moveBackTime);
+            float t = Mathf.Clamp01(elapsed / moveBackTime);
 
             transform.position = Vector3.Lerp(startPosition, followPositionBeforeAttack, t);
 
             yield return null;
         }
 
-        transform.position =
-            followPositionBeforeAttack;
+        transform.position = followPositionBeforeAttack;
 
 
         if (animator != null)
@@ -271,6 +307,8 @@ public class TripleBLaser : MonoBehaviour
         IsAttacking = false;
 
         ClearTarget();
+
+        OnLaserFinished?.Invoke();
     }
 
     private bool FindTargetUnderCursor(Vector2 mouseWorldPosition)
@@ -375,8 +413,7 @@ public class TripleBLaser : MonoBehaviour
 
             if (component != null)
             {
-                targetTransform =
-                    component.transform;
+                targetTransform = component.transform;
 
                 return true;
             }
@@ -535,9 +572,9 @@ public class TripleBLaser : MonoBehaviour
             }
 
            if(currentLaserStunnable != null)
-            {
+           {
                 currentLaserStunnable.StartLaserStun();
-            }
+           }
         }
         else
         {
@@ -635,6 +672,41 @@ public class TripleBLaser : MonoBehaviour
         return combinedLayerMask;
     }
 
+    private Vector2 GetSafeAttackVelocity(Vector2 desiredVelocity)
+    {
+        if (tripleBCollider == null || desiredVelocity.sqrMagnitude < Mathf.Epsilon)
+            return desiredVelocity;
+
+        Vector2 direction = desiredVelocity.normalized;
+
+        float distance = desiredVelocity.magnitude * Time.deltaTime;
+
+        int hitCount = tripleBCollider.Cast(direction,attackContactFilter,attackCastResults,distance + attackCollisionBuffer);
+
+        if (hitCount == 0)
+            return desiredVelocity;
+
+        float closestDistance = distance;
+
+        for (int i = 0; i < hitCount; i++)
+        {
+            if (attackCastResults[i].collider == null)
+                continue;
+
+            if (attackCastResults[i].collider == currentTargetCollider)
+                continue;
+
+            closestDistance = Mathf.Min(closestDistance,attackCastResults[i].distance);
+        }
+
+        if (closestDistance <= attackCollisionBuffer)
+            return Vector2.zero;
+
+        float safeSpeed =(closestDistance - attackCollisionBuffer) / Time.deltaTime;
+
+        return direction * Mathf.Min(desiredVelocity.magnitude,safeSpeed);
+    }
+   
     private void OnDrawGizmos()
     {
         if(laserSpawnPoint == null) return;

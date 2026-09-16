@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -25,22 +26,33 @@ public class TripleBFollowPlayer : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private string floatingAnimationName = "TripleBFloat";
 
+    [SerializeField] bool followEnabled = false;
+
+
     Rigidbody2D rb;
     Vector2 smoothVelocity;
 
     TripleBLaser tripleBLaser;
 
-    bool followEnabled = false;
+  
+    bool reachedPlayer = false;
 
     public bool IsFollowing => followEnabled;
+
+    public event Action OnReachedPlayer;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        tripleBLaser = GetComponent<TripleBLaser>();   
+        tripleBLaser = GetComponent<TripleBLaser>();
 
-        if(animator == null )
+
+        if (animator == null )
             animator = GetComponentInChildren<Animator>();
+
+        if(!followEnabled )
+            rb.bodyType = RigidbodyType2D.Static;
+    
     }
  
 
@@ -51,11 +63,13 @@ public class TripleBFollowPlayer : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
             return;
         }
+
         if (tripleBLaser != null && tripleBLaser.IsAttacking)
         {
             rb.linearVelocity = Vector2.zero;
             return;
         }
+
         FollowPlayer();
     }
 
@@ -69,18 +83,23 @@ public class TripleBFollowPlayer : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
             return;
         }
+
         Flip();
     }
 
     public void StartFollowing()
     {
         followEnabled = true;
+        reachedPlayer = false;
 
         smoothVelocity = Vector2.zero;
 
         if (rb != null)
+        {
             rb.linearVelocity = Vector2.zero;
-
+            rb.bodyType = RigidbodyType2D.Dynamic;
+        }
+            
         if (animator != null)
         {
             animator.Play(floatingAnimationName, 0, 0f);
@@ -95,7 +114,11 @@ public class TripleBFollowPlayer : MonoBehaviour
         smoothVelocity = Vector2.zero;
 
         if (rb != null)
+        {
             rb.linearVelocity = Vector2.zero;
+            rb.bodyType = RigidbodyType2D.Static;
+        }
+          
     }
 
     void FollowPlayer()
@@ -113,6 +136,13 @@ public class TripleBFollowPlayer : MonoBehaviour
         if (distance <= stopDistance)
         {
             rb.linearVelocity = Vector2.SmoothDamp(rb.linearVelocity, Vector2.zero, ref smoothVelocity, smoothTime);
+
+            if (!reachedPlayer) 
+            {
+                reachedPlayer = true;
+                OnReachedPlayer?.Invoke();
+            }
+
             return;
         }
 
@@ -123,7 +153,9 @@ public class TripleBFollowPlayer : MonoBehaviour
         float currentSpeed = (distance >= catchUpDistance) ? catchUpSpeed : moveSpeed;
         Vector2 targetVelocity = direction * currentSpeed;
 
-        rb.linearVelocity = Vector2.SmoothDamp(rb.linearVelocity, targetVelocity, ref smoothVelocity, smoothTime);
+    
+
+        rb.linearVelocity = Vector2.SmoothDamp(rb.linearVelocity,targetVelocity,ref smoothVelocity,smoothTime );
     }
 
     void Flip()
@@ -143,4 +175,8 @@ public class TripleBFollowPlayer : MonoBehaviour
 
 
     }
+
+   
+
+  
 }
