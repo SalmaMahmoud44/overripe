@@ -4894,37 +4894,6 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
---- !u!1 &3181652306537689419
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4771386806398152355}
-  m_Layer: 0
-  m_Name: SpawnPoints (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &4771386806398152355
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3181652306537689419}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 93.85, y: -11, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3972591559544228803}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4460113958343999539
 GameObject:
   m_ObjectHideFlags: 0
@@ -14722,135 +14691,6 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
---- !u!1 &4779788578572044207
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 273106034919293599}
-  m_Layer: 0
-  m_Name: SpawnPoints (4)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &273106034919293599
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4779788578572044207}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 83.39, y: -11, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3972591559544228803}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &5014878941659373909
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3972591559544228803}
-  m_Layer: 0
-  m_Name: Soliders Spawn Point
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3972591559544228803
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5014878941659373909}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -69.79724, y: 7.289584, z: 0}
-  m_LocalScale: {x: 0.7692308, y: 0.7692308, z: 0.7692308}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 3062497178070383925}
-  - {fileID: 4771386806398152355}
-  - {fileID: 2225243331221942156}
-  - {fileID: 3706168092512209872}
-  - {fileID: 273106034919293599}
-  m_Father: {fileID: 5042322394332746900}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &5668151691196398183
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3062497178070383925}
-  m_Layer: 0
-  m_Name: SpawnPoints
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &3062497178070383925
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5668151691196398183}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 87.9, y: -11, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3972591559544228803}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6203446035861607341
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2225243331221942156}
-  m_Layer: 0
-  m_Name: SpawnPoints (2)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &2225243331221942156
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6203446035861607341}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 96.38, y: -11, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3972591559544228803}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7181111340833023879
 GameObject:
   m_ObjectHideFlags: 0
@@ -19908,7 +19748,6 @@ Transform:
   - {fileID: 1040247433676539542}
   - {fileID: 2450063454057457190}
   - {fileID: 2368236269810613977}
-  - {fileID: 3972591559544228803}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &4912468350788736870
@@ -20002,11 +19841,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::OrangeBossController
   player: {fileID: 0}
   soliderSpawnPoints:
-  - {fileID: 3062497178070383925}
-  - {fileID: 4771386806398152355}
-  - {fileID: 2225243331221942156}
-  - {fileID: 3706168092512209872}
-  - {fileID: 273106034919293599}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   soliderPrefab: {fileID: 7368166959569054858, guid: 0caddc098469a5d488ceb4cc322ae023, type: 3}
   bossHealth: {fileID: 3361946041436867848}
   animator: {fileID: 4336297673896131993}
@@ -20020,49 +19859,53 @@ MonoBehaviour:
   hitStateName: OrangeHit
   normalHitCooldown: 0.12
   normalHitDuration: 0.12
-  laserHitCooldown: 0.7
-  laserInterruptsCharge: 1
   spriteFacesLeftByDefault: 1
   phase2Threshold: 0.5
-  phase3Threshold: 0.2
+  phase3Threshold: 0.22
   frenzyThreshold: 0.1
-  chargeTelegraphTime: 1
-  chargeSpeed: 14
+  chargeTelegraphTime: 0.9
+  chargeSpeed: 9
   chargeMaxDuration: 1.2
-  wallCheckDistance: 0.6
+  wallCheckDistance: 0.8
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
   chargeDamage: 10
-  chargeKnockbackForce: 20
-  chargeKnockbackUpwardForce: 7
-  wallStunTimeP1: 1.2
-  wallStunTimeP2: 1
-  wallStunTimeP3: 0.8
-  wallStunTimeFrenzy: 0.7
+  chargeKnockbackForce: 18
+  chargeKnockbackUpwardForce: 6
+  wallStunTimeP1: 1.6
+  wallStunTimeP2: 1.35
+  wallStunTimeP3: 1.15
+  wallStunTimeFrenzy: 1
   solidersToSummonP1: 2
   soldiersToSummonP2: 3
   soldiersToSummonP3: 3
   summonTelegraphTime: 0.6
-  delayAfterSummon: 2.5
-  summonCooldownP1: 10
-  summonCooldownP2: 8.5
+  delayAfterSummon: 2
+  summonCooldownP1: 11
+  summonCooldownP2: 9
   summonCooldownP3: 7
   summonCooldownFrenzy: 6
-  maxSoldiersP1: 2
-  maxSoldiersP2: 3
-  maxSoldiersP3: 3
-  maxSoldiersFrenzy: 4
+  maxSoldiersP1: 1
+  maxSoldiersP2: 2
+  maxSoldiersP3: 2
+  maxSoldiersFrenzy: 3
   soldierSpawnWarningTime: 0.35
   delayBetweenSoldiers: 0.2
-  recoveryTimeP1: 2.2
-  recoveryTimeP2: 1.8
-  recoveryTimeP3: 1.6
-  recoveryTimeFrenzy: 1.4
+  spawnCheckRadius: 0.35
+  spawnBlockerLayers:
+    serializedVersion: 2
+    m_Bits: 72
+  minDistanceFromPlayer: 2
+  minDistanceFromBoss: 1
+  recoveryTimeP1: 2
+  recoveryTimeP2: 1.7
+  recoveryTimeP3: 1.5
+  recoveryTimeFrenzy: 1.3
   breathingRoomP1: 1.2
   breathingRoomP2: 1
   breathingRoomP3: 0.9
-  breathingRoomFrenzy: 0.8
+  breathingRoomFrenzy: 0.85
   telegraphSquashAmount: 0.12
   telegraphPulseSpeed: 12
   hitStopTime: 0.04
@@ -20072,14 +19915,15 @@ MonoBehaviour:
   hitParticles: {fileID: 4944241568913640598}
   summonEffect: {fileID: 8637395682690603286}
   soldierSpawnEffect: {fileID: 1235826571019082040}
-  phaseTransitionDuration: 0.35
   enrageDuration: 0.3
   enrageSquashAmount: 0.3
   enragePulseSpeed: 25
   enrageScalePunch: 0.1
-  phase2FirstChargeMultiplier: 1.25
-  phase3FirstChargeMultiplier: 1.35
-  frenzyFirstChargeMultiplier: 1.5
+  phase2FirstChargeMultiplier: 1.2
+  phase3FirstChargeMultiplier: 1.3
+  frenzyFirstChargeMultiplier: 1.4
+  artifactPrefab: {fileID: 2212139751821455205, guid: c39d9da0946a2c245b51041ecd2b730f, type: 3}
+  artifactSpawnDelay: 0.5
 --- !u!114 &3929276978021966888
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20133,37 +19977,6 @@ MonoBehaviour:
     DissipationDistance: 100
     PropagationSpeed: 343
   DefaultVelocity: {x: 0, y: -1, z: 0}
---- !u!1 &8555019263644317360
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3706168092512209872}
-  m_Layer: 0
-  m_Name: SpawnPoints (3)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &3706168092512209872
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8555019263644317360}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 86.34, y: -11, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3972591559544228803}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8857610804482696894
 GameObject:
   m_ObjectHideFlags: 0
