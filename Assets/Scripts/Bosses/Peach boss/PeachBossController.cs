@@ -1,137 +1,357 @@
-using System.Collections;
+using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class PeachBossController : MonoBehaviour
 {
-    public enum BossState { Idle, RollIntro, Rolling, RollOutro }
+    public enum BossState { Idle, RollIntro, Rolling, RollOutro, DustAttack }
+
+
+    [Header("Health Settings")]
+    [SerializeField] float maxHealth = 100f;
+    [SerializeField] float currentHealth;
+
+    [Header("UI")]
+    [SerializeField] Slider healthSlider;
+
+    [Header("Room Walls")]
+    [SerializeField] GameObject leftWall;
+    [SerializeField] GameObject rightWall;
+
+    [Header("Detection Settings")]
+    [SerializeField] float detectRange = 6f;
+    Transform player;
+
+    [Header("Colliders")]
+    [SerializeField] Collider2D normalCollider;
+    [SerializeField] Collider2D rollCollider;
 
     [Header("References")]
-    [SerializeField] Transform player;
-    [SerializeField] Animator animator;
-    [SerializeField] Rigidbody2D peachRigidbody2D;
-    [SerializeField] Collider2D roomBounds;
+    [SerializeField] Rigidbody2D rb;
+    [SerializeField] SpriteRenderer spriteRenderer;
 
-    [Header("Phase 1 - Roll Settings")]
+    [Header("Room Bounds")]
+    [SerializeField] Collider2D bossRoomBounds;
+    [SerializeField] CinemachineConfiner2D cameraConfiner;
+    Collider2D originalBounds;
+    bool roomLocked = false;
+
+    [Header("Roll Platform")]
+    [SerializeField] GameObject rollPlatform;
+
+    [Header("Roll Settings")]
+    [SerializeField] float spottedDelay = 1.5f;
     [SerializeField] float rollIntroDelay = 1f;
-    [SerializeField] float rollSpeed = 8f;
-    [SerializeField] int bounceCount = 4;
-    [SerializeField] float rollOutroDuration = 0.4f; // TODO: نستبدلها بطول الـ outro clip الفعلي
+    [SerializeField] float rollSpeed = 6f;
+    [SerializeField] int rollBounceCount = 2;
+    [SerializeField] bool endWithHalfBounce = true;
+    [SerializeField] float rollOutroDelay = 0.5f;
 
-    [Header("Animator Triggers")]
-    [SerializeField] string rollIntroTrigger = "RollIntro";
-    [SerializeField] string rollLoopBool = "IsRolling";
-    [SerializeField] string rollOutroTrigger = "RollOutro";
+    BossState currentState = BossState.Idle;
+    float rollDirectionX;
+    float stateTimer;
+    int currentBounceCount;
+    bool doingFinalHalfMove = false;
+    float halfMoveTargetX;
 
-    public BossState currentState { get; private set; } = BossState.Idle;
+    [Header("Dust Attack Settings")]
+    [SerializeField] GameObject dustPuffPrefab;
+    [SerializeField] int dustPuffCount = 4;
+    [SerializeField] float dustPuffInterval = 0.5f;
+    [SerializeField] Vector2 dustSpawnOffset = Vector2.zero;
+    [SerializeField] float dustSpacing = 2f;
+    [SerializeField] float dustAttackEndDelay = 1.5f;
 
-    bool fightStarted = false;
-    int rollDirection = 1;
 
-    void Awake()
+    int currentDustPuffCount;
+    bool waitingForDustEnd = false;
+
+    bool playerSpotted = false;
+
+    void Start()
     {
-        if (animator == null)
-            animator = GetComponent<Animator>();
+        player = GameObject.FindGameObjectWithTag("Player").transform;
 
-        if (peachRigidbody2D == null)
-            peachRigidbody2D = GetComponent<Rigidbody2D>();
+        if (rb == null)
+            rb = GetComponent<Rigidbody2D>();
+
+        if (spriteRenderer == null)
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+        currentHealth = maxHealth;
+
+        if (healthSlider != null)
+        {
+            healthSlider.maxValue = maxHealth;
+            healthSlider.value = currentHealth;
+            healthSlider.gameObject.SetActive(false);
+        }
     }
 
-    public void BeginFight()
+    void Update()
     {
-        if (fightStarted) return;
+        switch (currentState)
+        {
+            case BossState.Idle:
+                UpdateIdle();
+                break;
 
-        fightStarted = true;
-        rollDirection = (player.position.x > transform.position.x) ? 1 : -1;
-        StartCoroutine(RollIntroSequence());
+            case BossState.RollIntro:
+                UpdateRollIntro();
+                break;
+
+            case BossState.Rolling:
+                MoveAndBounce();
+                break;
+
+            case BossState.RollOutro:
+                UpdateRollOutro();
+                break;
+
+            case BossState.DustAttack:
+                UpdateDustAttack();
+                break;
+        }
     }
 
-    IEnumerator RollIntroSequence()
+    void UpdateIdle()
     {
-        currentState = BossState.Idle;
+        if (!playerSpotted)
+        {
+            float distanceToPlayer = Vector2.Distance(transform.position, player.position);
+            if (distanceToPlayer <= detectRange)
+            {
+                playerSpotted = true;
+                stateTimer = spottedDelay;
 
-        yield return new WaitForSeconds(rollIntroDelay);
+                if (healthSlider != null)
+                    healthSlider.gameObject.SetActive(true);
 
+                LockCameraToBossRoom();
+            }
+            return;
+        }
+
+        stateTimer -= Time.deltaTime;
+
+        if (stateTimer <= 0f)
+        {
+            StartRollIntro();
+        }
+    }
+
+
+    void SetRollCollider(bool isRolling)
+    {
+        if (normalCollider != null)
+            normalCollider.enabled = !isRolling;
+
+        if (rollCollider != null)
+            rollCollider.enabled = isRolling;
+    }
+
+    void StartRollIntro()
+    {
         currentState = BossState.RollIntro;
+        stateTimer = rollIntroDelay;
 
-        if (animator != null)
-            animator.SetTrigger(rollIntroTrigger);
-
-        Debug.Log("Peach Boss: Roll Intro started");
-
-        // TODO: نستبدل الرقم دا بطول الـ intro clip الفعلي
-        yield return new WaitForSeconds(0.3f);
-
-        yield return StartCoroutine(RollSequence());
+        if (rollPlatform != null)
+            rollPlatform.SetActive(true);
     }
 
-    IEnumerator RollSequence()
+    void UpdateRollIntro()
+    {
+        stateTimer -= Time.deltaTime;
+
+        if (stateTimer <= 0f)
+        {
+            StartRolling();
+        }
+    }
+
+    void StartRolling()
     {
         currentState = BossState.Rolling;
+        rollDirectionX = player.position.x > transform.position.x ? 1f : -1f;
+        currentBounceCount = 0;
+        doingFinalHalfMove = false;
 
-        if (animator != null)
-            animator.SetBool(rollLoopBool, true);
+        SetRollCollider(true);
+    }
 
-        Debug.Log("Peach Boss: Rolling started");
-
-        int bounces = 0;
-
-        while (bounces < bounceCount)
-        {
-            bool didBounce = Roll();
-            if (didBounce)
-                bounces++;
-
-            yield return null;
-        }
-
-        peachRigidbody2D.linearVelocity = Vector2.zero;
-
-        if (animator != null)
-            animator.SetBool(rollLoopBool, false);
-
+    void StartRollOutro()
+    {
         currentState = BossState.RollOutro;
+        stateTimer = rollOutroDelay;
 
-        if (animator != null)
-            animator.SetTrigger(rollOutroTrigger);
+        rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+        SetRollCollider(false);
 
-        Debug.Log("Peach Boss: Roll Outro started");
+        if (rollPlatform != null)
+            rollPlatform.SetActive(false);
 
-        yield return new WaitForSeconds(rollOutroDuration);
-
-        FaceDirection(player.position.x > transform.position.x ? 1 : -1);
-
-        currentState = BossState.Idle;
-
-        Debug.Log("Peach Boss: Rolling finished, now Idle");
+        FaceDirection(rollDirectionX);
     }
 
-    bool Roll()
+    void UpdateRollOutro()
     {
-        if (peachRigidbody2D == null || roomBounds == null) return false;
+        stateTimer -= Time.deltaTime;
 
-        peachRigidbody2D.linearVelocity = new Vector2(rollDirection * rollSpeed, peachRigidbody2D.linearVelocity.y);
-
-        Bounds bounds = roomBounds.bounds;
-        bool bounced = false;
-
-        if (transform.position.x >= bounds.max.x)
+        if (stateTimer <= 0f)
         {
-            rollDirection = -1;
-            bounced = true;
+            StartDustAttack();
         }
-        else if (transform.position.x <= bounds.min.x)
-        {
-            rollDirection = 1;
-            bounced = true;
-        }
-
-        return bounced;
     }
 
-    void FaceDirection(int direction)
+    void StartDustAttack()
     {
-        Vector3 scale = transform.localScale;
-        scale.x = Mathf.Abs(scale.x) * direction;
-        transform.localScale = scale;
+        currentState = BossState.DustAttack;
+        currentDustPuffCount = 0;
+        waitingForDustEnd = false;
+        stateTimer = dustPuffInterval;
+
+        SpawnDustPuff();
+    }
+
+    void UpdateDustAttack()
+    {
+        stateTimer -= Time.deltaTime;
+
+        if (stateTimer <= 0f)
+        {
+            if (waitingForDustEnd)
+            {
+                StartRollIntro();
+                return;
+            }
+
+            currentDustPuffCount++;
+
+            if (currentDustPuffCount >= dustPuffCount)
+            {
+                waitingForDustEnd = true;
+                stateTimer = dustAttackEndDelay;
+                return;
+            }
+
+            SpawnDustPuff();
+            stateTimer = dustPuffInterval;
+        }
+    }
+
+    void SpawnDustPuff()
+    {
+        if (dustPuffPrefab == null || player == null)
+            return;
+
+        float directionX = player.position.x > transform.position.x ? 1f : -1f;
+        Vector2 direction = new Vector2(directionX, 0f);
+
+        float spawnOffsetX = dustSpawnOffset.x + (directionX * dustSpacing * currentDustPuffCount);
+        Vector3 spawnPos = transform.position + new Vector3(spawnOffsetX, dustSpawnOffset.y, 0f);
+
+        GameObject puff = Instantiate(dustPuffPrefab, spawnPos, Quaternion.identity);
+
+        DustPuff puffScript = puff.GetComponent<DustPuff>();
+        if (puffScript != null)
+            puffScript.Init(direction, bossRoomBounds);
+    }
+
+    void MoveAndBounce()
+    {
+        rb.linearVelocity = new Vector2(rollDirectionX * rollSpeed, rb.linearVelocity.y);
+
+        if (bossRoomBounds == null)
+            return;
+
+        float minX = bossRoomBounds.bounds.min.x;
+        float maxX = bossRoomBounds.bounds.max.x;
+
+        if (doingFinalHalfMove)
+        {
+            bool reachedTarget = rollDirectionX > 0f
+                ? transform.position.x >= halfMoveTargetX
+                : transform.position.x <= halfMoveTargetX;
+
+            if (reachedTarget)
+            {
+                StartRollOutro();
+            }
+            return;
+        }
+
+        if (transform.position.x <= minX && rollDirectionX < 0f)
+        {
+            rollDirectionX = 1f;
+            UpdateFlip();
+            RegisterBounce(minX, maxX);
+        }
+        else if (transform.position.x >= maxX && rollDirectionX > 0f)
+        {
+            rollDirectionX = -1f;
+            UpdateFlip();
+            RegisterBounce(minX, maxX);
+        }
+    }
+
+    void RegisterBounce(float minX, float maxX)
+    {
+        currentBounceCount++;
+
+        if (currentBounceCount >= rollBounceCount)
+        {
+            if (endWithHalfBounce)
+            {
+                doingFinalHalfMove = true;
+                halfMoveTargetX = (minX + maxX) / 2f;
+            }
+            else
+            {
+                StartRollOutro();
+            }
+        }
+    }
+
+    void RegisterBounce()
+    {
+        currentBounceCount++;
+
+        if (currentBounceCount >= rollBounceCount)
+        {
+            StartRollOutro();
+        }
+    }
+
+    void UpdateFlip()
+    {
+        FaceDirection(rollDirectionX);
+    }
+
+    void FaceDirection(float directionX)
+    {
+        if (spriteRenderer == null)
+            return;
+
+        spriteRenderer.flipX = directionX > 0f;
+    }
+
+    void LockCameraToBossRoom()
+    {
+        if (roomLocked || cameraConfiner == null || bossRoomBounds == null)
+            return;
+
+        originalBounds = cameraConfiner.BoundingShape2D;
+        cameraConfiner.BoundingShape2D = bossRoomBounds;
+        roomLocked = true;
+
+        if (leftWall != null) leftWall.SetActive(true);
+        if (rightWall != null) rightWall.SetActive(true);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, detectRange);
     }
 }
