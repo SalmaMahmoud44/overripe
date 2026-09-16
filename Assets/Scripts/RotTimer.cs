@@ -87,6 +87,15 @@ public class RotTimer : MonoBehaviour
         UpdateUI();
     }
 
+    public void RestoreFullTime()
+    {
+        currentTime = startTime;
+        tickTimer = 0f;
+        isWarningTime = true ;
+
+        UpdateUI();
+    }
+
     void UpdateUI()
     {
         fillBar.fillAmount = (float)currentTime / startTime;

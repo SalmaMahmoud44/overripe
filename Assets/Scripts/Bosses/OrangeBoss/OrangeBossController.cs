@@ -129,6 +129,11 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable
     [SerializeField] float phase3FirstChargeMultiplier = 1.35f;
     [SerializeField] float frenzyFirstChargeMultiplier = 1.5f;
 
+    [Header("Death Reward")]
+    [SerializeField] GameObject artifactPrefab;
+    [SerializeField] float artifactSpawnDelay = 0.5f;
+
+
     public event Action<BossPhase> OnPhaseChanged;
     public event Action OnBossDied;
 
@@ -151,6 +156,7 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable
     bool isCharging =false;
     bool isFirstChargeAfterPhase = false;
     bool isLaserStunned = false;
+    bool cancelCurrentCharge = false;
 
   
 
@@ -455,6 +461,8 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable
         if (player == null || isDead || isTransitioning)
             yield break;
 
+        cancelCurrentCharge = false; ;
+
         if (isFirstChargeAfterPhase)
         {
             speed *= GetFirstChargeMultiplier();
@@ -547,11 +555,20 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable
             {
                 orangeRigidbody2D.linearVelocity = Vector2.zero;
 
-                yield return null;
-                continue;
+                while (isLaserStunned && !isDead)
+                {
+                    yield return null;
+                }
+
+                if (isDead)
+                    yield break;
+
+                cancelCurrentCharge = true;
+
+                break;
             }
 
-            orangeRigidbody2D.linearVelocity =new Vector2(directionX * speed, 0f);
+            orangeRigidbody2D.linearVelocity = new Vector2(directionX * speed, 0f);
 
             RaycastHit2D wallCheck = Physics2D.Raycast(transform.position,chargeDirection,wallCheckDistance,groundLayer);
 
@@ -580,6 +597,13 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable
             chargeDust.Stop();
 
         PlayIdleAnimation();
+
+        if (cancelCurrentCharge)
+        {
+            cancelCurrentCharge = false;
+            currentState = BossState.Idle;
+            yield break;
+        }
 
         if (hitWall)
         {
@@ -981,6 +1005,22 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable
         OnBossDied?.Invoke();
         CameraShake(0.3f);
 
+        StartCoroutine(SpawnArtifactAndDestroy());
+
+    }
+
+    IEnumerator SpawnArtifactAndDestroy()
+    {
+        Vector3 spawnPosition = transform.position;
+
+        yield return new WaitForSeconds(artifactSpawnDelay);
+
+        if (artifactPrefab != null)
+        {
+            Instantiate(artifactPrefab,spawnPosition,Quaternion.identity);
+        }
+
+        Destroy(gameObject);
     }
 
     void StartSquash(Vector3 targetScale, float duration)

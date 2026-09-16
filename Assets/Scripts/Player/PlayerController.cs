@@ -55,6 +55,7 @@ public class PlayerController : MonoBehaviour
     public event Action OnPlayerJumped;
     public event Action OnPlayerDashed;
     public event Action OnPlayerMelee;
+    public event Action OnPlayerContinue;
 
 
     float shootTimer = 0f;  
@@ -295,6 +296,11 @@ public class PlayerController : MonoBehaviour
         tripleBLaserPrefab.ShootLaser(shootDirection,mousePos);
     }
 
+    void OnContinue(InputValue value)
+    {
+        if (value.isPressed)
+            OnPlayerContinue?.Invoke();
+    }
     public void SetControlsLocked(bool locked)
     {
         controlsLocked = locked;

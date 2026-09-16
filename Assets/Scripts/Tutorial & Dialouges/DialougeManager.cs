@@ -25,6 +25,9 @@ public class DialougeManager : MonoBehaviour
 
     [Header("Timer Reference")]
     [SerializeField] RotTimer rotTimer;
+
+    [Header("Laser Reference")]
+    [SerializeField] TripleBLaser tripleBLaser;
     
 
     PlayerAction currentWaitAction;
@@ -91,14 +94,13 @@ public class DialougeManager : MonoBehaviour
 
         currentWaitAction = messageToDisplay.waitForAction;
 
-        if (currentWaitAction == PlayerAction.None)
+        player.SetControlsLocked(messageToDisplay.LockPlayerControls);
+        if (currentWaitAction == PlayerAction.None )
         {
-            player.SetControlsLocked(true);
             autoAdvanceRoutine = StartCoroutine(AutoAdvance(messageToDisplay.message));
         }
         else
         {
-            player.SetControlsLocked(false);
             SubscribeToPlayerAction(messageToDisplay.waitForAction);
         }
 
@@ -131,6 +133,13 @@ public class DialougeManager : MonoBehaviour
             case PlayerAction.Melee:
                 player.OnPlayerMelee += OnActionPerformed;
                 break;
+            case PlayerAction.Continue:
+                player.OnPlayerContinue += OnActionPerformed;
+                break;
+            case PlayerAction.Laser:
+                if (tripleBLaser != null)
+                    tripleBLaser.OnLaserUsed += OnLaserPerformed;
+                break;
         }
     } 
     void UnSubscribeAll()
@@ -139,6 +148,11 @@ public class DialougeManager : MonoBehaviour
         player.OnPlayerJumped -= OnActionPerformed;
         player.OnPlayerDashed -= OnActionPerformed;
         player.OnPlayerMelee -= OnActionPerformed;
+        player.OnPlayerContinue -= OnActionPerformed;
+
+        if (tripleBLaser != null)
+            tripleBLaser.OnLaserUsed -= OnLaserPerformed;
+
     }
     void OnMovePerformed(KeyCode key)
     {
@@ -164,6 +178,18 @@ public class DialougeManager : MonoBehaviour
     {
         keyPromptUI.LightUpAction(currentWaitAction);
         UnSubscribeAll();
+        StartCoroutine(AdvanceAfterLight());
+    }
+
+    void OnLaserPerformed()
+    {
+        if (currentWaitAction != PlayerAction.Laser)
+            return;
+
+        keyPromptUI.LightUpAction(PlayerAction.Laser);
+
+        UnSubscribeAll() ;
+
         StartCoroutine(AdvanceAfterLight());
     }
     public void NextMessage()

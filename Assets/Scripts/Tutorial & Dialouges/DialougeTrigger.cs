@@ -19,7 +19,6 @@ public class DialougeTrigger : MonoBehaviour
 
     private void Reset()
     {
-        // Ensure the collider is set as a trigger
         Collider2D collider = GetComponent<Collider2D>();
         if (collider != null)
         {
@@ -77,17 +76,20 @@ public class DialougeTrigger : MonoBehaviour
 public enum PlayerAction
 {
     None,
+    Continue,
     Move,
     Jump,
     Dash,
     Melee,
+    Laser,
 }
 [System.Serializable]
 public class Message
 {
     public int actorId;
-    public string message;  
+    public string message;
     public PlayerAction waitForAction = PlayerAction.None;
+    public bool LockPlayerControls = true;
 }
 
 
