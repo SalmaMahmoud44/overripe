@@ -60,6 +60,12 @@ TagManager:
   - name: Juice
     uniqueID: 3052317003
     locked: 0
+  - name: AppleBossBody
+    uniqueID: 4101000043
+    locked: 0
+  - name: AppleBoosArm
+    uniqueID: 797991627
+    locked: 0
   - name: platform
     uniqueID: 2298765419
     locked: 0
