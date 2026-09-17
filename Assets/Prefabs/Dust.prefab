@@ -81,7 +81,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -611315949
-  m_SortingLayer: 8
+  m_SortingLayer: 9
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7833641969832785903, guid: 8abf263b8b00f1044bf3a0eeb0a9803a, type: 3}
@@ -170,5 +170,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83009dce5d4bf8c4bb83d6a363c1ab12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DustPuff
-  speed: 3
+  speed: 5
   roomBounds: {fileID: 0}

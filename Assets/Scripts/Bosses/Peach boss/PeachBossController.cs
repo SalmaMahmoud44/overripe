@@ -2,11 +2,9 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-public class PeachBossController : MonoBehaviour
+public class PeachBossController : MonoBehaviour, IDamagable
 {
-    public enum BossState { Idle, RollIntro, Rolling, RollOutro, DustAttack }
-
+    public enum BossState { Idle, RollIntro, Rolling, RollOutro, DustAttack, Transitioning }
 
     [Header("Health Settings")]
     [SerializeField] float maxHealth = 100f;
@@ -30,6 +28,9 @@ public class PeachBossController : MonoBehaviour
     [Header("References")]
     [SerializeField] Rigidbody2D rb;
     [SerializeField] SpriteRenderer spriteRenderer;
+
+    [Header("Animator")]
+    [SerializeField] Animator animator;
 
     [Header("Room Bounds")]
     [SerializeField] Collider2D bossRoomBounds;
@@ -55,19 +56,27 @@ public class PeachBossController : MonoBehaviour
     bool doingFinalHalfMove = false;
     float halfMoveTargetX;
 
+    [Header("Visuals")]
+    [SerializeField] Transform visualRoot;
+    [SerializeField] float rollRotationSpeed = 720f;
+
     [Header("Dust Attack Settings")]
     [SerializeField] GameObject dustPuffPrefab;
     [SerializeField] int dustPuffCount = 4;
     [SerializeField] float dustPuffInterval = 0.5f;
     [SerializeField] Vector2 dustSpawnOffset = Vector2.zero;
-    [SerializeField] float dustSpacing = 2f;
     [SerializeField] float dustAttackEndDelay = 1.5f;
-
+    [SerializeField] float extraDelayBeforeRoll = 1f;
 
     int currentDustPuffCount;
     bool waitingForDustEnd = false;
-
+    bool waitingExtraDelay = false;
     bool playerSpotted = false;
+
+    [Header("Phase Transition")]
+    [SerializeField] float phase2Threshold = 0.5f;
+    [SerializeField] float transitionDuration = 1.5f;
+    bool phase2Triggered = false;
 
     void Start()
     {
@@ -78,6 +87,9 @@ public class PeachBossController : MonoBehaviour
 
         if (spriteRenderer == null)
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>();
 
         currentHealth = maxHealth;
 
@@ -112,6 +124,10 @@ public class PeachBossController : MonoBehaviour
             case BossState.DustAttack:
                 UpdateDustAttack();
                 break;
+
+            case BossState.Transitioning:
+                UpdateTransitioning();
+                break;
         }
     }
 
@@ -141,7 +157,6 @@ public class PeachBossController : MonoBehaviour
         }
     }
 
-
     void SetRollCollider(bool isRolling)
     {
         if (normalCollider != null)
@@ -158,6 +173,9 @@ public class PeachBossController : MonoBehaviour
 
         if (rollPlatform != null)
             rollPlatform.SetActive(true);
+
+        if (animator != null)
+            animator.SetTrigger("RollIntro");
     }
 
     void UpdateRollIntro()
@@ -192,6 +210,12 @@ public class PeachBossController : MonoBehaviour
             rollPlatform.SetActive(false);
 
         FaceDirection(rollDirectionX);
+
+        if (visualRoot != null)
+            visualRoot.rotation = Quaternion.identity;
+
+        if (animator != null)
+            animator.SetTrigger("RollOutro");
     }
 
     void UpdateRollOutro()
@@ -209,33 +233,61 @@ public class PeachBossController : MonoBehaviour
         currentState = BossState.DustAttack;
         currentDustPuffCount = 0;
         waitingForDustEnd = false;
+        waitingExtraDelay = false;
         stateTimer = dustPuffInterval;
+
+        float directionX = player.position.x > transform.position.x ? 1f : -1f;
+        FaceDirection(directionX);
+
+        if (animator != null)
+            animator.SetTrigger("DustAttack");
 
         SpawnDustPuff();
     }
 
     void UpdateDustAttack()
     {
+        float directionX = player.position.x > transform.position.x ? 1f : -1f;
+        FaceDirection(directionX);
+
         stateTimer -= Time.deltaTime;
 
         if (stateTimer <= 0f)
         {
+            if (waitingExtraDelay)
+            {
+                if (phase2Triggered)
+                {
+                    StartTransitioning();
+                }
+                else
+                {
+                    StartRollIntro();
+                }
+                return;
+            }
+
             if (waitingForDustEnd)
             {
-                StartRollIntro();
+                waitingExtraDelay = true;
+                stateTimer = extraDelayBeforeRoll;
                 return;
             }
 
             currentDustPuffCount++;
 
+            SpawnDustPuff();
+
             if (currentDustPuffCount >= dustPuffCount)
             {
+                if (animator != null)
+                    animator.SetTrigger("DustAttackEnd");
+
                 waitingForDustEnd = true;
                 stateTimer = dustAttackEndDelay;
                 return;
             }
 
-            SpawnDustPuff();
             stateTimer = dustPuffInterval;
         }
     }
@@ -248,8 +300,7 @@ public class PeachBossController : MonoBehaviour
         float directionX = player.position.x > transform.position.x ? 1f : -1f;
         Vector2 direction = new Vector2(directionX, 0f);
 
-        float spawnOffsetX = dustSpawnOffset.x + (directionX * dustSpacing * currentDustPuffCount);
-        Vector3 spawnPos = transform.position + new Vector3(spawnOffsetX, dustSpawnOffset.y, 0f);
+        Vector3 spawnPos = transform.position + new Vector3(dustSpawnOffset.x, dustSpawnOffset.y, 0f);
 
         GameObject puff = Instantiate(dustPuffPrefab, spawnPos, Quaternion.identity);
 
@@ -261,6 +312,11 @@ public class PeachBossController : MonoBehaviour
     void MoveAndBounce()
     {
         rb.linearVelocity = new Vector2(rollDirectionX * rollSpeed, rb.linearVelocity.y);
+
+        if (visualRoot != null)
+        {
+            visualRoot.Rotate(0f, 0f, -rollDirectionX * rollRotationSpeed * Time.deltaTime);
+        }
 
         if (bossRoomBounds == null)
             return;
@@ -313,16 +369,6 @@ public class PeachBossController : MonoBehaviour
         }
     }
 
-    void RegisterBounce()
-    {
-        currentBounceCount++;
-
-        if (currentBounceCount >= rollBounceCount)
-        {
-            StartRollOutro();
-        }
-    }
-
     void UpdateFlip()
     {
         FaceDirection(rollDirectionX);
@@ -347,6 +393,52 @@ public class PeachBossController : MonoBehaviour
 
         if (leftWall != null) leftWall.SetActive(true);
         if (rightWall != null) rightWall.SetActive(true);
+    }
+
+    public new void TakeDamage(float damage)
+    {
+        if (currentState == BossState.Transitioning || currentHealth <= 0f)
+            return;
+
+        currentHealth -= damage;
+        currentHealth = Mathf.Max(currentHealth, 0f);
+
+        if (healthSlider != null)
+            healthSlider.value = currentHealth;
+
+        Debug.Log("Peach Boss took damage: " + damage + " | Health left: " + currentHealth);
+
+        if (currentHealth <= 0f)
+        {
+            Debug.Log("Peach Boss died (placeholder)");
+            return;
+        }
+
+        if (!phase2Triggered && currentHealth <= maxHealth * phase2Threshold)
+        {
+            phase2Triggered = true;
+        }
+    }
+
+    void StartTransitioning()
+    {
+        currentState = BossState.Transitioning;
+        stateTimer = transitionDuration;
+
+        rb.linearVelocity = Vector2.zero;
+
+        Debug.Log("Peach Boss: Transitioning to Phase 2 (placeholder)");
+    }
+
+    void UpdateTransitioning()
+    {
+        stateTimer -= Time.deltaTime;
+
+        if (stateTimer <= 0f)
+        {
+            Debug.Log("Peach Boss: Phase 2 started (placeholder)");
+            // هنبني هنا لوجيك الـ Phase 2 فعليًا في الخطوة الجاية
+        }
     }
 
     private void OnDrawGizmosSelected()
