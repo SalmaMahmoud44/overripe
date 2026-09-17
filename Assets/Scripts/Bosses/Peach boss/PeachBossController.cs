@@ -4,7 +4,8 @@ using UnityEngine.UI;
 
 public class PeachBossController : MonoBehaviour, IDamagable
 {
-    public enum BossState { Idle, RollIntro, Rolling, RollOutro, DustAttack, Transitioning }
+    public enum BossState { Idle, RollIntro, Rolling, RollOutro, DustAttack, PreTransition, Transitioning, Phase2 }
+    public enum BossPhase { Phase1, Phase2 }
 
     [Header("Health Settings")]
     [SerializeField] float maxHealth = 100f;
@@ -50,6 +51,7 @@ public class PeachBossController : MonoBehaviour, IDamagable
     [SerializeField] float rollOutroDelay = 0.5f;
 
     BossState currentState = BossState.Idle;
+    BossPhase currentPhase = BossPhase.Phase1;
     float rollDirectionX;
     float stateTimer;
     int currentBounceCount;
@@ -76,6 +78,7 @@ public class PeachBossController : MonoBehaviour, IDamagable
     [Header("Phase Transition")]
     [SerializeField] float phase2Threshold = 0.5f;
     [SerializeField] float transitionDuration = 1.5f;
+    [SerializeField] float preTransitionDelay = 0.3f;
     bool phase2Triggered = false;
 
     void Start()
@@ -125,8 +128,16 @@ public class PeachBossController : MonoBehaviour, IDamagable
                 UpdateDustAttack();
                 break;
 
+            case BossState.PreTransition:
+                UpdatePreTransition();
+                break;
+
             case BossState.Transitioning:
                 UpdateTransitioning();
+                break;
+
+            case BossState.Phase2:
+                // هنضيف UpdatePhase2() هنا لما نبدأ نبني اللوجيك الفعلي
                 break;
         }
     }
@@ -224,7 +235,14 @@ public class PeachBossController : MonoBehaviour, IDamagable
 
         if (stateTimer <= 0f)
         {
-            StartDustAttack();
+            if (phase2Triggered)
+            {
+                StartTransitioning();
+            }
+            else
+            {
+                StartDustAttack();
+            }
         }
     }
 
@@ -397,7 +415,7 @@ public class PeachBossController : MonoBehaviour, IDamagable
 
     public new void TakeDamage(float damage)
     {
-        if (currentState == BossState.Transitioning || currentHealth <= 0f)
+        if (currentState == BossState.Transitioning || currentState == BossState.Phase2 || currentHealth <= 0f)
             return;
 
         currentHealth -= damage;
@@ -417,6 +435,41 @@ public class PeachBossController : MonoBehaviour, IDamagable
         if (!phase2Triggered && currentHealth <= maxHealth * phase2Threshold)
         {
             phase2Triggered = true;
+            TryInterruptForPhase2();
+        }
+    }
+
+    void TryInterruptForPhase2()
+    {
+        if (currentState == BossState.Rolling)
+        {
+            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+            StartRollOutro();
+        }
+        else if (currentState == BossState.DustAttack)
+        {
+            StartPreTransition();
+        }
+    }
+
+    void StartPreTransition()
+    {
+        currentState = BossState.PreTransition;
+        stateTimer = preTransitionDelay;
+
+        rb.linearVelocity = Vector2.zero;
+
+        if (animator != null)
+            animator.SetTrigger("DustAttackEnd");
+    }
+
+    void UpdatePreTransition()
+    {
+        stateTimer -= Time.deltaTime;
+
+        if (stateTimer <= 0f)
+        {
+            StartTransitioning();
         }
     }
 
@@ -427,6 +480,9 @@ public class PeachBossController : MonoBehaviour, IDamagable
 
         rb.linearVelocity = Vector2.zero;
 
+        if (animator != null)
+            animator.SetTrigger("SeedTransition");
+
         Debug.Log("Peach Boss: Transitioning to Phase 2 (placeholder)");
     }
 
@@ -436,9 +492,17 @@ public class PeachBossController : MonoBehaviour, IDamagable
 
         if (stateTimer <= 0f)
         {
-            Debug.Log("Peach Boss: Phase 2 started (placeholder)");
-            // هنبني هنا لوجيك الـ Phase 2 فعليًا في الخطوة الجاية
+            currentPhase = BossPhase.Phase2;
+            StartPhase2();
         }
+    }
+
+    void StartPhase2()
+    {
+        currentState = BossState.Phase2;
+
+        Debug.Log("Peach Boss: Phase 2 logic starts here (placeholder)");
+        // هنبني هنا لوجيك النط والـ wave في الخطوة الجاية
     }
 
     private void OnDrawGizmosSelected()
