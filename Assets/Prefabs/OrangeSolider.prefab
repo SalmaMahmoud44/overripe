@@ -245,7 +245,7 @@ MonoBehaviour:
   moveSpeed: 5
   attackRange: 2
   attackDamage: 5
-  attackCooldown: 2
+  attackCooldown: 1.5
   hitFeedback: {fileID: 8130410130810175476}
   knockbackForce: 6
   knockbackUpwardForce: 2
