@@ -23,7 +23,7 @@ public class MainMenu : MonoBehaviour
 
     public void OnStartClick()
     {
-        SceneManager.LoadScene("Banana");
+        SceneManager.LoadScene("First Cutscene");
     }
 
     public void OnCreditsClick()

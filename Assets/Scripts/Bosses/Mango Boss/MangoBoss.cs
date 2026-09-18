@@ -155,7 +155,7 @@ public class MangoBoss : MonoBehaviour, IDamagable
 
         Vector3 startPos = transform.position;
         Vector3 bossLandingPos = new Vector3(player.position.x, startPos.y, startPos.z);
-        Vector3 shadowPos = new Vector3(player.position.x, player.position.y + shadowYOffset, startPos.z);
+        Vector3 shadowPos = new Vector3(player.position.x, startPos.y + shadowYOffset, startPos.z);
         Vector3 risePos = startPos + Vector3.up * jumpHeight;
         Vector3 fallStartPos = new Vector3(bossLandingPos.x, risePos.y, bossLandingPos.z);
 
