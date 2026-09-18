@@ -4,7 +4,11 @@ using UnityEngine.UI;
 
 public class PeachBossController : MonoBehaviour, IDamagable
 {
-    public enum BossState { Idle, RollIntro, Rolling, RollOutro, DustAttack, PreTransition, Transitioning, Phase2 }
+    public enum BossState
+    {
+        Idle, RollIntro, Rolling, RollOutro, DustAttack, PreTransition, Transitioning,
+        Phase2Idle, Phase2JumpRise, Phase2JumpFall, Phase2JumpPause, Phase2Critical, Dead
+    }
     public enum BossPhase { Phase1, Phase2 }
 
     [Header("Health Settings")]
@@ -13,6 +17,15 @@ public class PeachBossController : MonoBehaviour, IDamagable
 
     [Header("UI")]
     [SerializeField] Slider healthSlider;
+
+    [Header("Camera Shake")]
+    [SerializeField] Unity.Cinemachine.CinemachineImpulseSource impulseSource;
+    [SerializeField] float rollShakeInterval = 0.1f;
+
+    float rollShakeTimer;
+
+    [Header("Seed Transition Visuals")]
+    [SerializeField] SpriteRenderer seedLandingRenderer;
 
     [Header("Room Walls")]
     [SerializeField] GameObject leftWall;
@@ -25,6 +38,7 @@ public class PeachBossController : MonoBehaviour, IDamagable
     [Header("Colliders")]
     [SerializeField] Collider2D normalCollider;
     [SerializeField] Collider2D rollCollider;
+    [SerializeField] Collider2D seedCollider;
 
     [Header("References")]
     [SerializeField] Rigidbody2D rb;
@@ -49,6 +63,7 @@ public class PeachBossController : MonoBehaviour, IDamagable
     [SerializeField] int rollBounceCount = 2;
     [SerializeField] bool endWithHalfBounce = true;
     [SerializeField] float rollOutroDelay = 0.5f;
+    [SerializeField] ParticleSystem chargeDust;
 
     BossState currentState = BossState.Idle;
     BossPhase currentPhase = BossPhase.Phase1;
@@ -80,6 +95,32 @@ public class PeachBossController : MonoBehaviour, IDamagable
     [SerializeField] float transitionDuration = 1.5f;
     [SerializeField] float preTransitionDelay = 0.3f;
     bool phase2Triggered = false;
+
+    [Header("Phase 2 Settings")]
+    [SerializeField] float phase2IdleDelay = 1f;
+    [SerializeField] float jumpHeight = 5f;
+    [SerializeField] float jumpRiseDuration = 0.9f;
+    [SerializeField] float jumpFallDuration = 0.6f;
+    [SerializeField] float jumpPauseDuration = 0.667f;
+    [SerializeField] int jumpsPerCycle = 4;
+    [SerializeField] float criticalStateDuration = 2f;
+    [SerializeField] float pauseBeforeCritical = 1f;
+
+    int currentJumpCount;
+    float jumpElapsed;
+    Vector3 jumpStartPos;
+    Vector3 jumpPeakPos;
+    bool isVulnerable = false;
+
+    [Header("Wave Attack Settings")]
+    [SerializeField] GameObject wavePrefab;
+    [SerializeField] Vector2 waveSpawnOffset = Vector2.zero;
+
+    [Header("Death Settings")]
+    [SerializeField] ParticleSystem explosionEffect;
+    [SerializeField] float deathAnimDelay = 1f;
+    [SerializeField] float delayBeforeExplosion = 0.3f;
+    [SerializeField] GameObject artifactToReveal;
 
     void Start()
     {
@@ -136,8 +177,24 @@ public class PeachBossController : MonoBehaviour, IDamagable
                 UpdateTransitioning();
                 break;
 
-            case BossState.Phase2:
-                // هنضيف UpdatePhase2() هنا لما نبدأ نبني اللوجيك الفعلي
+            case BossState.Phase2Idle:
+                UpdatePhase2Idle();
+                break;
+
+            case BossState.Phase2JumpRise:
+                UpdateJumpRise();
+                break;
+
+            case BossState.Phase2JumpFall:
+                UpdateJumpFall();
+                break;
+
+            case BossState.Phase2JumpPause:
+                UpdateJumpPause();
+                break;
+
+            case BossState.Phase2Critical:
+                UpdateCriticalState();
                 break;
         }
     }
@@ -207,6 +264,11 @@ public class PeachBossController : MonoBehaviour, IDamagable
         doingFinalHalfMove = false;
 
         SetRollCollider(true);
+
+        if (chargeDust != null)
+            chargeDust.Play();
+
+        rollShakeTimer = 0f;
     }
 
     void StartRollOutro()
@@ -224,6 +286,9 @@ public class PeachBossController : MonoBehaviour, IDamagable
 
         if (visualRoot != null)
             visualRoot.rotation = Quaternion.identity;
+
+        if (chargeDust != null)
+            chargeDust.Stop();
 
         if (animator != null)
             animator.SetTrigger("RollOutro");
@@ -318,7 +383,7 @@ public class PeachBossController : MonoBehaviour, IDamagable
         float directionX = player.position.x > transform.position.x ? 1f : -1f;
         Vector2 direction = new Vector2(directionX, 0f);
 
-        Vector3 spawnPos = transform.position + new Vector3(dustSpawnOffset.x, dustSpawnOffset.y, 0f);
+        Vector3 spawnPos = transform.position + new Vector3(dustSpawnOffset.x * directionX, dustSpawnOffset.y, 0f);
 
         GameObject puff = Instantiate(dustPuffPrefab, spawnPos, Quaternion.identity);
 
@@ -334,6 +399,15 @@ public class PeachBossController : MonoBehaviour, IDamagable
         if (visualRoot != null)
         {
             visualRoot.Rotate(0f, 0f, -rollDirectionX * rollRotationSpeed * Time.deltaTime);
+        }
+
+        rollShakeTimer -= Time.deltaTime;
+        if (rollShakeTimer <= 0f)
+        {
+            if (impulseSource != null)
+                impulseSource.GenerateImpulse();
+
+            rollShakeTimer = rollShakeInterval;
         }
 
         if (bossRoomBounds == null)
@@ -415,7 +489,10 @@ public class PeachBossController : MonoBehaviour, IDamagable
 
     public new void TakeDamage(float damage)
     {
-        if (currentState == BossState.Transitioning || currentState == BossState.Phase2 || currentHealth <= 0f)
+        if (currentState == BossState.Transitioning || currentHealth <= 0f)
+            return;
+
+        if (currentPhase == BossPhase.Phase2 && !isVulnerable)
             return;
 
         currentHealth -= damage;
@@ -428,7 +505,7 @@ public class PeachBossController : MonoBehaviour, IDamagable
 
         if (currentHealth <= 0f)
         {
-            Debug.Log("Peach Boss died (placeholder)");
+            Die();
             return;
         }
 
@@ -480,6 +557,17 @@ public class PeachBossController : MonoBehaviour, IDamagable
 
         rb.linearVelocity = Vector2.zero;
 
+        float directionX = player.position.x > transform.position.x ? 1f : -1f;
+
+        if (seedLandingRenderer != null)
+            seedLandingRenderer.flipX = directionX > 0f;
+
+        if (normalCollider != null)
+            normalCollider.enabled = false;
+
+        if (seedCollider != null)
+            seedCollider.enabled = true;
+
         if (animator != null)
             animator.SetTrigger("SeedTransition");
 
@@ -499,10 +587,187 @@ public class PeachBossController : MonoBehaviour, IDamagable
 
     void StartPhase2()
     {
-        currentState = BossState.Phase2;
+        currentState = BossState.Phase2Idle;
+        stateTimer = phase2IdleDelay;
 
-        Debug.Log("Peach Boss: Phase 2 logic starts here (placeholder)");
-        // هنبني هنا لوجيك النط والـ wave في الخطوة الجاية
+        Debug.Log("Peach Boss: Phase 2 started, idle before first jump");
+    }
+
+    void UpdatePhase2Idle()
+    {
+        stateTimer -= Time.deltaTime;
+
+        if (stateTimer <= 0f)
+        {
+            StartJumpCycle();
+        }
+    }
+
+    void StartJumpCycle()
+    {
+        currentJumpCount = 0;
+        StartJumpRise();
+    }
+
+    void StartJumpRise()
+    {
+        currentState = BossState.Phase2JumpRise;
+        jumpElapsed = 0f;
+        jumpStartPos = transform.position;
+
+        if (animator != null)
+            animator.SetTrigger("Phase2JumpRise");
+    }
+
+    void UpdateJumpRise()
+    {
+        jumpElapsed += Time.deltaTime;
+        float t = Mathf.Clamp01(jumpElapsed / jumpRiseDuration);
+
+        transform.position = jumpStartPos + Vector3.up * jumpHeight * t;
+
+        if (t >= 1f)
+        {
+            StartJumpFall();
+        }
+    }
+
+    void StartJumpFall()
+    {
+        currentState = BossState.Phase2JumpFall;
+        jumpElapsed = 0f;
+        jumpPeakPos = transform.position;
+
+        if (animator != null)
+            animator.SetTrigger("Phase2JumpFall");
+    }
+
+    void UpdateJumpFall()
+    {
+        jumpElapsed += Time.deltaTime;
+        float t = Mathf.Clamp01(jumpElapsed / jumpFallDuration);
+
+        transform.position = Vector3.Lerp(jumpPeakPos, jumpStartPos, t);
+
+        if (t >= 1f)
+        {
+            transform.position = jumpStartPos;
+            currentJumpCount++;
+
+            float directionX = player.position.x > transform.position.x ? 1f : -1f;
+            FaceDirection(directionX);
+
+            if (impulseSource != null)
+                impulseSource.GenerateImpulse();
+
+            Debug.Log("Peach Boss Phase2: landed jump " + currentJumpCount + " / " + jumpsPerCycle);
+
+            SpawnWave();
+
+            StartJumpPause();
+        }
+    }
+
+    void SpawnWave()
+    {
+        if (wavePrefab == null || player == null)
+            return;
+
+        float directionX = player.position.x > transform.position.x ? 1f : -1f;
+
+        Vector3 spawnPos = transform.position + new Vector3(waveSpawnOffset.x * directionX, waveSpawnOffset.y, 0f);
+
+        GameObject wave = Instantiate(wavePrefab, spawnPos, Quaternion.identity);
+
+        WaveAttack waveScript = wave.GetComponent<WaveAttack>();
+        if (waveScript != null)
+            waveScript.Init(directionX, bossRoomBounds);
+    }
+
+    void StartJumpPause()
+    {
+        currentState = BossState.Phase2JumpPause;
+
+        bool isLastJump = currentJumpCount >= jumpsPerCycle;
+        stateTimer = isLastJump ? pauseBeforeCritical : jumpPauseDuration;
+    }
+
+    void UpdateJumpPause()
+    {
+        stateTimer -= Time.deltaTime;
+
+        if (stateTimer <= 0f)
+        {
+            if (currentJumpCount >= jumpsPerCycle)
+            {
+                StartCriticalState();
+            }
+            else
+            {
+                StartJumpRise();
+            }
+        }
+    }
+
+    void StartCriticalState()
+    {
+        currentState = BossState.Phase2Critical;
+        stateTimer = criticalStateDuration;
+        isVulnerable = true;
+
+        if (animator != null)
+            animator.SetTrigger("Phase2Critical");
+
+        Debug.Log("Peach Boss Phase2: entered critical state, vulnerable now");
+    }
+
+    void UpdateCriticalState()
+    {
+        stateTimer -= Time.deltaTime;
+
+        if (stateTimer <= 0f)
+        {
+            isVulnerable = false;
+            StartJumpCycle();
+
+            Debug.Log("Peach Boss Phase2: critical state ended, jumping again");
+        }
+    }
+
+    void Die()
+    {
+        currentState = BossState.Dead;
+        isVulnerable = false;
+
+        rb.linearVelocity = Vector2.zero;
+
+        if (animator != null)
+            animator.SetTrigger("Death");
+
+        StartCoroutine(DeathSequence());
+    }
+
+    System.Collections.IEnumerator DeathSequence()
+    {
+        yield return new WaitForSeconds(deathAnimDelay);
+
+        if (seedLandingRenderer != null)
+            seedLandingRenderer.enabled = false;
+
+        if (seedCollider != null)
+            seedCollider.enabled = false;
+
+        yield return new WaitForSeconds(delayBeforeExplosion);
+
+        if (explosionEffect != null)
+            explosionEffect.Play();
+
+        yield return new WaitForSeconds(2f);
+
+        if (artifactToReveal != null)
+            artifactToReveal.SetActive(true);
+
+        Destroy(gameObject);
     }
 
     private void OnDrawGizmosSelected()
