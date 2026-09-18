@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Unity.Cinemachine;
 
 public class AppleBossStickAttack : MonoBehaviour
 {
@@ -23,6 +24,8 @@ public class AppleBossStickAttack : MonoBehaviour
     [Header("Animation")]
     [SerializeField] string stickAnimTrigger = "stickAttack";
 
+    [Header("Camera Shake")]
+    [SerializeField] CinemachineImpulseSource impactImpulse;
 
 
     Coroutine safetyCoroutine;
@@ -136,7 +139,7 @@ public class AppleBossStickAttack : MonoBehaviour
         stickHitbox.Activate();
     }
 
-    public void OnStaffHitboxOff()
+    public void OnStickHitboxOff()
     {
 
         if (stickHitbox != null)
@@ -156,8 +159,6 @@ public class AppleBossStickAttack : MonoBehaviour
             stickHitbox.Deactivate();
 
         ResetArms();
-
-        Debug.Log("Apple Staff Attack Finished");
     }
 
     void ResetArms()
@@ -167,7 +168,11 @@ public class AppleBossStickAttack : MonoBehaviour
         emptyArm.SetActive(false);
     }
 
-
+    public void OnStickImpact()
+    {
+        if (impactImpulse != null)
+            impactImpulse.GenerateImpulse();
+    }
 
 
 }

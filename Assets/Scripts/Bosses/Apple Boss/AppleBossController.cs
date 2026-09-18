@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AppleBossController : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class AppleBossController : MonoBehaviour
     [SerializeField] AppleBossVulnerable vulnerable;
     [SerializeField] BossHealth health;
 
+
     [Header("Animator")]
     [SerializeField] Animator bodyAnimator;
     [SerializeField] Animator armAnimator;
@@ -37,7 +39,6 @@ public class AppleBossController : MonoBehaviour
     [SerializeField] Transform leftPosition;
     [SerializeField] Transform rightPosition;
     [SerializeField] Transform centerPosition;
-
 
 
     [Header("Phase Movement")]
@@ -60,6 +61,11 @@ public class AppleBossController : MonoBehaviour
     [SerializeField] float stickMaxDistance = 6f;
     [SerializeField][Range(0f, 1f)] float stickChance = 0.65f;
     [SerializeField][Range(0f, 1f)] float farStickChance = 0.40f;
+
+    [Header("Death")]
+    [SerializeField] string deathTrigger = "Death";
+    [SerializeField] float deathToCutsceneDelay = 1f;
+    [SerializeField] string finalCutsceneScene = "FinalCutscene";
 
 
     public Transform Player => player;
@@ -108,11 +114,6 @@ public class AppleBossController : MonoBehaviour
             health = GetComponent<BossHealth>();
     }
 
-
-    private void Start()
-    {
-        StartFight();
-    }
 
     public void StartFight()
     {
@@ -629,13 +630,26 @@ public class AppleBossController : MonoBehaviour
     }
     void EnterDeadState()
     {
+        if (CurrentState == BossState.Dead)
+            return;
+
         CurrentState = BossState.Dead;
 
         StopCurrentActions();
 
         ResetAttackTriggers();
-    }
 
+        if (bodyAnimator != null)
+            bodyAnimator.SetTrigger(deathTrigger);
+
+        StartCoroutine(DeathRoutine());
+    }
+    private IEnumerator DeathRoutine()
+    {
+        yield return new WaitForSeconds(deathToCutsceneDelay);
+
+        SceneManager.LoadScene(finalCutsceneScene);
+    }
     public void StartSeedAttack()
     {
         if (CurrentState != BossState.Attacking)
