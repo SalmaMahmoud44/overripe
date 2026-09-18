@@ -467,7 +467,7 @@ public class PlayerController : MonoBehaviour
             if (enemy == null)
                 continue;
 
-            IDamagable damagable = enemy.GetComponent<IDamagable>();
+            IDamagable damagable = enemy.GetComponentInParent<IDamagable>();
 
             if (damagable == null)
                 continue;
