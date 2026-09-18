@@ -45,7 +45,9 @@ public class AppleBossVulnerable : MonoBehaviour
             bodyAnimator.speed = 1f;
 
             bodyAnimator.ResetTrigger(tiredTrigger);
+            bodyAnimator.SetBool(tiredBool, true);
             bodyAnimator.SetTrigger(tiredTrigger);
+            
         }
     }
 

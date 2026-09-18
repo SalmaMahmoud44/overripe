@@ -23,9 +23,13 @@ public class AppleBossStickAttack : MonoBehaviour
     [Header("Animation")]
     [SerializeField] string stickAnimTrigger = "stickAttack";
 
-    bool attackActive;
+
 
     Coroutine safetyCoroutine;
+
+    bool attackActive;
+
+    public bool IsAttacking => attackActive;
 
     private void Awake()
     {
