@@ -9,7 +9,7 @@ public class AppleBossMovement : MonoBehaviour
     [SerializeField] Transform rightPoint;
 
     [Header("Movement")]
-    [SerializeField] float moveSpeed = 3f;
+    [SerializeField] float moveSpeed = 10f;
     [SerializeField] float stopDistance = 0.05f;
 
     public bool IsMoving { get; private set; }
