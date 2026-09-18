@@ -4,6 +4,7 @@ using UnityEngine;
 public class DustPuff : MonoBehaviour
 {
     [SerializeField] float speed = 3f;
+    [SerializeField] float damage = 2f;
     [SerializeField] Collider2D roomBounds;
 
     Rigidbody2D rb;
@@ -44,7 +45,14 @@ public class DustPuff : MonoBehaviour
         if (!collision.CompareTag("Player"))
             return;
 
-        Debug.Log("Player hit by dust puff - fog effect placeholder");
+        PlayerDeath playerDeath = collision.GetComponent<PlayerDeath>();
+        if (playerDeath != null)
+        {
+            playerDeath.TakeDamage(damage);
+        }
+
+        if (FogEffect.Instance != null)
+            FogEffect.Instance.Trigger();
 
         Destroy(gameObject);
     }
