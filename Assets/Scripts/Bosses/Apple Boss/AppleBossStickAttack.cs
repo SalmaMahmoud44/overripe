@@ -23,9 +23,13 @@ public class AppleBossStickAttack : MonoBehaviour
     [Header("Animation")]
     [SerializeField] string stickAnimTrigger = "stickAttack";
 
-    bool attackActive;
+
 
     Coroutine safetyCoroutine;
+
+    bool attackActive;
+
+    public bool IsAttacking => attackActive;
 
     private void Awake()
     {
@@ -55,7 +59,7 @@ public class AppleBossStickAttack : MonoBehaviour
 
         SetArmsForStick();
 
-      
+
         StartSafetyTimer();
 
 
@@ -105,7 +109,7 @@ public class AppleBossStickAttack : MonoBehaviour
     }
     void StopSafetyTimer()
     {
-        if(safetyCoroutine != null)
+        if (safetyCoroutine != null)
         {
             StopCoroutine(safetyCoroutine);
             safetyCoroutine = null;
@@ -126,7 +130,7 @@ public class AppleBossStickAttack : MonoBehaviour
             return;
 
         if (stickHitbox == null)
-     
+
             return;
 
         stickHitbox.Activate();
@@ -163,7 +167,7 @@ public class AppleBossStickAttack : MonoBehaviour
         emptyArm.SetActive(false);
     }
 
-   
+
 
 
 }

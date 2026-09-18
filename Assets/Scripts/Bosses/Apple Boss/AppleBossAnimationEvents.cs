@@ -55,7 +55,7 @@ public class AppleBossAnimationEvents : MonoBehaviour
 
     public void BecomeVulnerable()
     {
-        if(bossVulnerable != null)
+        if (bossVulnerable != null)
             bossVulnerable.BecomeVulnerable();
     }
 }

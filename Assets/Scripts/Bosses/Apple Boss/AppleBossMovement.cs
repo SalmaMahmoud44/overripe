@@ -9,7 +9,7 @@ public class AppleBossMovement : MonoBehaviour
     [SerializeField] Transform rightPoint;
 
     [Header("Movement")]
-    [SerializeField] float moveSpeed = 3f;
+    [SerializeField] float moveSpeed = 10f;
     [SerializeField] float stopDistance = 0.05f;
 
     public bool IsMoving { get; private set; }
@@ -28,20 +28,20 @@ public class AppleBossMovement : MonoBehaviour
         MoveTo(leftPoint);
     }
 
-    public void MoveToRight() 
+    public void MoveToRight()
     {
         MoveTo(rightPoint);
     }
-    public void MoveToCenter() 
+    public void MoveToCenter()
     {
         MoveTo(centerPoint);
     }
 
     public void MoveTo(Transform targetPoint)
     {
-        if(targetPoint == null) return; 
+        if (targetPoint == null) return;
 
-        if(moveRoutine != null) 
+        if (moveRoutine != null)
             StopCoroutine(moveRoutine);
 
         moveRoutine = StartCoroutine(MoveRoutine(targetPoint));
@@ -51,7 +51,7 @@ public class AppleBossMovement : MonoBehaviour
     {
         IsMoving = true;
 
-        while(Mathf.Abs(transform.position.x - targetPoint.position.x) > stopDistance)
+        while (Mathf.Abs(transform.position.x - targetPoint.position.x) > stopDistance)
         {
             Vector3 targetPos = new Vector3(targetPoint.position.x, transform.position.y, transform.position.z);
 
@@ -68,7 +68,7 @@ public class AppleBossMovement : MonoBehaviour
 
     public void Stop()
     {
-        if(moveRoutine != null)
+        if (moveRoutine != null)
         {
             StopCoroutine(moveRoutine);
             moveRoutine = null;

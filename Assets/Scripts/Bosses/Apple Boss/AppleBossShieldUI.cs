@@ -61,7 +61,7 @@ public class AppleBossShieldUI : MonoBehaviour
 
                 float normalized = t / (breakDuration * 0.4f);
 
-                float scale = Mathf.Lerp( 1f,shieldPunchScale, normalized );
+                float scale = Mathf.Lerp(1f, shieldPunchScale, normalized);
 
                 shieldIcon.transform.localScale = originalScale * scale;
 
@@ -77,9 +77,9 @@ public class AppleBossShieldUI : MonoBehaviour
 
                 float normalized = t / (breakDuration * 0.6f);
 
-                float scale = Mathf.Lerp(  shieldPunchScale, 0f, normalized  );
+                float scale = Mathf.Lerp(shieldPunchScale, 0f, normalized);
 
-                shieldIcon.transform.localScale =  originalScale * scale;
+                shieldIcon.transform.localScale = originalScale * scale;
 
                 yield return null;
             }
@@ -117,7 +117,7 @@ public class AppleBossShieldUI : MonoBehaviour
 
                 float normalized = t / duration;
 
-                float scale = Mathf.Lerp( 0f, 1f, normalized );
+                float scale = Mathf.Lerp(0f, 1f, normalized);
 
                 shieldIcon.transform.localScale = originalScale * scale;
 

@@ -9,7 +9,6 @@ public class AppleSeedProjectile : MonoBehaviour
     [Header("Damage")]
     [SerializeField] int damage = 8;
 
-
     [Header("Knockback")]
     [SerializeField] float knockbackForce = 2f;
     [SerializeField] float knockbackUpwardForce = 1f;
@@ -21,46 +20,74 @@ public class AppleSeedProjectile : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.gravityScale = 0f;
+
+        if (rb != null)
+            rb.gravityScale = 0f;
     }
+
+
     private void Start()
     {
-   
-        Destroy(gameObject ,lifeTime);
+        Destroy(gameObject, lifeTime);
     }
+
 
     public void Initialize(Vector2 target)
     {
-        direction = (target - (Vector2)transform.position).normalized;
-
-        rb.linearVelocity = direction * speed;
-
-        float angle = Mathf.Atan2(direction.y, direction.x)* Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0f,0f,angle);
+        Initialize(target, speed);
     }
+
+
+    public void Initialize(Vector2 target, float moveSpeed)
+    {
+        direction =
+            (target - (Vector2)transform.position).normalized;
+
+
+        rb.linearVelocity =
+            direction * moveSpeed;
+
+
+        float angle =
+            Mathf.Atan2(direction.y, direction.x) *
+            Mathf.Rad2Deg;
+
+
+        transform.rotation =
+            Quaternion.Euler(0f, 0f, angle);
+    }
+
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(!collision.CompareTag("Player"))
+        if (!collision.CompareTag("Player"))
             return;
 
-        IDamagable damagable = collision.GetComponent<IDamagable>();
+
+        IDamagable damagable =
+            collision.GetComponent<IDamagable>();
+
 
         if (damagable != null)
-        {
             damagable.TakeDamage(damage);
-        }
 
-        KnockBack knockBack = collision.GetComponentInParent<KnockBack>();
 
-        if (knockBack != null && knockBack.CanReceiveKnockback)
+        KnockBack knockBack =
+            collision.GetComponentInParent<KnockBack>();
+
+
+        if (knockBack != null &&
+            knockBack.CanReceiveKnockback)
         {
-            Vector2 knockbackDirection = direction;
-
-            knockBack.ApplyKnockback(direction, knockbackForce, knockbackUpwardForce);
-
+            knockBack.ApplyKnockback(
+                direction,
+                knockbackForce,
+                knockbackUpwardForce
+            );
         }
+
 
         Destroy(gameObject);
     }
-
 }
+

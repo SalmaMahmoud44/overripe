@@ -45,7 +45,9 @@ public class AppleBossVulnerable : MonoBehaviour
             bodyAnimator.speed = 1f;
 
             bodyAnimator.ResetTrigger(tiredTrigger);
+            bodyAnimator.SetBool(tiredBool, true);
             bodyAnimator.SetTrigger(tiredTrigger);
+
         }
     }
 
@@ -56,10 +58,10 @@ public class AppleBossVulnerable : MonoBehaviour
 
         isVulnerable = true;
 
-        if(bossHealth != null)
-        bossHealth.SetVulnerable(true);
+        if (bossHealth != null)
+            bossHealth.SetVulnerable(true);
 
-        if(shieldUI != null)
+        if (shieldUI != null)
             shieldUI.BreakShield();
 
         if (bodyAnimator != null)
