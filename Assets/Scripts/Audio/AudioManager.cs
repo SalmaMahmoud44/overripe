@@ -15,25 +15,32 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip bossMusic;
 
     [Header("Boss SFX")]
-     public AudioClip mangoSmash;
-     public AudioClip mangoDeath;
+    public AudioClip mangoSmash;
+    public AudioClip mangoDeath;
 
     [Header("Player SFX")]
-     public AudioClip footstepClip;
-     public AudioClip jumpClip;
-     public AudioClip meleeClip;
-   
+    public AudioClip footstepClip;
+    public AudioClip jumpClip;
+    public AudioClip meleeClip;
+
 
     [Header("Interaction SFX")]
-     public AudioClip juiceClip;
-     public AudioClip juiceHit;
-     public AudioClip artifactCollect;
+    public AudioClip juiceClip;
+    public AudioClip juiceHit;
+    public AudioClip artifactCollect;
+
+    [Header("UI SFX")]
+    public AudioClip buttonHoverClip;
+    public AudioClip buttonClickClip;
 
     [Header("Music Settings")]
     [SerializeField, Range(0f, 1f)] private float musicVolume = 0.5f;
 
     [Header("SFX Settings")]
     [SerializeField, Range(0f, 1f)] private float sfxVolume = 1f;
+
+    public float MusicVolume => musicVolume;
+    public float SFXVolume => sfxVolume;
 
     private void Awake()
     {
@@ -115,6 +122,16 @@ public class AudioManager : MonoBehaviour
     public void PlayJuiceSound()
     {
         sfxSource.PlayOneShot(juiceClip);
+    }
+
+    public void PlayButtonHover()
+    {
+        PlaySFX(buttonHoverClip);
+    }
+
+    public void PlayButtonClick()
+    {
+        PlaySFX(buttonClickClip);
     }
 
     public void SetMusicVolume(float volume)
