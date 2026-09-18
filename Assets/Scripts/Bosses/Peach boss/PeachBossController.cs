@@ -65,6 +65,12 @@ public class PeachBossController : MonoBehaviour, IDamagable
     [SerializeField] float rollOutroDelay = 0.5f;
     [SerializeField] ParticleSystem chargeDust;
 
+    [Header("Contact Damage")]
+    [SerializeField] float rollDamage = 5f;
+    [SerializeField] float rollDamageCooldown = 0.5f;
+
+    float rollDamageTimer;
+
     BossState currentState = BossState.Idle;
     BossPhase currentPhase = BossPhase.Phase1;
     float rollDirectionX;
@@ -147,6 +153,9 @@ public class PeachBossController : MonoBehaviour, IDamagable
 
     void Update()
     {
+        if (rollDamageTimer > 0f)
+            rollDamageTimer -= Time.deltaTime;
+
         switch (currentState)
         {
             case BossState.Idle:
@@ -485,6 +494,25 @@ public class PeachBossController : MonoBehaviour, IDamagable
 
         if (leftWall != null) leftWall.SetActive(true);
         if (rightWall != null) rightWall.SetActive(true);
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (currentState != BossState.Rolling)
+            return;
+
+        if (!collision.gameObject.CompareTag("Player"))
+            return;
+
+        if (rollDamageTimer > 0f)
+            return;
+
+        PlayerDeath playerDeath = collision.gameObject.GetComponent<PlayerDeath>();
+        if (playerDeath != null)
+        {
+            playerDeath.TakeDamage(rollDamage);
+            rollDamageTimer = rollDamageCooldown;
+        }
     }
 
     public new void TakeDamage(float damage)

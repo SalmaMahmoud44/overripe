@@ -75,5 +75,8 @@ TagManager:
   - name: player
     uniqueID: 3683651347
     locked: 0
+  - name: fog
+    uniqueID: 296247215
+    locked: 0
   m_RenderingLayers:
   - Default
