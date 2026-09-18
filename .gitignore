@@ -115,3 +115,7 @@ InitTestScene*.unity*
 Assets/Sounds/Music.meta
 Assets/Scenes/Banana.unity
 Assets/Scenes/Banana.unity
+Assets/Scenes/Apple.unity
+Assets/Scenes/Apple.unity
+/Assets/Scenes
+*.unity

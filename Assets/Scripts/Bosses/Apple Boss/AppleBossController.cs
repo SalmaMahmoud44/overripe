@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class AppleBossController : MonoBehaviour
 {
-    public enum BossState { Idle, Moving, Attacking, Vulnerable, Dead }
+    public enum BossState{ Idle,Moving, Attacking, Vulnerable,Dead}
 
-    public enum BossPhase { Phase1, Phase2, Phase3 }
+    public enum BossPhase{Phase1,Phase2,Phase3}
 
-    public enum AttackType { Seed, Stick }
+    public enum AttackType {  Seed,Stick}
 
 
     [Header("References")]
