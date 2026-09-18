@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ffbb46c5d2a76344fa2429226eaf9ee2
+guid: 4357f9b4d261ea84685121fea20d6a09
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8267479917527289064
-    second: Idle body_0
+      213: 8331916580332171155
+    second: AppleAvatar_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 128
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Idle body_0
+      name: AppleAvatar_0
       rect:
         serializedVersion: 2
-        x: 263
-        y: 322
-        width: 115
-        height: 123
+        x: 1116
+        y: 1590
+        width: 1693
+        height: 1635
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8ecc3e79e2dfbb270800000000000000
-      internalID: 8267479917527289064
+      spriteID: 39fe2e44cf9e0a370800000000000000
+      internalID: 8331916580332171155
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Idle body_0: 8267479917527289064
+      AppleAvatar_0: 8331916580332171155
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
