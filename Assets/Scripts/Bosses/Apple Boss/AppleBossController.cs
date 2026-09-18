@@ -29,8 +29,8 @@ public class AppleBossController : MonoBehaviour
     [Header("Fight Timing")]
     [SerializeField] float delayBetweenActions = 0.3f;
 
-    [SerializeField] [Range(0f, 1f)] float moveChance = 0.7f;
-    [SerializeField] [Range(0f, 1f)] float attackWhileMovingChance = 0.40f;
+    [SerializeField][Range(0f, 1f)] float moveChance = 0.7f;
+    [SerializeField][Range(0f, 1f)] float attackWhileMovingChance = 0.40f;
 
 
     [Header("Movement Position")]
@@ -41,9 +41,9 @@ public class AppleBossController : MonoBehaviour
 
 
     [Header("Phase Movement")]
-    [SerializeField] [Range(0f, 1f)] float phase1MoveChance = 0.65f;
-    [SerializeField] [Range(0f, 1f)] float phase2MoveChance = 0.70f;
-    [SerializeField] [Range(0f, 1f)]float phase3MoveChance = 0.80f;
+    [SerializeField][Range(0f, 1f)] float phase1MoveChance = 0.65f;
+    [SerializeField][Range(0f, 1f)] float phase2MoveChance = 0.70f;
+    [SerializeField][Range(0f, 1f)] float phase3MoveChance = 0.80f;
 
 
     [Header("Phase Attacks")]
@@ -58,8 +58,8 @@ public class AppleBossController : MonoBehaviour
 
     [Header("Stick Decision")]
     [SerializeField] float stickMaxDistance = 6f;
-    [SerializeField] [Range(0f, 1f)] float stickChance = 0.65f;
-    [SerializeField] [Range(0f, 1f)] float farStickChance = 0.40f;
+    [SerializeField][Range(0f, 1f)] float stickChance = 0.65f;
+    [SerializeField][Range(0f, 1f)] float farStickChance = 0.40f;
 
 
     public Transform Player => player;
@@ -176,7 +176,7 @@ public class AppleBossController : MonoBehaviour
                     StartAttack(attackType);
 
 
-                    yield return new WaitUntil(() => !IsAnyAttackActive() || CurrentState == BossState.Dead );
+                    yield return new WaitUntil(() => !IsAnyAttackActive() || CurrentState == BossState.Dead);
 
                     if (health != null && health.IsDead)
                     {
@@ -198,7 +198,7 @@ public class AppleBossController : MonoBehaviour
 
                     if (bossMovement != null)
                     {
-                        yield return new WaitUntil(() =>!bossMovement.IsMoving || CurrentState == BossState.Dead );
+                        yield return new WaitUntil(() => !bossMovement.IsMoving || CurrentState == BossState.Dead);
                     }
 
                     if (CurrentState == BossState.Dead)
@@ -208,7 +208,7 @@ public class AppleBossController : MonoBehaviour
                 }
 
 
-                yield return new WaitUntil(() => !bossMovement.IsMoving || CurrentState == BossState.Dead );
+                yield return new WaitUntil(() => !bossMovement.IsMoving || CurrentState == BossState.Dead);
 
 
                 if (CurrentState == BossState.Dead)
@@ -227,7 +227,7 @@ public class AppleBossController : MonoBehaviour
             StartAttack(attackType);
 
 
-            yield return new WaitUntil(() =>  !IsAnyAttackActive() || CurrentState == BossState.Dead );
+            yield return new WaitUntil(() => !IsAnyAttackActive() || CurrentState == BossState.Dead);
 
 
             if (health != null && health.IsDead)
@@ -292,14 +292,14 @@ public class AppleBossController : MonoBehaviour
             vulnerable.StartTired();
 
 
-            yield return new WaitUntil(() => vulnerable.IsVulnerable || CurrentState == BossState.Dead );
+            yield return new WaitUntil(() => vulnerable.IsVulnerable || CurrentState == BossState.Dead);
 
 
             if (CurrentState == BossState.Dead)
                 yield break;
 
 
-            yield return new WaitUntil(() => !vulnerable.IsVulnerable ||  CurrentState == BossState.Dead);
+            yield return new WaitUntil(() => !vulnerable.IsVulnerable || CurrentState == BossState.Dead);
         }
 
 
@@ -359,7 +359,7 @@ public class AppleBossController : MonoBehaviour
             return false;
 
 
-        float horizontalDistance = Mathf.Abs( player.position.x - transform.position.x );
+        float horizontalDistance = Mathf.Abs(player.position.x - transform.position.x);
 
 
         return horizontalDistance <= stickMaxDistance;
@@ -408,12 +408,12 @@ public class AppleBossController : MonoBehaviour
         Transform closestPosition = positions[0];
 
 
-        float closestDistance = Mathf.Abs( positions[0].position.x - player.position.x );
+        float closestDistance = Mathf.Abs(positions[0].position.x - player.position.x);
 
 
         for (int i = 1; i < positions.Length; i++)
         {
-            float distance = Mathf.Abs( positions[i].position.x -player.position.x);
+            float distance = Mathf.Abs(positions[i].position.x - player.position.x);
 
 
             if (distance < closestDistance)
@@ -450,10 +450,10 @@ public class AppleBossController : MonoBehaviour
 
         do
         {
-            selectedPosition =positions[Random.Range( 0, positions.Length )];
+            selectedPosition = positions[Random.Range(0, positions.Length)];
             attempts++;
         }
-        while( hasLastPosition && selectedPosition == lastPosition && attempts < 10);
+        while (hasLastPosition && selectedPosition == lastPosition && attempts < 10);
 
 
         lastPosition = selectedPosition;
@@ -530,7 +530,7 @@ public class AppleBossController : MonoBehaviour
         bool seedActive = seedAttack != null && seedAttack.IsAttacking;
 
 
-        bool stickActive = stickAttack != null &&  stickAttack.IsAttacking;
+        bool stickActive = stickAttack != null && stickAttack.IsAttacking;
 
         return seedActive || stickActive;
     }

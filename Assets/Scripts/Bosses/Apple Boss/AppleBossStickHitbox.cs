@@ -9,7 +9,7 @@ public class AppleBossStickHitbox : MonoBehaviour
     [SerializeField] float knockbackForce = 16f;
     [SerializeField] float knockbackUpwardForce = 6f;
 
-    bool active ;
+    bool active;
     bool playerHit;
 
     public void Activate()
@@ -39,30 +39,30 @@ public class AppleBossStickHitbox : MonoBehaviour
         );
         if (!active) return;
 
-        if(playerHit) return;
+        if (playerHit) return;
 
-        if(!collision.CompareTag("Player"))
+        if (!collision.CompareTag("Player"))
             return;
 
         Debug.Log("STAFF HIT PLAYER!");
         IDamagable damagable = collision.GetComponent<IDamagable>();
 
-        if(damagable != null)
+        if (damagable != null)
         {
             damagable.TakeDamage(damage);
         }
 
         KnockBack knockBack = collision.GetComponent<KnockBack>();
 
-        if(knockBack != null && knockBack.CanReceiveKnockback)
+        if (knockBack != null && knockBack.CanReceiveKnockback)
         {
             Vector2 direction = (collision.transform.position - transform.position).normalized;
 
-            knockBack.ApplyKnockback(direction,knockbackForce,knockbackUpwardForce);
+            knockBack.ApplyKnockback(direction, knockbackForce, knockbackUpwardForce);
         }
 
         playerHit = true;
     }
 
-  
+
 }
