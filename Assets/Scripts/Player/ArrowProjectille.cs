@@ -13,30 +13,37 @@ public class ArrowProjectille : MonoBehaviour
     private void Awake()
     {
         Arrowrb = GetComponent<Rigidbody2D>();
-        Arrowrb.gravityScale = 0f; // Disable gravity for the arrow
+        Arrowrb.gravityScale = 0f; 
     }
 
     public void Init(Vector2 dir)
     {
         Arrowdir= dir.normalized;
         Vector2 scale = transform.localScale;
-        scale.x = Mathf.Sign(dir.x); // Flip the arrow based on direction
+        scale.x = Mathf.Sign(dir.x); 
         transform.localScale = scale;
 
         Arrowrb.linearVelocity = Arrowdir * speed;
 
-        Destroy(gameObject, lifetime); // Destroy the arrow after its lifetime
+        Destroy(gameObject, lifetime); 
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        IDamagable damagable = collision.gameObject.GetComponent<EnemyHealth>();
         Debug.Log("Arrow hit: " + collision.gameObject.name);
+
+        if (collision.gameObject.layer != LayerMask.NameToLayer("Enemy"))
+            return;
+
+        IDamagable damagable =
+            collision.GetComponentInParent<IDamagable>();
+
         if (damagable != null)
         {
             Debug.Log("Arrow damaging: " + collision.gameObject.name);
+
             damagable.TakeDamage(damage);
-            Destroy(gameObject); // Destroy the arrow after hitting an enemy
+            Destroy(gameObject);
         }
     }
 }
