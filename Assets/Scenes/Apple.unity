@@ -7075,6 +7075,9 @@ MonoBehaviour:
     sprite: {fileID: -5150704196045627465, guid: 30fef647e723505418356b4ef12293d1, type: 3}
   dialougeManager: {fileID: 1404762932}
   playerTag: Player
+  dialogueID: 
+  saveCheckpointAfterDialogue: 0
+  checkpointAfterDialogue: {fileID: 0}
   startTimerAfterDialogue: 0
   rotTimer: {fileID: 1817522600}
 --- !u!61 &83868592
@@ -99375,6 +99378,9 @@ MonoBehaviour:
     sprite: {fileID: 8331916580332171155, guid: 4357f9b4d261ea84685121fea20d6a09, type: 3}
   dialougeManager: {fileID: 1404762932}
   playerTag: Player
+  dialogueID: 
+  saveCheckpointAfterDialogue: 0
+  checkpointAfterDialogue: {fileID: 0}
   startTimerAfterDialogue: 1
   rotTimer: {fileID: 1817522600}
 --- !u!61 &262641183
@@ -99991,6 +99997,24 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ee3893e84aa5fb4ea74acdd24c5ac68, type: 3}
+--- !u!1 &400193896 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7086515663351076259, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
+  m_PrefabInstance: {fileID: 517416414}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &400193901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 400193896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43139a43669e69d498a82fdad0662318, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationEvent
+  controller: {fileID: 517416416}
 --- !u!1001 &417252771
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -100662,7 +100686,10 @@ PrefabInstance:
     - {fileID: 5412128022643129715, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
     - {fileID: 4835226886487152954, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7086515663351076259, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 400193901}
   m_SourcePrefab: {fileID: 100100000, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
 --- !u!4 &517416415 stripped
 Transform:
@@ -103165,6 +103192,9 @@ MonoBehaviour:
     sprite: {fileID: -5150704196045627465, guid: 30fef647e723505418356b4ef12293d1, type: 3}
   dialougeManager: {fileID: 1404762932}
   playerTag: Player
+  dialogueID: 
+  saveCheckpointAfterDialogue: 0
+  checkpointAfterDialogue: {fileID: 0}
   startTimerAfterDialogue: 0
   rotTimer: {fileID: 1817522600}
 --- !u!61 &1062111270
@@ -108580,6 +108610,9 @@ MonoBehaviour:
     sprite: {fileID: -5150704196045627465, guid: 30fef647e723505418356b4ef12293d1, type: 3}
   dialougeManager: {fileID: 1404762932}
   playerTag: Player
+  dialogueID: 
+  saveCheckpointAfterDialogue: 0
+  checkpointAfterDialogue: {fileID: 0}
   startTimerAfterDialogue: 1
   rotTimer: {fileID: 1817522600}
 --- !u!61 &1660294392

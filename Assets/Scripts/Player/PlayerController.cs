@@ -75,6 +75,7 @@ public class PlayerController : MonoBehaviour
     bool nextMeleeFirst = true;
     bool isShooting = false;
     bool arrowFired = false;
+    private bool jumpAnimationFinished;
 
     Vector2 moveInput;
 
@@ -428,6 +429,8 @@ public class PlayerController : MonoBehaviour
         coyoteTimeCounter = 0f;
         jumpBufferCounter = 0f;
 
+        jumpAnimationFinished = false;
+
         if (myAnimator != null)
             myAnimator.SetTrigger("Jump");
 
@@ -590,6 +593,7 @@ public class PlayerController : MonoBehaviour
         myAnimator.SetBool("isDashing", isDashing);
 
         myAnimator.SetBool("isGrounded", isGrounded);
+        myAnimator.SetBool("jumpAnimationFinished", jumpAnimationFinished);
 
         if (isDashing)
         {
@@ -597,13 +601,15 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        bool isRunning =
-            isGrounded &&
-            Mathf.Abs(moveInput.x) > 0.01f;
+        bool isRunning =isGrounded && Mathf.Abs(moveInput.x) > 0.01f;
 
         myAnimator.SetBool("isRunning", isRunning);
     }
 
+    public void OnJumpAnimationFinished()
+    {
+        jumpAnimationFinished = true;
+    }
     bool IsKnockedBack()
     {
         return knockBack != null && knockBack.IsKnockedBack;
