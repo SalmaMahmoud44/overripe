@@ -100551,6 +100551,10 @@ PrefabInstance:
       value: 1.398323
       objectReference: {fileID: 0}
     - target: {fileID: 6183291168645385503, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
+      propertyPath: arrowCooldown
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6183291168645385503, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
       propertyPath: meleeHitboxSize.x
       value: 2.3
       objectReference: {fileID: 0}
@@ -102764,7 +102768,7 @@ Transform:
   m_GameObject: {fileID: 1003238325}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -37.645447, y: -13.151613, z: -10}
+  m_LocalPosition: {x: -29.281921, y: -13.183858, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
