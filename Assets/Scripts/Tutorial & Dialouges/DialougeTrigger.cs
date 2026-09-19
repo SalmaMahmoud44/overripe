@@ -81,6 +81,7 @@ public enum PlayerAction
     Jump,
     Dash,
     Melee,
+    Shoot,
     Laser,
 }
 [System.Serializable]

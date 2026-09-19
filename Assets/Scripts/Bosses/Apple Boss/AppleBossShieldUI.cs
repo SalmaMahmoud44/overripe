@@ -16,6 +16,10 @@ public class AppleBossShieldUI : MonoBehaviour
     [SerializeField] float breakDuration = 0.25f;
     [SerializeField] float shieldPunchScale = 1.25f;
 
+    [Header("Boss Icon")]
+    [SerializeField] GameObject bossIconShielded;
+    [SerializeField] GameObject bossIconVulnerable;
+
     Vector3 originalScale;
     Coroutine shieldRoutine;
 
@@ -37,6 +41,8 @@ public class AppleBossShieldUI : MonoBehaviour
 
         if (healthFill != null)
             healthFill.color = shieldedColor;
+
+        SetBossIcon(false);
     }
 
     public void BreakShield()
@@ -90,6 +96,8 @@ public class AppleBossShieldUI : MonoBehaviour
         if (healthFill != null)
             healthFill.color = vulnerableColor;
 
+        SetBossIcon(true);
+
         shieldRoutine = null;
     }
 
@@ -130,6 +138,17 @@ public class AppleBossShieldUI : MonoBehaviour
         if (healthFill != null)
             healthFill.color = shieldedColor;
 
+        SetBossIcon(false);
+
         shieldRoutine = null;
+    }
+
+    void SetBossIcon(bool vulnerable)
+    {
+        if (bossIconShielded != null)
+            bossIconShielded.SetActive(!vulnerable);
+
+        if (bossIconVulnerable != null)
+            bossIconVulnerable.SetActive(vulnerable);
     }
 }
