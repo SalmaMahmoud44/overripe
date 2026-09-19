@@ -15537,6 +15537,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Shift
       objectReference: {fileID: 0}
+    - target: {fileID: 7140761307488678713, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 2f3365478b37c1c4b936cd8986518458, type: 2}
+    - target: {fileID: 7140761307488678713, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -5457870317605257122, guid: 2f3365478b37c1c4b936cd8986518458, type: 2}
+    - target: {fileID: 7140761307488678713, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7413556408541610712, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
       propertyPath: m_IsActive
       value: 1

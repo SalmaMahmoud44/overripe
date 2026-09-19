@@ -99997,24 +99997,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ee3893e84aa5fb4ea74acdd24c5ac68, type: 3}
---- !u!1 &400193896 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7086515663351076259, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
-  m_PrefabInstance: {fileID: 517416414}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &400193901
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 400193896}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43139a43669e69d498a82fdad0662318, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationEvent
-  controller: {fileID: 517416416}
 --- !u!1001 &417252771
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -100146,7 +100128,7 @@ Transform:
   m_GameObject: {fileID: 424757922}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -40.32, y: -14.07, z: -10}
+  m_LocalPosition: {x: -40.5, y: -14.07, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -100599,7 +100581,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 315650049332018269, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -732.72
+      value: -732.9
       objectReference: {fileID: 0}
     - target: {fileID: 315650049332018269, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
       propertyPath: m_LocalPosition.y
@@ -100651,7 +100633,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6183291168645385503, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
       propertyPath: arrowCooldown
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6183291168645385503, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
       propertyPath: meleeHitboxSize.x
@@ -100686,10 +100668,7 @@ PrefabInstance:
     - {fileID: 5412128022643129715, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
     - {fileID: 4835226886487152954, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7086515663351076259, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 400193901}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
 --- !u!4 &517416415 stripped
 Transform:
@@ -103724,8 +103703,8 @@ Transform:
   m_GameObject: {fileID: 1223914039}
   serializedVersion: 2
   m_LocalRotation: {x: -0.013653911, y: -0, z: -0, w: 0.99990684}
-  m_LocalPosition: {x: -675.80005, y: -3.5, z: -0}
-  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
+  m_LocalPosition: {x: -675.80005, y: -3.5, z: 0}
+  m_LocalScale: {x: 1.35, y: 1.35, z: 1.35}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1134281968}
@@ -108581,6 +108560,7 @@ GameObject:
   - component: {fileID: 1660294393}
   - component: {fileID: 1660294392}
   - component: {fileID: 1660294391}
+  - component: {fileID: 1660294394}
   m_Layer: 0
   m_Name: TripleBMissingTrigger
   m_TagString: Untagged
@@ -108610,9 +108590,9 @@ MonoBehaviour:
     sprite: {fileID: -5150704196045627465, guid: 30fef647e723505418356b4ef12293d1, type: 3}
   dialougeManager: {fileID: 1404762932}
   playerTag: Player
-  dialogueID: 
-  saveCheckpointAfterDialogue: 0
-  checkpointAfterDialogue: {fileID: 0}
+  dialogueID: Missing_Dialogue
+  saveCheckpointAfterDialogue: 1
+  checkpointAfterDialogue: {fileID: 1660294394}
   startTimerAfterDialogue: 1
   rotTimer: {fileID: 1817522600}
 --- !u!61 &1660294392
@@ -108670,12 +108650,25 @@ Transform:
   m_GameObject: {fileID: 1660294390}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -732.6, y: -14.8, z: 0}
+  m_LocalPosition: {x: -732.6, y: -16.58, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1660294394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1660294390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c104e517fd28c04d92c9b0cf41eb3e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Checkpoint
+  checkpointID: Apple_CP
 --- !u!1 &1694606604
 GameObject:
   m_ObjectHideFlags: 0
@@ -110676,6 +110669,10 @@ PrefabInstance:
       propertyPath: shieldUI
       value: 
       objectReference: {fileID: 1082133256}
+    - target: {fileID: 1822406381827641208, guid: d38a26cf2241ad942a0b766d251c938c, type: 3}
+      propertyPath: vulnerableDuration
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 3231705053192317955, guid: d38a26cf2241ad942a0b766d251c938c, type: 3}
       propertyPath: leftPoint
       value: 
@@ -110688,6 +110685,10 @@ PrefabInstance:
       propertyPath: centerPoint
       value: 
       objectReference: {fileID: 1428459317}
+    - target: {fileID: 3231705053192317955, guid: d38a26cf2241ad942a0b766d251c938c, type: 3}
+      propertyPath: movementImpulse
+      value: 
+      objectReference: {fileID: 6386942297254236030}
     - target: {fileID: 3770338562099672362, guid: d38a26cf2241ad942a0b766d251c938c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.75596
@@ -110799,7 +110800,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
   ImpulseDefinition:
     ImpulseChannel: 1
-    ImpulseShape: 2
+    ImpulseShape: 1
     CustomImpulseShape:
       serializedVersion: 2
       m_Curve: []
@@ -110837,7 +110838,7 @@ MonoBehaviour:
     DissipationMode: 2
     DissipationDistance: 100
     PropagationSpeed: 343
-  DefaultVelocity: {x: 0, y: -1, z: 0}
+  DefaultVelocity: {x: 0, y: -0.15, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

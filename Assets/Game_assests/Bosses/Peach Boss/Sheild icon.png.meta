@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 953ae97c92fcc5c498191f2b92f1db57
+guid: 32ef3978007ea384cad366b293d8ddfc
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4491753142624357937
-    second: Weak_20260919042902_0
+      213: 5534077198186670608
+    second: Sheild icon_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Weak_20260919042902_0
+      name: Sheild icon_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 640
-        height: 640
+        x: 129
+        y: 97
+        width: 382
+        height: 477
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 13e8ed45fa9e55e30800000000000000
-      internalID: 4491753142624357937
+      spriteID: 01a618514edfccc40800000000000000
+      internalID: 5534077198186670608
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Weak_20260919042902_0: 4491753142624357937
+      Sheild icon_0: 5534077198186670608
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
