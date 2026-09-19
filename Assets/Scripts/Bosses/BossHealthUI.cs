@@ -59,7 +59,12 @@ public class BossHealthUI : MonoBehaviour
             return;
         }
 
-        if (fillRoutine != null) StopCoroutine(fillRoutine);
+        if (!gameObject.activeInHierarchy)
+            return;
+
+        if (fillRoutine != null)
+            StopCoroutine(fillRoutine);
+
         fillRoutine = StartCoroutine(SmoothFillRoutine());
     }
 

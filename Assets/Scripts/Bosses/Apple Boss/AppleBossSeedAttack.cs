@@ -73,12 +73,10 @@ public class AppleBossSeedAttack : MonoBehaviour
         attackActive = true;
 
 
-        string animationTrigger =
-            GetSeedAnimationTrigger();
+        string animationTrigger = GetSeedAnimationTrigger();
 
 
-        currentSpawnPoint =
-            GetSeedSpawnPoint(animationTrigger);
+        currentSpawnPoint = GetSeedSpawnPoint(animationTrigger);
 
 
         if (appleBoss.BodyAnimator != null)
@@ -123,38 +121,29 @@ public class AppleBossSeedAttack : MonoBehaviour
 
     string GetSeedAnimationTrigger()
     {
-        float distanceX =
-            appleBoss.Player.position.x -
-            transform.position.x;
+        float distanceX = appleBoss.Player.position.x - transform.position.x;
 
 
-        float distance =
-            Mathf.Abs(distanceX);
+        float distance = Mathf.Abs(distanceX);
 
 
-        bool playerIsRight =
-            distanceX > 0f;
+        bool playerIsRight = distanceX > 0f;
 
 
         if (distance <= frontRange)
             return "SeedFront";
 
 
-        bool isClose =
-            distance <= closeRange;
+        bool isClose = distance <= closeRange;
 
 
         if (playerIsRight)
         {
-            return isClose
-                ? "SeedRightClose"
-                : "SeedRightFar";
+            return isClose ? "SeedRightClose"  : "SeedRightFar";
         }
 
 
-        return isClose
-            ? "SeedLeftClose"
-            : "SeedLeftFar";
+        return isClose ? "SeedLeftClose" : "SeedLeftFar";
     }
 
 
@@ -176,15 +165,13 @@ public class AppleBossSeedAttack : MonoBehaviour
             StopCoroutine(burstRoutine);
 
 
-        burstRoutine =
-            StartCoroutine(SeedBurstRoutine());
+        burstRoutine = StartCoroutine(SeedBurstRoutine());
     }
 
 
     private IEnumerator SeedBurstRoutine()
     {
-        int seedCount =
-            GetSeedCountForPhase();
+        int seedCount = GetSeedCountForPhase();
 
 
         for (int i = 0; i < seedCount; i++)
@@ -194,9 +181,7 @@ public class AppleBossSeedAttack : MonoBehaviour
 
             if (i < seedCount - 1)
             {
-                yield return new WaitForSeconds(
-                    delayBetweenSeeds
-                );
+                yield return new WaitForSeconds(delayBetweenSeeds );
             }
         }
 
@@ -207,32 +192,20 @@ public class AppleBossSeedAttack : MonoBehaviour
 
     void SpawnSeed()
     {
-        if (currentSpawnPoint == null ||
-            seedPrefab == null ||
-            appleBoss.Player == null)
-        {
+        if (currentSpawnPoint == null || seedPrefab == null || appleBoss.Player == null)
             return;
-        }
 
 
-        GameObject appleSeed =
-            Instantiate(
-                seedPrefab,
-                currentSpawnPoint.position,
-                Quaternion.identity
-            );
+
+        GameObject appleSeed = Instantiate(seedPrefab, currentSpawnPoint.position, Quaternion.identity);
 
 
-        AppleSeedProjectile projectile =
-            appleSeed.GetComponent<AppleSeedProjectile>();
+        AppleSeedProjectile projectile = appleSeed.GetComponent<AppleSeedProjectile>();
 
 
         if (projectile != null)
         {
-            projectile.Initialize(
-                appleBoss.Player.position,
-                GetSeedSpeedForPhase()
-            );
+            projectile.Initialize( appleBoss.Player.position,  GetSeedSpeedForPhase() );
         }
     }
 

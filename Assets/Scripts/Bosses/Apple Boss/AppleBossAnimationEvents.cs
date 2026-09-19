@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class AppleBossAnimationEvents : MonoBehaviour
 {
@@ -44,7 +45,7 @@ public class AppleBossAnimationEvents : MonoBehaviour
     public void OnStickHitboxOff()
     {
         if (stickAttack != null)
-            stickAttack.OnStaffHitboxOff();
+            stickAttack.OnStickHitboxOff();
     }
 
     public void FinishAttack()
@@ -57,5 +58,10 @@ public class AppleBossAnimationEvents : MonoBehaviour
     {
         if (bossVulnerable != null)
             bossVulnerable.BecomeVulnerable();
+    }
+    public void StickImpact()
+    {
+        if(stickAttack != null)
+            stickAttack.OnStickImpact();
     }
 }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1417407983293438163}
   - component: {fileID: 6467301859671656013}
   m_Layer: 0
-  m_Name: Saw
+  m_Name: OrangeSaw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

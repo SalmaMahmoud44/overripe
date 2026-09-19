@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 using UnityEngine.Rendering.Universal;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
@@ -29,7 +30,9 @@ public class PlayerController : MonoBehaviour
     [Header("Shoot Settings")]
     [SerializeField] ArrowProjectille arrowPrefab;
     [SerializeField] Transform arrowSpawnPoint;
-    [SerializeField] float arrowCooldown = 0.5f;
+    [SerializeField] float arrowCooldown = 1f;
+    [SerializeField] float shootDelay = 0.15f;
+    [SerializeField] float shootAnimationDuration = 0.35f;
     [SerializeField] LevelManager levelManager;
 
     [Header("Melee Settings")]
@@ -58,7 +61,8 @@ public class PlayerController : MonoBehaviour
     public event Action OnPlayerContinue;
 
 
-    float shootTimer = 0f;  
+    float shootTimer = 0f;
+    float shootDelayTimer = 0f;
     float meleeTimer = 0f;
     float footstepTimer = 0f;
 
@@ -66,6 +70,8 @@ public class PlayerController : MonoBehaviour
     bool canDash = true;
     bool controlsLocked = false;
     bool nextMeleeFirst = true;
+    bool isShooting = false;
+    bool arrowFired = false;
 
 
     Vector2 moveInput;
@@ -120,6 +126,8 @@ public class PlayerController : MonoBehaviour
         CheckGround();
 
         UpdateJumpTimers();
+
+        UpdateShoot();
 
         if (IsKnockedBack())
         {
@@ -218,11 +226,25 @@ public class PlayerController : MonoBehaviour
     {
         //if(levelManager.currentLevelIndex == 1 || levelManager.currentLevelIndex == 2|| levelManager.currentLevelIndex == 3)
         //    return;
-        if (value.isPressed) 
-        {
-            ShootArrow();
-        }
+
+        if (!value.isPressed)
+            return;
+
+        if (IsKnockedBack())
+            return;
+
+        if (controlsLocked)
+            return;
+
+        if (isDashing)
+            return;
+
+        if (shootTimer > 0f)
+            return;
+
+        StartShootAnimation();
     }
+
     void OnMelee(InputValue value)
     {
         if (IsKnockedBack())
@@ -405,23 +427,68 @@ public class PlayerController : MonoBehaviour
     }
     void ShootArrow()
     {
-
         if (arrowPrefab == null || arrowSpawnPoint == null)
         {
             Debug.LogWarning("Arrow prefab or spawn point is not assigned.");
             return;
         }
-        if (shootTimer > 0f)
-            return; 
 
-        shootTimer = arrowCooldown; 
+        if (Camera.main == null || Mouse.current == null)
+            return;
 
+        worldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue() );
 
-        worldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()); 
-        mousePos = new Vector2(worldPos.x, worldPos.y); 
-        Vector2 shootDirection = (mousePos - (Vector2)arrowSpawnPoint.position).normalized; 
+        mousePos = new Vector2(worldPos.x, worldPos.y);
+
+        Vector2 shootDirection = (mousePos - (Vector2)arrowSpawnPoint.position).normalized;
+
+        if (shootDirection.sqrMagnitude <= 0.001f)
+            return;
+
         ArrowProjectille arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, Quaternion.identity);
+
         arrow.Init(shootDirection);
+    }
+    void StartShootAnimation()
+    {
+        isShooting = true;
+        arrowFired = false;
+
+        shootTimer = arrowCooldown;
+        shootDelayTimer = shootDelay;
+
+        myAnimator.ResetTrigger("Shoot");
+        myAnimator.SetTrigger("Shoot");
+
+        StartCoroutine(FinishShootAfterAnimation());
+    }
+
+    IEnumerator FinishShootAfterAnimation()
+    {
+        yield return new WaitForSeconds(shootAnimationDuration);
+
+        isShooting = false;
+    }
+    void UpdateShoot()
+    {
+        if (!isShooting)
+            return;
+
+        if (!arrowFired)
+        {
+            shootDelayTimer -= Time.deltaTime;
+
+            if (shootDelayTimer <= 0f)
+            {
+                ShootArrow();
+                arrowFired = true;
+            }
+        }
+    }
+
+    public void FinishShooting()
+    {
+        isShooting = false;
     }
 
     bool MeleeAttack()

@@ -5,7 +5,7 @@ using System.Reflection.Metadata;
 using UnityEngine;
 using Unity.Cinemachine;
 
-public class OrangeBossController : MonoBehaviour, ILaserStunnable
+public class OrangeBossController : MonoBehaviour, ILaserStunnable,IBoss
 {
     public enum BossPhase { Phase1, Phase2 ,Phase3,Frenzy,Dead};
     public enum BossState { Idle,Telegraph , Summon , Charge, Recovery,Transitioning,Dead };

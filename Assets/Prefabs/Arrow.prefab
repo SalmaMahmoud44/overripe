@@ -75,8 +75,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowProjectille
   speed: 10
-  lifetime: 5
+  lifetime: 4
   damage: 10
+  arrowSprite: {fileID: 4193086838490661861}
 --- !u!58 &351229087780960686
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -111,8 +112,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.0009842515, y: 0}
-  m_Radius: 0.19586813
+  m_Offset: {x: 0.43, y: 0.45}
+  m_Radius: 0.36957994
 --- !u!1 &8596659903928586786
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,11 +191,11 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -611315949
+  m_SortingLayer: 11
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 693958682575017297, guid: b641de130be28d043a62723763d715fe, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

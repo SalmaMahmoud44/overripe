@@ -4,7 +4,7 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MangoBoss : MonoBehaviour, IDamagable
+public class MangoBoss : MonoBehaviour, IDamagable,IBoss
 {
     public enum BossState { Idle, Attacking, Dead }
 
@@ -68,6 +68,7 @@ public class MangoBoss : MonoBehaviour, IDamagable
     [SerializeField] ParticleSystem juiceRain;
     BossState currentState = BossState.Idle;
     Coroutine attackRoutine;
+    public event System.Action OnBossDied;
 
     void Start()
     {
@@ -351,6 +352,8 @@ public class MangoBoss : MonoBehaviour, IDamagable
     void Die()
     {
         currentState = BossState.Dead;
+
+        OnBossDied?.Invoke();
 
         if (attackRoutine != null)
             StopCoroutine(attackRoutine);

@@ -168,18 +168,23 @@ MonoBehaviour:
   - actorId: 0
     message: Wait... did you see that?
     waitForAction: 0
+    LockPlayerControls: 1
   - actorId: 0
     message: Defeating enemies gives you more time.
     waitForAction: 0
+    LockPlayerControls: 1
   - actorId: 0
     message: But watch out!
     waitForAction: 0
+    LockPlayerControls: 1
   - actorId: 0
     message: Taking damage will cost you time.
     waitForAction: 0
+    LockPlayerControls: 1
   - actorId: 0
     message: Fight smart. Defeat enemies to gain time, but avoid getting hit.
     waitForAction: 0
+    LockPlayerControls: 1
   actors:
   - name: Banana
     sprite: {fileID: -5150704196045627465, guid: 30fef647e723505418356b4ef12293d1, type: 3}
@@ -260,7 +265,7 @@ Transform:
   m_GameObject: {fileID: 120993690}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 42.32, y: -12.64, z: 0}
+  m_LocalPosition: {x: 41.55, y: -12.64, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -282,12 +287,15 @@ MonoBehaviour:
   - actorId: 0
     message: Looks like we have company...
     waitForAction: 0
+    LockPlayerControls: 1
   - actorId: 0
     message: Let's take care of it.
     waitForAction: 0
+    LockPlayerControls: 1
   - actorId: 0
     message: Press Left Click to attack.
-    waitForAction: 4
+    waitForAction: 5
+    LockPlayerControls: 0
   actors:
   - name: Banana
     sprite: {fileID: -5150704196045627465, guid: 30fef647e723505418356b4ef12293d1, type: 3}
@@ -390,12 +398,15 @@ MonoBehaviour:
   - actorId: 0
     message: Whoa, careful!
     waitForAction: 0
+    LockPlayerControls: 1
   - actorId: 0
     message: Don't fall into that juice. It'll take you out.
     waitForAction: 0
+    LockPlayerControls: 1
   - actorId: 0
     message: Try jumping across.
-    waitForAction: 2
+    waitForAction: 3
+    LockPlayerControls: 0
   actors:
   - name: Banana
     sprite: {fileID: -5150704196045627465, guid: 30fef647e723505418356b4ef12293d1, type: 3}
@@ -658,9 +669,11 @@ MonoBehaviour:
   - actorId: 0
     message: Alright! Let's get moving!
     waitForAction: 0
+    LockPlayerControls: 1
   - actorId: 0
     message: Use A and D to move around.
-    waitForAction: 1
+    waitForAction: 2
+    LockPlayerControls: 0
   actors:
   - name: Banana
     sprite: {fileID: -5150704196045627465, guid: 30fef647e723505418356b4ef12293d1, type: 3}
@@ -1625,7 +1638,7 @@ Transform:
   m_GameObject: {fileID: 1054016202}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -20.04875, y: -12.523438, z: -10}
+  m_LocalPosition: {x: -22.742151, y: -12.548426, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2137,7 +2150,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1996201877
-  m_SortingLayer: 7
+  m_SortingLayer: 9
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -12110,12 +12123,15 @@ MonoBehaviour:
   - actorId: 0
     message: Looks like this one's a little too far to jump...
     waitForAction: 0
+    LockPlayerControls: 1
   - actorId: 0
     message: Try jumping and dashing across!
-    waitForAction: 3
+    waitForAction: 4
+    LockPlayerControls: 0
   - actorId: 0
     message: Nice! You can combine your jump and dash to cover more distance.
     waitForAction: 0
+    LockPlayerControls: 1
   actors:
   - name: Banana
     sprite: {fileID: -5150704196045627465, guid: 30fef647e723505418356b4ef12293d1, type: 3}
@@ -12920,7 +12936,8 @@ MonoBehaviour:
   baseDisplayTime: 1
   timePerCharacter: 0.05
   keyPromptUI: {fileID: 1322567036}
-  rotTimer: {fileID: 0}
+  rotTimer: {fileID: 1659281537}
+  tripleBLaser: {fileID: 0}
 --- !u!4 &1636715300
 Transform:
   m_ObjectHideFlags: 0
@@ -13431,21 +13448,27 @@ MonoBehaviour:
   - actorId: 0
     message: Wait... what's that?
     waitForAction: 0
+    LockPlayerControls: 1
   - actorId: 0
     message: An Artifact...
     waitForAction: 0
+    LockPlayerControls: 1
   - actorId: 0
     message: These are what we're looking for.
     waitForAction: 0
+    LockPlayerControls: 1
   - actorId: 0
     message: We need to collect them all.
     waitForAction: 0
+    LockPlayerControls: 1
   - actorId: 0
     message: They're our only chance to save our people.
     waitForAction: 0
+    LockPlayerControls: 1
   - actorId: 0
     message: Take it.
     waitForAction: 0
+    LockPlayerControls: 1
   actors:
   - name: Banana
     sprite: {fileID: -5150704196045627465, guid: 30fef647e723505418356b4ef12293d1, type: 3}
@@ -13617,6 +13640,7 @@ MonoBehaviour:
   - actorId: 0
     message: "\u201CHeads up! The timer starts now, so keep an eye on it!\u201D"
     waitForAction: 0
+    LockPlayerControls: 1
   actors:
   - name: Banana
     sprite: {fileID: -5150704196045627465, guid: 30fef647e723505418356b4ef12293d1, type: 3}
@@ -15229,6 +15253,26 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 470713144}
+    - target: {fileID: 3108450733714282502, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
+      propertyPath: keyIcons.Array.data[0].action
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108450733714282502, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
+      propertyPath: keyIcons.Array.data[1].action
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108450733714282502, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
+      propertyPath: keyIcons.Array.data[2].action
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108450733714282502, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
+      propertyPath: keyIcons.Array.data[3].action
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108450733714282502, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
+      propertyPath: keyIcons.Array.data[4].action
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 8173839679178754697, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
       propertyPath: m_Pivot.x
       value: 0

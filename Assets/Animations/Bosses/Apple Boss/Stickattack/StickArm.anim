@@ -30,17 +30,17 @@ AnimationClip:
       value: {fileID: -4178046375966092550, guid: d8457d2daa9799c4cafb4b9ad06fc38e, type: 3}
     - time: 0.33333334
       value: {fileID: 4130640169021434097, guid: 7f01b6ab1cb504348821c81d4a9a7924, type: 3}
-    - time: 0.6666667
+    - time: 0.5833333
       value: {fileID: 3465286685962602723, guid: df1489150d26e1a498fcab71979cba60, type: 3}
-    - time: 0.75
+    - time: 0.6666667
       value: {fileID: 7028616704906629411, guid: fd02a38546ae521478e6ca0045effabd, type: 3}
-    - time: 0.8333333
+    - time: 0.75
       value: {fileID: 8288426215254106694, guid: b7eee772657d79f4a9cc11f3d4f9ab1e, type: 3}
-    - time: 0.9166667
+    - time: 0.8333333
       value: {fileID: 4113829005332862926, guid: 1a8d4cf11f181294798d4ab914bc7981, type: 3}
-    - time: 1.1666666
+    - time: 1.0833334
       value: {fileID: -5099292496197868168, guid: 81696f7f5d2a6fe4b8960d8902a110df, type: 3}
-    - time: 1.25
+    - time: 1.1666666
       value: {fileID: -2966200626249415253, guid: 4e7480cfb902c134d9ed9d0956e9fdf9, type: 3}
     attribute: m_Sprite
     path: 
@@ -80,7 +80,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1.3333334
+    m_StopTime: 1.25
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -107,14 +107,21 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.9166667
+  - time: 0.5833333
+    functionName: StickImpact
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.8333333
     functionName: OnStickHitboxOff
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.25
+  - time: 1.1666666
     functionName: FinishAttack
     data: 
     objectReferenceParameter: {fileID: 0}
