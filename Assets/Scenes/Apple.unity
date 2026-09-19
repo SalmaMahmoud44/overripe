@@ -109319,6 +109319,10 @@ PrefabInstance:
       value: 190
       objectReference: {fileID: 0}
     - target: {fileID: 6917241684926676987, guid: 5b6573c3b63f51f4fa6648c26c8993c8, type: 3}
+      propertyPath: timerText
+      value: 
+      objectReference: {fileID: 673721464}
+    - target: {fileID: 6917241684926676987, guid: 5b6573c3b63f51f4fa6648c26c8993c8, type: 3}
       propertyPath: sartPaused
       value: 0
       objectReference: {fileID: 0}
