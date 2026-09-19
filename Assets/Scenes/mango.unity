@@ -12910,7 +12910,7 @@ MonoBehaviour:
   shadowFadedColor: {r: 0.32156864, g: 0.32156864, b: 0.32156864, a: 0.2}
   shadowClearColor: {r: 0.122641504, g: 0.122641504, b: 0.122641504, a: 0.8}
   shadowGrowDuration: 1.5
-  shadowYOffset: -1.9
+  shadowYOffset: -0.35
   jumpHeight: 15
   riseDuration: 0.4
   fallDuration: 0.3
@@ -35129,7 +35129,7 @@ Transform:
   m_GameObject: {fileID: 1054016202}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -24.045364, y: -12.441765, z: -10}
+  m_LocalPosition: {x: -20.31555, y: -12.430749, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
