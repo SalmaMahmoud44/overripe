@@ -24613,8 +24613,8 @@ GameObject:
   - component: {fileID: 5042322394332746900}
   - component: {fileID: 4912468350788736870}
   - component: {fileID: 73164151804632360}
-  - component: {fileID: 3361946041436867848}
   - component: {fileID: 6849636323740774374}
+  - component: {fileID: 3361946041436867848}
   - component: {fileID: 3929276978021966888}
   m_Layer: 7
   m_Name: OrangeBoss
@@ -24708,21 +24708,6 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0.36999997, y: -0.3846937}
   m_Radius: 1.5646937
---- !u!114 &3361946041436867848
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8283376859408779252}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 154091f734715b14b93b67ddd3aaa614, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BossHealth
-  maxHealth: 150
-  vulnerableDamageMultiplier: 1.5
-  damageOnlyWhenVulnerable: 0
 --- !u!114 &6849636323740774374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24831,6 +24816,21 @@ MonoBehaviour:
   deathExplosionEffect: {fileID: 231600555576529458}
   deathExplosionDelay: 0.35
   artifactDelayAfterExplosion: 0.45
+--- !u!114 &3361946041436867848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8283376859408779252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 154091f734715b14b93b67ddd3aaa614, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossHealth
+  maxHealth: 150
+  vulnerableDamageMultiplier: 1.5
+  damageOnlyWhenVulnerable: 0
 --- !u!114 &3929276978021966888
 MonoBehaviour:
   m_ObjectHideFlags: 0

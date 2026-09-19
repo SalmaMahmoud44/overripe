@@ -55,6 +55,7 @@ public class PlayerDeath : MonoBehaviour , IDamagable
     {
         Debug.Log("Player took damage: " + damage);
         rotTimer.AddTime(-damage);
+
         if (AudioManager.Instance != null)
             AudioManager.Instance.PlaySFX(AudioManager.Instance.hitPlayerClip);
     }

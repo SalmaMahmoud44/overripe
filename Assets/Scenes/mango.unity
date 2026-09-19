@@ -12912,7 +12912,7 @@ MonoBehaviour:
   shadowClearColor: {r: 0.122641504, g: 0.122641504, b: 0.122641504, a: 0.8}
   shadowGrowDuration: 1.5
   shadowYOffset: -0.35
-  jumpHeight: 15
+  jumpHeight: 18
   riseDuration: 0.4
   fallDuration: 0.3
   pauseAfterLanding: 2
@@ -40360,6 +40360,10 @@ PrefabInstance:
       propertyPath: rotTimer
       value: 
       objectReference: {fileID: 2004650175}
+    - target: {fileID: 4013685350287569201, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: a6d25b051b1d59742865494fceb29f4d, type: 2}
     - target: {fileID: 4095186360861652686, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
       propertyPath: m_Name
       value: Player
