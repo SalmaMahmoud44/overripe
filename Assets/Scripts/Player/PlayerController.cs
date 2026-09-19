@@ -118,8 +118,15 @@ public class PlayerController : MonoBehaviour
         if (levelManager == null)
             levelManager = FindObjectOfType<LevelManager>();
 
-        if(tripleBLaserPrefab == null)
-            tripleBLaserPrefab = GameObject.Find("TripleB").GetComponent<TripleBLaser>();
+        if (tripleBLaserPrefab == null)
+        {
+            GameObject tripleBObject = GameObject.Find("TripleB");
+
+            if (tripleBObject != null)
+            {
+                tripleBLaserPrefab = tripleBObject.GetComponent<TripleBLaser>();
+            }
+        }
     }
 
     void Update()

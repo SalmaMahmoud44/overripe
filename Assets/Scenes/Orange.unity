@@ -65977,6 +65977,51 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1618125053
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1618125055}
+  - component: {fileID: 1618125054}
+  m_Layer: 0
+  m_Name: Checkpoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1618125054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618125053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c104e517fd28c04d92c9b0cf41eb3e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Checkpoint
+  checkpointID: Orange_Checkpoint
+--- !u!4 &1618125055
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618125053}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -18.86, y: -13.39, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1639486051
 GameObject:
   m_ObjectHideFlags: 0
@@ -66557,7 +66602,7 @@ Transform:
   m_GameObject: {fileID: 1771094580}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -17.70348, y: -11.55262, z: 0}
+  m_LocalPosition: {x: -17.70348, y: -16, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -66630,7 +66675,7 @@ MonoBehaviour:
   - actorId: 2
     message: 'Just aim your cursor at the enemy you want to hit and press E and I''ll
       take care of the rest! '
-    waitForAction: 6
+    waitForAction: 7
     LockPlayerControls: 0
   afterLaserMessages:
   - actorId: 2
@@ -66660,6 +66705,12 @@ MonoBehaviour:
   tripleBFollow: {fileID: 1868642896}
   tripleBLaser: {fileID: 1868642892}
   rotTimer: {fileID: 1817522600}
+  introCheckpoint: {fileID: 1618125054}
+  laserTutorialCheckpoint: {fileID: 1618125054}
+  laserUsedCheckpoint: {fileID: 1618125054}
+  introDialogueID: TripleB_Intro
+  tutorialDialogueID: TripleB_LaserTutorial
+  afterLaserDialogueID: TripleB_AfterLaser
 --- !u!61 &1771094583
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -66694,7 +66745,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -1.250556, y: 1.5452933}
+  m_Offset: {x: -1.250556, y: 3.2268286}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -66704,7 +66755,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2.5112743, y: 11.760848}
+  m_Size: {x: 2.5112743, y: 6.1557293}
   m_EdgeRadius: 0
 --- !u!1 &1809558908
 GameObject:
@@ -68312,3 +68363,4 @@ SceneRoots:
   - {fileID: 1746316519}
   - {fileID: 622910239}
   - {fileID: 1087158075}
+  - {fileID: 1618125055}
