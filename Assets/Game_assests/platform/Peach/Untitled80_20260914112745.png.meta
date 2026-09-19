@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: 37d7e5e0b3d3e1a4f85711b527da7f8e
+guid: e84fc783a7e1e9841956148871d48ecd
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7352773738448793316
-    second: 2690a575-1d98-4acf-81d5-e7c0d57da5d8_0
-  - first:
-      213: -3343603459548810825
-    second: 2690a575-1d98-4acf-81d5-e7c0d57da5d8_1
+      213: 6838232920795446413
+    second: Untitled80_20260914112745_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -116,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 2690a575-1d98-4acf-81d5-e7c0d57da5d8_0
+      name: Untitled80_20260914112745_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 2155
-        height: 702
+        x: 172
+        y: 173
+        width: 296
+        height: 294
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -131,30 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4eeaf0a22cc4a0660800000000000000
-      internalID: 7352773738448793316
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 2690a575-1d98-4acf-81d5-e7c0d57da5d8_1
-      rect:
-        serializedVersion: 2
-        x: 151
-        y: 2
-        width: 11
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 7b173d36e522991d0800000000000000
-      internalID: -3343603459548810825
+      spriteID: d8cf4676c9846ee50800000000000000
+      internalID: 6838232920795446413
       vertices: []
       indices: 
       edges: []
@@ -173,8 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      2690a575-1d98-4acf-81d5-e7c0d57da5d8_0: 7352773738448793316
-      2690a575-1d98-4acf-81d5-e7c0d57da5d8_1: -3343603459548810825
+      Untitled80_20260914112745_0: 6838232920795446413
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

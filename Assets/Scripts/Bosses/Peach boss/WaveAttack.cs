@@ -10,6 +10,9 @@ public class WaveAttack : MonoBehaviour
     [SerializeField] float knockbackForce = 5f;
     [SerializeField] float knockbackUpwardForce = 2f;
 
+    [Header("Visuals")]
+    [SerializeField] SpriteRenderer spriteRenderer;
+
     Rigidbody2D rb;
     Collider2D roomBounds;
     float minX;
@@ -19,11 +22,17 @@ public class WaveAttack : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 0f;
+
+        if (spriteRenderer == null)
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     public void Init(float directionX, Collider2D bounds)
     {
         rb.linearVelocity = new Vector2(directionX * speed, 0f);
+
+        if (spriteRenderer != null)
+            spriteRenderer.flipX = directionX < 0f;
 
         roomBounds = bounds;
         if (roomBounds != null)
