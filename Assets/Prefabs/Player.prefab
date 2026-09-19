@@ -198,7 +198,7 @@ MonoBehaviour:
   dashCooldown: 1
   arrowPrefab: {fileID: 2226950002214366329, guid: 8c1f3c9a741408c47a78a094000ec4d2, type: 3}
   arrowSpawnPoint: {fileID: 731650840178208189}
-  arrowCooldown: 0.5
+  arrowCooldown: 1
   shootDelay: 0.15
   shootAnimationDuration: 0.35
   levelManager: {fileID: 4468910176655245706, guid: 11083b29bb44fd04db47c21601809af0, type: 3}
@@ -429,6 +429,7 @@ GameObject:
   - component: {fileID: 5686983594025846849}
   - component: {fileID: 2416653852725260582}
   - component: {fileID: 1103054155422389414}
+  - component: {fileID: 4715545396543044839}
   m_Layer: 3
   m_Name: PlayerVisual
   m_TagString: Untagged
@@ -545,6 +546,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KnockBackAnimationEvent
   knockBack: {fileID: 8569756162482123466}
+--- !u!114 &4715545396543044839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7086515663351076259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43139a43669e69d498a82fdad0662318, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationEvent
+  controller: {fileID: 6183291168645385503}
 --- !u!1 &7782297264280884967
 GameObject:
   m_ObjectHideFlags: 0

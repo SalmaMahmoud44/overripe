@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Unity.Cinemachine;
 
 public class AppleBossMovement : MonoBehaviour
 {
@@ -12,11 +13,16 @@ public class AppleBossMovement : MonoBehaviour
     [SerializeField] float moveSpeed = 10f;
     [SerializeField] float stopDistance = 0.05f;
 
+    [Header("Boss Movement Camera Shake")]
+    [SerializeField] private CinemachineImpulseSource movementImpulse;
+    [SerializeField] private float shakeInterval = 0.35f;
+
     public bool IsMoving { get; private set; }
 
     public Transform CurrentPoint { get; private set; }
 
     private Coroutine moveRoutine;
+    private Coroutine shakeRoutine;
 
     private void Start()
     {
@@ -47,25 +53,52 @@ public class AppleBossMovement : MonoBehaviour
         moveRoutine = StartCoroutine(MoveRoutine(targetPoint));
     }
 
-    IEnumerator MoveRoutine(Transform targetPoint)
+    private IEnumerator MoveRoutine(Transform targetPoint)
     {
         IsMoving = true;
 
+        if (shakeRoutine != null)
+            StopCoroutine(shakeRoutine);
+
+        shakeRoutine = StartCoroutine(MovementShakeRoutine());
+
         while (Mathf.Abs(transform.position.x - targetPoint.position.x) > stopDistance)
         {
-            Vector3 targetPos = new Vector3(targetPoint.position.x, transform.position.y, transform.position.z);
+            Vector3 targetPos = new Vector3( targetPoint.position.x, transform.position.y, transform.position.z );
 
-            transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards( transform.position, targetPos,moveSpeed * Time.deltaTime );
+
             yield return null;
         }
 
-        transform.position = new Vector3(targetPoint.position.x, transform.position.y, transform.position.z);
+        transform.position = new Vector3(targetPoint.position.x,transform.position.y, transform.position.z);
+
+        IsMoving = false;
+
+        if (shakeRoutine != null)
+        {
+            StopCoroutine(shakeRoutine);
+            shakeRoutine = null;
+        }
 
         CurrentPoint = targetPoint;
-        IsMoving = false;
         moveRoutine = null;
     }
+    private IEnumerator MovementShakeRoutine()
+    {
+        while (IsMoving)
+        {
+            yield return new WaitForSeconds(shakeInterval);
 
+            if (!IsMoving)
+                yield break;
+
+            if (movementImpulse != null)
+            {
+                movementImpulse.GenerateImpulse();
+            }
+        }
+    }
     public void Stop()
     {
         if (moveRoutine != null)
@@ -75,5 +108,7 @@ public class AppleBossMovement : MonoBehaviour
         }
         IsMoving = false;
     }
+
+
 
 }

@@ -49,8 +49,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AppleSeedProjectile
   speed: 10
   lifeTime: 5
-  damage: 8
+  damage: 5
   knockbackForce: 8
+  knockbackUpwardForce: 1
 --- !u!58 &8662507886573947437
 CircleCollider2D:
   m_ObjectHideFlags: 0

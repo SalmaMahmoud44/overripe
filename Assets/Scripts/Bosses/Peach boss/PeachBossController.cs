@@ -129,6 +129,10 @@ public class PeachBossController : MonoBehaviour, IDamagable, IBoss
     [SerializeField] float delayBeforeExplosion = 0.3f;
     [SerializeField] GameObject artifactToReveal;
 
+    [Header("Shield UI")]
+    [SerializeField] private PeachBossShieldUI shieldUI;
+
+
     public event System.Action OnBossDied;
 
     void Start()
@@ -629,6 +633,9 @@ public class PeachBossController : MonoBehaviour, IDamagable, IBoss
     {
         currentState = BossState.Phase2Idle;
         stateTimer = phase2IdleDelay;
+
+        if (shieldUI != null)
+            shieldUI.SetShieldedInstant();
     }
 
     void UpdatePhase2Idle()
@@ -753,6 +760,9 @@ public class PeachBossController : MonoBehaviour, IDamagable, IBoss
         stateTimer = criticalStateDuration;
         isVulnerable = true;
 
+        if (shieldUI != null)
+            shieldUI.BreakShield();
+
         if (animator != null)
             animator.SetTrigger("Phase2Critical");
 
@@ -766,6 +776,10 @@ public class PeachBossController : MonoBehaviour, IDamagable, IBoss
         if (stateTimer <= 0f)
         {
             isVulnerable = false;
+
+            if (shieldUI != null)
+                shieldUI.RestoreShield();
+
             StartJumpCycle();
         }
     }
