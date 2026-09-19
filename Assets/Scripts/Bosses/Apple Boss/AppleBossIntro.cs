@@ -282,6 +282,9 @@ public class AppleBossIntro : MonoBehaviour
             if (explosionImpulse != null)
                 explosionImpulse.GenerateImpulse();
 
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.explosionClip);
+
             yield return new WaitForSeconds(explosionDuration);
 
             explosion.SetActive(false);

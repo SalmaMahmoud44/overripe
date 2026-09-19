@@ -34,7 +34,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float shootDelay = 0.15f;
     [SerializeField] float shootAnimationDuration = 0.35f;
     [SerializeField] LevelManager levelManager;
-
+    [SerializeField] bool canShoot = false;
+ 
     [Header("Melee Settings")]
     [SerializeField] float meleeCooldown = 1f;
     [SerializeField] Transform meleeSpawnPoint;
@@ -75,6 +76,7 @@ public class PlayerController : MonoBehaviour
     bool nextMeleeFirst = true;
     bool isShooting = false;
     bool arrowFired = false;
+  
     private bool jumpAnimationFinished;
 
     Vector2 moveInput;
@@ -232,7 +234,7 @@ public class PlayerController : MonoBehaviour
 
     void OnShoot(InputValue value)
     {
-        if (levelManager.currentLevelIndex == 1 || levelManager.currentLevelIndex == 2 || levelManager.currentLevelIndex == 3)
+        if(!canShoot)
             return;
 
         if (!value.isPressed)
@@ -462,6 +464,9 @@ public class PlayerController : MonoBehaviour
         ArrowProjectille arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, Quaternion.identity);
 
         arrow.Init(shootDirection);
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.shootClip);
     }
     void StartShootAnimation()
     {
@@ -556,6 +561,9 @@ public class PlayerController : MonoBehaviour
 
             damagable.TakeDamage(meleeDamage);
 
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.hitEnemyClip);
+
             if (hitEffectPrefab != null)
                 Instantiate(hitEffectPrefab,enemy.transform.position, Quaternion.identity);
 
@@ -619,6 +627,9 @@ public class PlayerController : MonoBehaviour
     {
         isDashing = true;
         canDash = false;
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.dashClip);
 
         myAnimator.SetBool("isDashing", true);
         myAnimator.SetBool("isRunning", false);

@@ -26,6 +26,7 @@ public class OrangeSolider : MonoBehaviour,ILaserStunnable
     KnockBack knockBack;
 
     float attackTimer;
+    float walkSoundTimer;
 
     bool isAttacking;
     bool isDead;
@@ -106,6 +107,14 @@ public class OrangeSolider : MonoBehaviour,ILaserStunnable
         if (animator != null)
             animator.SetBool("isWalking", true);
 
+        walkSoundTimer -= Time.deltaTime;
+
+        if (walkSoundTimer <= 0f && AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.soldierWalkClip);
+            walkSoundTimer = 0.4f;   
+        }
+
         float directionX = Mathf.Sign(target.position.x - transform.position.x);
 
         rb.linearVelocity = new Vector2(directionX * moveSpeed, rb.linearVelocity.y);
@@ -135,6 +144,9 @@ public class OrangeSolider : MonoBehaviour,ILaserStunnable
     public void DealAttackDamage()
     {
        if(target == null || isDead) return;
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.soldierAttackClip);
 
         float distance = Vector2.Distance(transform.position, target.position);
 

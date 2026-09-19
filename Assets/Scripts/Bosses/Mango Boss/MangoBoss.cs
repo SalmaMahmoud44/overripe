@@ -392,6 +392,9 @@ public class MangoBoss : MonoBehaviour, IDamagable,IBoss
 
         yield return new WaitForSeconds(2f);
 
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.artifactAppearClip);
+
         if (artifactToReveal != null)
             artifactToReveal.SetActive(true);
 

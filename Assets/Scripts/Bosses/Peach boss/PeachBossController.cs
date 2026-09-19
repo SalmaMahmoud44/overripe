@@ -275,6 +275,10 @@ public class PeachBossController : MonoBehaviour, IDamagable, IBoss
     void StartRolling()
     {
         currentState = BossState.Rolling;
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.rollClip);
+
         rollDirectionX = player.position.x > transform.position.x ? 1f : -1f;
         currentBounceCount = 0;
         doingFinalHalfMove = false;
@@ -395,6 +399,9 @@ public class PeachBossController : MonoBehaviour, IDamagable, IBoss
     {
         if (dustPuffPrefab == null || player == null)
             return;
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.dustPuffClip);
 
         float directionX = player.position.x > transform.position.x ? 1f : -1f;
         Vector2 direction = new Vector2(directionX, 0f);
@@ -816,6 +823,9 @@ public class PeachBossController : MonoBehaviour, IDamagable, IBoss
             explosionEffect.Play();
 
         yield return new WaitForSeconds(2f);
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.artifactAppearClip);
 
         if (artifactToReveal != null)
             artifactToReveal.SetActive(true);

@@ -60,6 +60,9 @@ public class AppleBossMovement : MonoBehaviour
         if (shakeRoutine != null)
             StopCoroutine(shakeRoutine);
 
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.appleWalkClip);
+
         shakeRoutine = StartCoroutine(MovementShakeRoutine());
 
         while (Mathf.Abs(transform.position.x - targetPoint.position.x) > stopDistance)

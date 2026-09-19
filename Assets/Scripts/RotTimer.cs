@@ -75,6 +75,10 @@ public class RotTimer : MonoBehaviour
 
     public void AddTime(float amount)
     {
+       
+        if (amount > 0f && AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.addTimeClip); if (amount > 0f && AudioManager.Instance != null)
+
         currentTime += amount;
         if (currentTime > startTime)
             currentTime = startTime;
