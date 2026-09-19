@@ -190,6 +190,9 @@ MonoBehaviour:
     sprite: {fileID: -5150704196045627465, guid: 30fef647e723505418356b4ef12293d1, type: 3}
   dialougeManager: {fileID: 1636715299}
   playerTag: Player
+  dialogueID: 
+  saveCheckpointAfterDialogue: 0
+  checkpointAfterDialogue: {fileID: 0}
   startTimerAfterDialogue: 1
   rotTimer: {fileID: 0}
 --- !u!61 &6523180
@@ -265,7 +268,7 @@ Transform:
   m_GameObject: {fileID: 120993690}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 41.55, y: -12.64, z: 0}
+  m_LocalPosition: {x: 31.33, y: -10.39, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -301,8 +304,11 @@ MonoBehaviour:
     sprite: {fileID: -5150704196045627465, guid: 30fef647e723505418356b4ef12293d1, type: 3}
   dialougeManager: {fileID: 1636715299}
   playerTag: Player
+  dialogueID: Dialogue_Melee
+  saveCheckpointAfterDialogue: 1
+  checkpointAfterDialogue: {fileID: 1809378410}
   startTimerAfterDialogue: 1
-  rotTimer: {fileID: 0}
+  rotTimer: {fileID: 1659281537}
 --- !u!61 &120993693
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -337,7 +343,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 15.049259, y: -2.3094964}
+  m_Offset: {x: 26.151402, y: -3.0017247}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -347,7 +353,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 15.772697, y: 5.927743}
+  m_Size: {x: 17.290924, y: 7.3121996}
   m_EdgeRadius: 0
 --- !u!1 &135975165
 GameObject:
@@ -360,6 +366,7 @@ GameObject:
   - component: {fileID: 135975166}
   - component: {fileID: 135975167}
   - component: {fileID: 135975168}
+  - component: {fileID: 135975169}
   m_Layer: 0
   m_Name: 'JumpDialogue '
   m_TagString: Untagged
@@ -376,7 +383,7 @@ Transform:
   m_GameObject: {fileID: 135975165}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.08, y: -16.75, z: 0}
+  m_LocalPosition: {x: 0.08, y: -13.38, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -412,6 +419,9 @@ MonoBehaviour:
     sprite: {fileID: -5150704196045627465, guid: 30fef647e723505418356b4ef12293d1, type: 3}
   dialougeManager: {fileID: 1636715299}
   playerTag: Player
+  dialogueID: Dialogue_Jump
+  saveCheckpointAfterDialogue: 1
+  checkpointAfterDialogue: {fileID: 135975169}
   startTimerAfterDialogue: 0
   rotTimer: {fileID: 0}
 --- !u!61 &135975168
@@ -448,7 +458,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.23241329, y: 1.8904295}
+  m_Offset: {x: -0.24956441, y: 1.4005513}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -458,8 +468,21 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 5.181757, y: 2.2021008}
+  m_Size: {x: 4.2178016, y: 5.204585}
   m_EdgeRadius: 0
+--- !u!114 &135975169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 135975165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c104e517fd28c04d92c9b0cf41eb3e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Checkpoint
+  checkpointID: Tutorial_Jump
 --- !u!1 &196331621
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,6 +654,7 @@ GameObject:
   - component: {fileID: 338438679}
   - component: {fileID: 338438680}
   - component: {fileID: 338438681}
+  - component: {fileID: 338438682}
   m_Layer: 0
   m_Name: MovementDialogue
   m_TagString: Untagged
@@ -679,6 +703,9 @@ MonoBehaviour:
     sprite: {fileID: -5150704196045627465, guid: 30fef647e723505418356b4ef12293d1, type: 3}
   dialougeManager: {fileID: 1636715299}
   playerTag: Player
+  dialogueID: Dialogue_Move
+  saveCheckpointAfterDialogue: 1
+  checkpointAfterDialogue: {fileID: 338438682}
   startTimerAfterDialogue: 0
   rotTimer: {fileID: 0}
 --- !u!61 &338438681
@@ -727,6 +754,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 21.288792, y: 8.427432}
   m_EdgeRadius: 0
+--- !u!114 &338438682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338438678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c104e517fd28c04d92c9b0cf41eb3e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Checkpoint
+  checkpointID: Tutorial_Move
 --- !u!224 &455344272 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5493138298677428108, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
@@ -776,7 +816,9 @@ Transform:
   - {fileID: 338438679}
   - {fileID: 135975166}
   - {fileID: 1315071476}
+  - {fileID: 1916169530}
   - {fileID: 120993691}
+  - {fileID: 1809378409}
   - {fileID: 6523178}
   - {fileID: 1636715300}
   - {fileID: 2004154872}
@@ -12085,6 +12127,7 @@ GameObject:
   - component: {fileID: 1315071476}
   - component: {fileID: 1315071477}
   - component: {fileID: 1315071478}
+  - component: {fileID: 1315071479}
   m_Layer: 0
   m_Name: 'DashDialogue '
   m_TagString: Untagged
@@ -12101,7 +12144,7 @@ Transform:
   m_GameObject: {fileID: 1315071475}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 23.47, y: -15.41, z: 0}
+  m_LocalPosition: {x: 22.71, y: -13.398, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12128,15 +12171,14 @@ MonoBehaviour:
     message: Try jumping and dashing across!
     waitForAction: 4
     LockPlayerControls: 0
-  - actorId: 0
-    message: Nice! You can combine your jump and dash to cover more distance.
-    waitForAction: 0
-    LockPlayerControls: 1
   actors:
   - name: Banana
     sprite: {fileID: -5150704196045627465, guid: 30fef647e723505418356b4ef12293d1, type: 3}
   dialougeManager: {fileID: 1636715299}
   playerTag: Player
+  dialogueID: Dialogue_Dash
+  saveCheckpointAfterDialogue: 1
+  checkpointAfterDialogue: {fileID: 1315071479}
   startTimerAfterDialogue: 0
   rotTimer: {fileID: 0}
 --- !u!61 &1315071478
@@ -12173,7 +12215,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -1.5419044, y: 0.39967275}
+  m_Offset: {x: -1.5675001, y: 0.6897559}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -12183,8 +12225,21 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 3.8779793, y: 1.7993484}
+  m_Size: {x: 3.2807484, y: 3.64223}
   m_EdgeRadius: 0
+--- !u!114 &1315071479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1315071475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c104e517fd28c04d92c9b0cf41eb3e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Checkpoint
+  checkpointID: Tutorial_Dash
 --- !u!114 &1322567036 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3108450733714282502, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
@@ -13362,6 +13417,98 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &1809378408
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1809378409}
+  - component: {fileID: 1809378411}
+  - component: {fileID: 1809378410}
+  m_Layer: 0
+  m_Name: MeleeCheckpoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1809378409
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1809378408}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 47.48, y: -13.34, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 470713143}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1809378410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1809378408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c104e517fd28c04d92c9b0cf41eb3e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Checkpoint
+  checkpointID: Tutorial_Melee
+--- !u!61 &1809378411
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1809378408}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 1, y: 1}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &1906447976
 GameObject:
   m_ObjectHideFlags: 0
@@ -13398,6 +13545,112 @@ Transform:
   - {fileID: 196331622}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1916169529
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1916169530}
+  - component: {fileID: 1916169532}
+  - component: {fileID: 1916169531}
+  m_Layer: 0
+  m_Name: afterDashDialogue
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1916169530
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1916169529}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 22.71, y: -13.398, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 470713143}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &1916169531
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1916169529}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -1.5675001, y: 0.6897559}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 3.2807484, y: 3.64223}
+  m_EdgeRadius: 0
+--- !u!114 &1916169532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1916169529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6d600c83b944c4690ddcc9e40165cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialougeTrigger
+  messages:
+  - actorId: 0
+    message: Looks like this one's a little too far to jump...
+    waitForAction: 0
+    LockPlayerControls: 1
+  actors:
+  - name: Banana
+    sprite: {fileID: -5150704196045627465, guid: 30fef647e723505418356b4ef12293d1, type: 3}
+  dialougeManager: {fileID: 1636715299}
+  playerTag: Player
+  dialogueID: Dialogue_AfterDash
+  saveCheckpointAfterDialogue: 1
+  checkpointAfterDialogue: {fileID: 1315071479}
+  startTimerAfterDialogue: 0
+  rotTimer: {fileID: 0}
 --- !u!1 &1983414106
 GameObject:
   m_ObjectHideFlags: 0
@@ -13646,6 +13899,9 @@ MonoBehaviour:
     sprite: {fileID: -5150704196045627465, guid: 30fef647e723505418356b4ef12293d1, type: 3}
   dialougeManager: {fileID: 1636715299}
   playerTag: Player
+  dialogueID: 
+  saveCheckpointAfterDialogue: 0
+  checkpointAfterDialogue: {fileID: 0}
   startTimerAfterDialogue: 1
   rotTimer: {fileID: 1659281537}
 --- !u!1 &2071762934
@@ -15280,6 +15536,10 @@ PrefabInstance:
     - target: {fileID: 5997597694627901324, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
       propertyPath: m_Name
       value: Shift
+      objectReference: {fileID: 0}
+    - target: {fileID: 7413556408541610712, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8173839679178754697, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
       propertyPath: m_Pivot.x
