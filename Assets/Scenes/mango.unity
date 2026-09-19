@@ -40315,7 +40315,7 @@ PrefabInstance:
     - target: {fileID: 6183291168645385503, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
       propertyPath: hitEffectPrefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 746094410688493536, guid: 01734351cc09bac44ae593c46893bad0, type: 3}
     - target: {fileID: 7086515663351076259, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
       propertyPath: m_TagString
       value: Untagged

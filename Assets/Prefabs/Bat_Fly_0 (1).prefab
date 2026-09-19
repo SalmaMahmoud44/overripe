@@ -138,7 +138,7 @@ MonoBehaviour:
   damageAmount: 5
   damageCooldown: 1
   knockbackDuration: 0.12
-  knockbackForce: 5
+  knockbackForce: 8
   knockbackUpwardForce: 2
 --- !u!61 &6497194824810700489
 BoxCollider2D:
