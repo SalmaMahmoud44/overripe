@@ -209,7 +209,7 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
-  hitEffectPrefab: {fileID: 0}
+  hitEffectPrefab: {fileID: 746094410688493536, guid: 01734351cc09bac44ae593c46893bad0, type: 3}
   meleeKnockbackForce: 6
   meleeKnockbackVerticalForce: 2
   tripleBLaserPrefab: {fileID: 0}

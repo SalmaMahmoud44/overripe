@@ -11934,6 +11934,67 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1001 &1199537650
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2904425524493362939, guid: aaa3a51eb33e5474cb71e0bac5813d12, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6232059305551098400, guid: aaa3a51eb33e5474cb71e0bac5813d12, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -25.33158
+      objectReference: {fileID: 0}
+    - target: {fileID: 6232059305551098400, guid: aaa3a51eb33e5474cb71e0bac5813d12, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -13.79297
+      objectReference: {fileID: 0}
+    - target: {fileID: 6232059305551098400, guid: aaa3a51eb33e5474cb71e0bac5813d12, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6232059305551098400, guid: aaa3a51eb33e5474cb71e0bac5813d12, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6232059305551098400, guid: aaa3a51eb33e5474cb71e0bac5813d12, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6232059305551098400, guid: aaa3a51eb33e5474cb71e0bac5813d12, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6232059305551098400, guid: aaa3a51eb33e5474cb71e0bac5813d12, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6232059305551098400, guid: aaa3a51eb33e5474cb71e0bac5813d12, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6232059305551098400, guid: aaa3a51eb33e5474cb71e0bac5813d12, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6232059305551098400, guid: aaa3a51eb33e5474cb71e0bac5813d12, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7392726420455227314, guid: aaa3a51eb33e5474cb71e0bac5813d12, type: 3}
+      propertyPath: m_Name
+      value: SceneTransition
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: aaa3a51eb33e5474cb71e0bac5813d12, type: 3}
 --- !u!1 &1241483316
 GameObject:
   m_ObjectHideFlags: 0
@@ -15533,14 +15594,30 @@ PrefabInstance:
       propertyPath: keyIcons.Array.data[4].action
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 3869042514335042333, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5004964422970412317, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
+      propertyPath: m_text
+      value: ...
+      objectReference: {fileID: 0}
     - target: {fileID: 5997597694627901324, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
       propertyPath: m_Name
       value: Shift
       objectReference: {fileID: 0}
     - target: {fileID: 7140761307488678713, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
+      propertyPath: m_fontSize
+      value: 14.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7140761307488678713, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
       propertyPath: m_fontAsset
       value: 
       objectReference: {fileID: 11400000, guid: 2f3365478b37c1c4b936cd8986518458, type: 2}
+    - target: {fileID: 7140761307488678713, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 14.1
+      objectReference: {fileID: 0}
     - target: {fileID: 7140761307488678713, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
       propertyPath: m_sharedMaterial
       value: 
@@ -15751,3 +15828,4 @@ SceneRoots:
   - {fileID: 805679170}
   - {fileID: 714502109554370221}
   - {fileID: 4320270041190915732}
+  - {fileID: 1199537650}

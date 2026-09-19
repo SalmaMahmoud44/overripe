@@ -1,15 +1,14 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Collections;
-using UnityEngine.SceneManagement;
 
 public class CutsceneManager : MonoBehaviour
 {
     [System.Serializable]
     public class CutscenePanel
     {
-        public CanvasGroup panelGroup;      // the full panel image
-        public CanvasGroup[] textGroups;    // texts in this panel, in the order they should appear
+        public CanvasGroup panelGroup;
+        public CanvasGroup[] textGroups;
     }
 
     [Header("Panels in order")]
@@ -35,11 +34,13 @@ public class CutsceneManager : MonoBehaviour
         StartCoroutine(PlayCutscene());
     }
 
-    IEnumerator PlayCutscene()
+    private IEnumerator PlayCutscene()
     {
         foreach (var panel in panels)
         {
+
             panel.panelGroup.gameObject.SetActive(true);
+
             yield return Fade(panel.panelGroup, 0f, 1f);
 
             foreach (var text in panel.textGroups)
@@ -48,34 +49,66 @@ public class CutsceneManager : MonoBehaviour
                 yield return Fade(text, 0f, 1f);
             }
 
+
             yield return WaitForInput();
+
+
             yield return Fade(panel.panelGroup, 1f, 0f);
+
             panel.panelGroup.gameObject.SetActive(false);
+
 
             foreach (var text in panel.textGroups)
                 text.alpha = 0f;
         }
 
-        SceneManager.LoadScene(nextSceneName);
+
+        if (SceneTransition.Instance != null)
+        {
+            SceneTransition.Instance.LoadScene(nextSceneName);
+        }
+        else
+        {
+            Debug.LogWarning(
+                "SceneTransition.Instance is null. Loading scene directly."
+            );
+
+            UnityEngine.SceneManagement.SceneManager.LoadScene(nextSceneName);
+        }
     }
 
-    IEnumerator WaitForInput()
+    private IEnumerator WaitForInput()
     {
         yield return new WaitUntil(() =>
-            (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame) ||
-            (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame));
+            (Keyboard.current != null &&
+             Keyboard.current.spaceKey.wasPressedThisFrame) ||
+
+            (Mouse.current != null &&
+             Mouse.current.leftButton.wasPressedThisFrame)
+        );
     }
 
-    IEnumerator Fade(CanvasGroup group, float from, float to)
+    private IEnumerator Fade(CanvasGroup group, float from, float to)
     {
         float t = 0f;
+
         group.alpha = from;
+
         while (t < fadeDuration)
         {
             t += Time.deltaTime;
-            group.alpha = Mathf.Lerp(from, to, t / fadeDuration);
+
+            float progress = Mathf.Clamp01(t / fadeDuration);
+
+            group.alpha = Mathf.Lerp(
+                from,
+                to,
+                progress
+            );
+
             yield return null;
         }
+
         group.alpha = to;
     }
 }

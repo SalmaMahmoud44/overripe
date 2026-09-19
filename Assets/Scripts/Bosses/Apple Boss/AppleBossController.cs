@@ -649,7 +649,18 @@ public class AppleBossController : MonoBehaviour,IBoss
     {
         yield return new WaitForSeconds(deathToCutsceneDelay);
 
-        SceneManager.LoadScene(finalCutsceneScene);
+        if (SceneTransition.Instance != null)
+        {
+            SceneTransition.Instance.LoadScene(finalCutsceneScene);
+        }
+        else
+        {
+            Debug.LogWarning(
+                "SceneTransition.Instance is null. Loading FinalCutscene directly."
+            );
+
+            SceneManager.LoadScene(finalCutsceneScene);
+        }
     }
     public void StartSeedAttack()
     {
