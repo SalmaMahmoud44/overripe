@@ -76,7 +76,6 @@ public class PlayerController : MonoBehaviour
     bool isShooting = false;
     bool arrowFired = false;
 
-
     Vector2 moveInput;
 
     float coyoteTimeCounter;
@@ -195,21 +194,19 @@ public class PlayerController : MonoBehaviour
       }
     void OnJump(InputValue value)
     {
+        if (!value.isPressed)
+            return;
+
         if (IsKnockedBack())
             return;
 
         if (isDashing)
-            return; 
+            return;
 
         if (controlsLocked)
-        {
             return;
-        }
 
-        if (value.isPressed)
-        {
-            jumpBufferCounter = jumpBufferTime;
-        }
+        jumpBufferCounter = jumpBufferTime;
     }
     void OnDash(InputValue value)
     {
@@ -431,9 +428,11 @@ public class PlayerController : MonoBehaviour
         coyoteTimeCounter = 0f;
         jumpBufferCounter = 0f;
 
+        if (myAnimator != null)
+            myAnimator.SetTrigger("Jump");
+
         if (AudioManager.Instance != null)
-        {AudioManager.Instance.PlaySFX( AudioManager.Instance.jumpClip);
-        }
+            AudioManager.Instance.PlaySFX( AudioManager.Instance.jumpClip);
 
         OnPlayerJumped?.Invoke();
     }
@@ -588,25 +587,15 @@ public class PlayerController : MonoBehaviour
         if (myAnimator == null)
             return;
 
-        bool isFalling =
-            myRigidbody.linearVelocity.y < -0.1f;
-
-        bool isRising =
-            myRigidbody.linearVelocity.y > 0.1f;
-
         myAnimator.SetBool("isDashing", isDashing);
+
+        myAnimator.SetBool("isGrounded", isGrounded);
 
         if (isDashing)
         {
-            myAnimator.SetBool("isJumping", false);
+            myAnimator.SetBool("isRunning", false);
             return;
         }
-
-        bool shouldJump =
-            !isGrounded &&
-            (isRising || isFalling);
-
-        myAnimator.SetBool("isJumping", shouldJump);
 
         bool isRunning =
             isGrounded &&
@@ -627,7 +616,6 @@ public class PlayerController : MonoBehaviour
         canDash = false;
 
         myAnimator.SetBool("isDashing", true);
-        myAnimator.SetBool("isJumping", false);
         myAnimator.SetBool("isRunning", false);
 
         float originalGravity = myRigidbody.gravityScale;
