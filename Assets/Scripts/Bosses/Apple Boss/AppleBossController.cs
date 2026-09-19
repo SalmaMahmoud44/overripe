@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class AppleBossController : MonoBehaviour
+public class AppleBossController : MonoBehaviour,IBoss
 {
     public enum BossState{ Idle,Moving, Attacking, Vulnerable,Dead}
 
@@ -93,7 +93,7 @@ public class AppleBossController : MonoBehaviour
     bool hasLastPosition;
     bool hasLastAttack;
 
-
+    public event System.Action OnBossDied;
 
 
     private void Awake()
@@ -641,6 +641,7 @@ public class AppleBossController : MonoBehaviour
 
         if (bodyAnimator != null)
             bodyAnimator.SetTrigger(deathTrigger);
+        OnBossDied?.Invoke();
 
         StartCoroutine(DeathRoutine());
     }
