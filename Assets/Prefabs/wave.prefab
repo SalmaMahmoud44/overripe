@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a416c581cf8f2043bf2c0515bdcdfeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaveAttack
-  speed: 5
+  speed: 8
   damage: 10
   knockbackForce: 5
   knockbackUpwardForce: 2

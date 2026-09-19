@@ -78,6 +78,7 @@ MonoBehaviour:
   lifetime: 4
   damage: 10
   arrowSprite: {fileID: 4193086838490661861}
+  hitEffectPrefab: {fileID: 746094410688493536, guid: 01734351cc09bac44ae593c46893bad0, type: 3}
 --- !u!58 &351229087780960686
 CircleCollider2D:
   m_ObjectHideFlags: 0
