@@ -112,6 +112,7 @@ GameObject:
   - component: {fileID: 5003040353476594667}
   - component: {fileID: 6055698812318141176}
   - component: {fileID: 5805740756377150779}
+  - component: {fileID: 355979053010626580}
   m_Layer: 7
   m_Name: Mushroom-Run_0 (1)
   m_TagString: Untagged
@@ -180,7 +181,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -611315949
-  m_SortingLayer: 8
+  m_SortingLayer: 11
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 3384204939538765328, guid: 3c38bb1d34282664493467933631ce67, type: 3}
@@ -342,3 +343,19 @@ MonoBehaviour:
   animator: {fileID: 3416270933903989860}
   knockbackAnimTrigger: Hit
   canReceiveKnockback: 1
+--- !u!114 &355979053010626580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6000573064207092417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0af7638f6f9983c41b1e70d701841f63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoliderHitFeedback
+  spriteRenderer: {fileID: 7306045891768194344}
+  hitColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 1
+  stunDuration: 0.35
