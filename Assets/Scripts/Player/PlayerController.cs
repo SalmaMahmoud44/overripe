@@ -58,7 +58,9 @@ public class PlayerController : MonoBehaviour
     public event Action OnPlayerJumped;
     public event Action OnPlayerDashed;
     public event Action OnPlayerMelee;
+    public event Action OnPlayerShoot;
     public event Action OnPlayerContinue;
+    
 
 
     float shootTimer = 0f;
@@ -243,6 +245,8 @@ public class PlayerController : MonoBehaviour
             return;
 
         StartShootAnimation();
+        
+        OnPlayerShoot?.Invoke();
     }
 
     void OnMelee(InputValue value)

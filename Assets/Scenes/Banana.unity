@@ -940,7 +940,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 553428094498274960, guid: 410e23d016366eb438c6ef3ba7c9c3d4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -13.7
+      value: -12.64
       objectReference: {fileID: 0}
     - target: {fileID: 553428094498274960, guid: 410e23d016366eb438c6ef3ba7c9c3d4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -15253,6 +15253,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 470713144}
+    - target: {fileID: 2379040692399856049, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: c48a9e623f57a964bb290afc4c88ec5e, type: 3}
     - target: {fileID: 3108450733714282502, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
       propertyPath: keyIcons.Array.data[0].action
       value: 2
@@ -15272,6 +15276,10 @@ PrefabInstance:
     - target: {fileID: 3108450733714282502, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
       propertyPath: keyIcons.Array.data[4].action
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5997597694627901324, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
+      propertyPath: m_Name
+      value: Shift
       objectReference: {fileID: 0}
     - target: {fileID: 8173839679178754697, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
       propertyPath: m_Pivot.x
@@ -15353,10 +15361,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8214882009675340315, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
+      propertyPath: m_Name
+      value: W
+      objectReference: {fileID: 0}
     - target: {fileID: 8277155796054555527, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
       propertyPath: m_Name
       value: Tutorial Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 8594966574030583469, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 185cf49fca2ff1f4c8fd8e3b993f700e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15376,7 +15392,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1663594980951944062, guid: c39d9da0946a2c245b51041ecd2b730f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -13.44
+      value: -12.139
       objectReference: {fileID: 0}
     - target: {fileID: 1663594980951944062, guid: c39d9da0946a2c245b51041ecd2b730f, type: 3}
       propertyPath: m_LocalPosition.z

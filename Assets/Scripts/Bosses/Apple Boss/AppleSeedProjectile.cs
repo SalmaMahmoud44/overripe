@@ -63,6 +63,11 @@ public class AppleSeedProjectile : MonoBehaviour
         if (!collision.CompareTag("Player"))
             return;
 
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            Destroy(gameObject);
+            return;
+        }
 
         IDamagable damagable =
             collision.GetComponent<IDamagable>();
