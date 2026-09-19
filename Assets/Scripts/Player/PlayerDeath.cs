@@ -54,7 +54,9 @@ public class PlayerDeath : MonoBehaviour , IDamagable
     public new void TakeDamage(float damage)
     {
         Debug.Log("Player took damage: " + damage);
-        rotTimer.AddTime(-damage); 
+        rotTimer.AddTime(-damage);
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.hitPlayerClip);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

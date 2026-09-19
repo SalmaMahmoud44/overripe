@@ -120,6 +120,8 @@ public class AppleBossController : MonoBehaviour,IBoss
         if (fightRoutine != null)
             StopCoroutine(fightRoutine);
 
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayAppleBossMusic();
         fightRoutine = StartCoroutine(FightRoutine());
     }
 

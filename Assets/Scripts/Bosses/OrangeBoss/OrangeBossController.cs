@@ -551,6 +551,9 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable,IBoss
             animator.SetTrigger(rollingTrigger);
         }
 
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.rollClip);
+
         if (chargeDust != null)
             chargeDust.Play();
 
@@ -1034,6 +1037,8 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable,IBoss
 
         if (artifactPrefab != null)
         {
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.artifactAppearClip);
             Instantiate(artifactPrefab,spawnPosition,Quaternion.identity);
         }
 

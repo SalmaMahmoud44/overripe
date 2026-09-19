@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
 {
@@ -28,10 +29,36 @@ public class AudioManager : MonoBehaviour
     public AudioClip juiceClip;
     public AudioClip juiceHit;
     public AudioClip artifactCollect;
+    public AudioClip artifactAppearClip;
 
     [Header("UI SFX")]
     public AudioClip buttonHoverClip;
     public AudioClip buttonClickClip;
+
+    [Header("Music")]
+    [SerializeField] private AudioClip appleBossMusic;   
+
+    [Header("Player SFX")]
+    public AudioClip dashClip;        
+    public AudioClip hitPlayerClip;   
+    public AudioClip shootClip;
+    public AudioClip laserClip;
+
+    [Header("Enemy SFX")]
+    public AudioClip hitEnemyClip;      
+    public AudioClip soldierAttackClip;  
+    public AudioClip soldierWalkClip;     
+
+    [Header("Boss SFX")]
+    public AudioClip rollClip;        
+    public AudioClip appleSeedClip;  
+    public AudioClip appleStickClip;  
+    public AudioClip appleWalkClip;
+    public AudioClip dustPuffClip;
+    public AudioClip explosionClip;
+
+    [Header("Timer SFX")]
+    public AudioClip addTimeClip;     
 
     [Header("Music Settings")]
     [SerializeField, Range(0f, 1f)] private float musicVolume = 0.5f;
@@ -41,6 +68,7 @@ public class AudioManager : MonoBehaviour
 
     public float MusicVolume => musicVolume;
     public float SFXVolume => sfxVolume;
+    public void PlayAppleBossMusic() => PlayMusic(appleBossMusic);
 
     private void Awake()
     {
@@ -52,6 +80,7 @@ public class AudioManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded;
 
         musicSource.loop = true;
         musicSource.playOnAwake = false;
@@ -60,6 +89,18 @@ public class AudioManager : MonoBehaviour
 
         musicSource.volume = musicVolume;
         sfxSource.volume = sfxVolume;
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "Main Menu")
+            PlayMainMenuMusic();
     }
 
     public void PlayMusic(AudioClip music)
@@ -145,5 +186,6 @@ public class AudioManager : MonoBehaviour
         sfxVolume = Mathf.Clamp01(volume);
         sfxSource.volume = sfxVolume;
     }
-
+   
+   
 }

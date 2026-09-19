@@ -562,6 +562,8 @@ public class TripleBLaser : MonoBehaviour
 
             float distance = Vector2.Distance(startPosition, targetPoint);
 
+
+
             if (distance > laserRange)
             {
                 endPosition = startPosition + direction * laserRange;
@@ -593,6 +595,9 @@ public class TripleBLaser : MonoBehaviour
         laserLine.SetPosition(1, endPosition);
 
         laserLine.enabled = true;
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.laserClip);
 
         if (rotTimer != null)
         {

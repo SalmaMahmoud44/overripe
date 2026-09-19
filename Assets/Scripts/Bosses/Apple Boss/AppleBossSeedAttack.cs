@@ -195,7 +195,8 @@ public class AppleBossSeedAttack : MonoBehaviour
         if (currentSpawnPoint == null || seedPrefab == null || appleBoss.Player == null)
             return;
 
-
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.appleSeedClip);
 
         GameObject appleSeed = Instantiate(seedPrefab, currentSpawnPoint.position, Quaternion.identity);
 

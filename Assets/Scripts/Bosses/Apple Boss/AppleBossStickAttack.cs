@@ -172,6 +172,8 @@ public class AppleBossStickAttack : MonoBehaviour
     {
         if (impactImpulse != null)
             impactImpulse.GenerateImpulse();
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.appleStickClip);
     }
 
 

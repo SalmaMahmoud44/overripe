@@ -69,6 +69,8 @@ public class ArrowProjectille : MonoBehaviour
 
             damagable.TakeDamage(damage);
 
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.hitEnemyClip);
             if (hitEffectPrefab != null)
                 Instantiate(hitEffectPrefab, collision.transform.position, Quaternion.identity);
 

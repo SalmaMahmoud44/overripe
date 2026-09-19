@@ -100632,6 +100632,10 @@ PrefabInstance:
       value: 1.398323
       objectReference: {fileID: 0}
     - target: {fileID: 6183291168645385503, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
+      propertyPath: canShoot
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6183291168645385503, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
       propertyPath: arrowCooldown
       value: 1
       objectReference: {fileID: 0}
@@ -108958,6 +108962,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5885296173084161490, guid: a8c0d82c5a2080742a793e6bbf5006af, type: 3}
+      propertyPath: customClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 065068ca4ef77ee429f8c6be952ce5fa, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

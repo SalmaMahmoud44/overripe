@@ -60106,7 +60106,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3108450733714282502, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
       propertyPath: keyIcons.Array.data[0].action
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5004964422970412317, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
       propertyPath: m_fontSize
@@ -60289,6 +60289,50 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5431981613125337291, guid: 4d2550bb0636629489747674e49d9e1f, type: 3}
   m_PrefabInstance: {fileID: 1961397495}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &611847532
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 611847534}
+  - component: {fileID: 611847533}
+  m_Layer: 0
+  m_Name: cc
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &611847533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 611847532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f47636c8055aa8d4c87158f5fb5ea8a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CheckpointManager
+--- !u!4 &611847534
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 611847532}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1025.1486, y: 585.99896, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &619539099
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -66392,6 +66436,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5885296173084161490, guid: a8c0d82c5a2080742a793e6bbf5006af, type: 3}
+      propertyPath: customClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 20be152b6117d664a9ea4be46b6e2a60, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -66910,6 +66958,10 @@ PrefabInstance:
       propertyPath: startTime
       value: 120
       objectReference: {fileID: 0}
+    - target: {fileID: 6917241684926676987, guid: 5b6573c3b63f51f4fa6648c26c8993c8, type: 3}
+      propertyPath: timerText
+      value: 
+      objectReference: {fileID: 2123745403}
     - target: {fileID: 6917241684926676987, guid: 5b6573c3b63f51f4fa6648c26c8993c8, type: 3}
       propertyPath: sartPaused
       value: 1
@@ -68388,6 +68440,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1817522600}
     - target: {fileID: 5253102543998237560, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
+      propertyPath: laserCooldown
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 5253102543998237560, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
       propertyPath: targetStopDistance
       value: 2
       objectReference: {fileID: 0}
@@ -68518,3 +68574,4 @@ SceneRoots:
   - {fileID: 622910239}
   - {fileID: 1087158075}
   - {fileID: 1618125055}
+  - {fileID: 611847534}
