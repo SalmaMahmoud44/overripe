@@ -7,24 +7,41 @@ public class ArrowProjectille : MonoBehaviour
     [SerializeField] float lifetime = 5f;
     [SerializeField] float damage = 10f;
 
-    private Rigidbody2D Arrowrb;
-    private Vector2 Arrowdir;
+    [SerializeField] private SpriteRenderer arrowSprite;
+
+    private Rigidbody2D arrowrb;
+    private Vector2 arrowDir;
+
+
 
     private void Awake()
     {
-        Arrowrb = GetComponent<Rigidbody2D>();
-        Arrowrb.gravityScale = 0f; 
+        arrowrb = GetComponent<Rigidbody2D>();
+        arrowrb.gravityScale = 0f;
+
+        if(arrowSprite == null )
+          arrowSprite = GetComponentInChildren<SpriteRenderer>();
     }
 
     public void Init(Vector2 dir)
     {
-        Arrowdir = dir.normalized;
+        arrowDir = dir.normalized;
 
-        float angle = Mathf.Atan2(Arrowdir.y, Arrowdir.x) * Mathf.Rad2Deg;
+        float angle = Mathf.Atan2(arrowDir.y, arrowDir.x) * Mathf.Rad2Deg;
 
-        transform.rotation = Quaternion.Euler( 0f, 0f, angle - 50f);
+        if (arrowDir.x >= 0)
+        {
+    
+            arrowSprite.flipY = false;
+            transform.rotation = Quaternion.Euler(0f, 0f, angle - 50f);
+        }
+        else
+        {
+            arrowSprite.flipY = true;
+            transform.rotation = Quaternion.Euler(0f, 0f, angle + 50f);
+        }
 
-        Arrowrb.linearVelocity = Arrowdir * speed;
+        arrowrb.linearVelocity = arrowDir * speed;
 
         Destroy(gameObject, lifetime);
     }

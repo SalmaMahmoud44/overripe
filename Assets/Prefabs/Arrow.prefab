@@ -77,6 +77,7 @@ MonoBehaviour:
   speed: 10
   lifetime: 4
   damage: 10
+  arrowSprite: {fileID: 4193086838490661861}
 --- !u!58 &351229087780960686
 CircleCollider2D:
   m_ObjectHideFlags: 0

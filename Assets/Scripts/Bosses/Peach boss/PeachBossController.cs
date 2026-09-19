@@ -2,7 +2,7 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PeachBossController : MonoBehaviour, IDamagable
+public class PeachBossController : MonoBehaviour, IDamagable,IBoss
 {
     public enum BossState
     {
@@ -127,6 +127,8 @@ public class PeachBossController : MonoBehaviour, IDamagable
     [SerializeField] float deathAnimDelay = 1f;
     [SerializeField] float delayBeforeExplosion = 0.3f;
     [SerializeField] GameObject artifactToReveal;
+
+    public event System.Action OnBossDied;
 
     void Start()
     {
@@ -768,6 +770,8 @@ public class PeachBossController : MonoBehaviour, IDamagable
         isVulnerable = false;
 
         rb.linearVelocity = Vector2.zero;
+
+        OnBossDied?.Invoke();
 
         if (animator != null)
             animator.SetTrigger("Death");
