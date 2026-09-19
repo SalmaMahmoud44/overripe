@@ -132,6 +132,8 @@ public class CheckpointManager : MonoBehaviour
 
         if (rb != null)
             rb.linearVelocity = Vector2.zero;
+
+        RestartTimerAfterRespawn();
     }
 
 
@@ -144,5 +146,14 @@ public class CheckpointManager : MonoBehaviour
         completedDialogues.Clear();
 
         tripleBStage = TripleBStage.None;
+    }
+    public void RestartTimerAfterRespawn()
+    {
+        RotTimer rotTimer = FindFirstObjectByType<RotTimer>();
+
+        if (rotTimer == null)
+            return;
+
+        rotTimer.StartTimer();
     }
 }

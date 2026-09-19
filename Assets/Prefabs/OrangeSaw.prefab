@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5431981613125337291}
   - component: {fileID: 1417407983293438163}
   - component: {fileID: 6467301859671656013}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: OrangeSaw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82,6 +82,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17cf2ea105631cd44a206843535d3564, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Saw
+  damage: 3
+  knockbackForce: 5
+  knockbackUpwardForce: 1.5
 --- !u!1 &5407404036621756576
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,7 +96,7 @@ GameObject:
   - component: {fileID: 1807962820110805994}
   - component: {fileID: 535274865703672450}
   - component: {fileID: 2568685128024554534}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SawVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}

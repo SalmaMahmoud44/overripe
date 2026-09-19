@@ -16,10 +16,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: AppleSaw Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 1794960212803057596, guid: 4d2550bb0636629489747674e49d9e1f, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2568685128024554534, guid: 4d2550bb0636629489747674e49d9e1f, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 97b71601d0bce6645b411d53856d5ff1, type: 2}
+    - target: {fileID: 5407404036621756576, guid: 4d2550bb0636629489747674e49d9e1f, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 5431981613125337291, guid: 4d2550bb0636629489747674e49d9e1f, type: 3}
       propertyPath: m_LocalPosition.x
       value: -693.43

@@ -136,6 +136,10 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable,IBoss
     [SerializeField] GameObject artifactPrefab;
     [SerializeField] float artifactSpawnDelay = 0.5f;
 
+    [Header("Death Explosion")]
+    [SerializeField] ParticleSystem deathExplosionEffect;
+    [SerializeField] float deathExplosionDelay = 0.35f;
+    [SerializeField] float artifactDelayAfterExplosion = 0.45f;
 
 
 
@@ -169,6 +173,15 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable,IBoss
     float summonTimer = 0f;
     float normalHitTimer = 0f;
 
+    AudioSource rollLoop;
+
+    void StopRollSound()
+    {
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.StopLoopSFX(rollLoop);
+
+        rollLoop = null;
+    }
 
     private void Awake()
     {
@@ -188,6 +201,10 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable,IBoss
 
         if (spriteRenderer != null)
             baseColor = spriteRenderer.color;
+    }
+    void OnDestroy()
+    {
+        StopRollSound();
     }
 
     private void Update()
@@ -552,7 +569,7 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable,IBoss
         }
 
         if (AudioManager.Instance != null)
-            AudioManager.Instance.PlaySFX(AudioManager.Instance.rollClip);
+            rollLoop = AudioManager.Instance.PlayLoopSFX(AudioManager.Instance.ORANGErollClip);
 
         if (chargeDust != null)
             chargeDust.Play();
@@ -574,6 +591,7 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable,IBoss
             if (isLaserStunned)
             {
                 orangeRigidbody2D.linearVelocity = Vector2.zero;
+                StopRollSound();
                 cancelCurrentCharge = true;
                 break;
             }
@@ -596,6 +614,7 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable,IBoss
 
         orangeRigidbody2D.linearVelocity = Vector2.zero;
 
+        StopRollSound();
 
         orangeRigidbody2D.gravityScale = oldGravityScale;
         orangeRigidbody2D.constraints = oldConstraints;
@@ -971,6 +990,8 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable,IBoss
         isDead = true;
         isTransitioning = false;
 
+        StopRollSound();
+
         if (animator != null)
         {
             animator.ResetTrigger(rollingTrigger);
@@ -1033,13 +1054,33 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable,IBoss
     {
         Vector3 spawnPosition = transform.position;
 
-        yield return new WaitForSeconds(artifactSpawnDelay);
+
+        yield return new WaitForSeconds(deathExplosionDelay);
+
+        if (deathExplosionEffect != null)
+        {
+            deathExplosionEffect.transform.position = spawnPosition;
+
+            deathExplosionEffect.Stop(
+                true,
+                ParticleSystemStopBehavior.StopEmittingAndClear
+            );
+
+            deathExplosionEffect.Play();
+        }
+
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.explosionClip);
+        }
+        yield return new WaitForSeconds(artifactDelayAfterExplosion);
 
         if (artifactPrefab != null)
         {
             if (AudioManager.Instance != null)
-                AudioManager.Instance.PlaySFX(AudioManager.Instance.artifactAppearClip);
-            Instantiate(artifactPrefab,spawnPosition,Quaternion.identity);
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.artifactAppearClip );
+
+            Instantiate(artifactPrefab, spawnPosition,Quaternion.identity);
         }
 
         Destroy(gameObject);
@@ -1230,6 +1271,9 @@ public class OrangeBossController : MonoBehaviour, ILaserStunnable,IBoss
     void StopChargePhysics(float oldGravityScale, RigidbodyConstraints2D oldConstraints)
     {
         orangeRigidbody2D.linearVelocity = Vector2.zero;
+
+        StopRollSound();
+
         orangeRigidbody2D.gravityScale = oldGravityScale;
         orangeRigidbody2D.constraints = oldConstraints;
 

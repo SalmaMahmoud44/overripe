@@ -58993,6 +58993,7 @@ GameObject:
   - component: {fileID: 337684186}
   - component: {fileID: 337684185}
   - component: {fileID: 337684184}
+  - component: {fileID: 337684187}
   m_Layer: 5
   m_Name: Reload
   m_TagString: Untagged
@@ -59113,6 +59114,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 337684182}
   m_CullTransparentMesh: 1
+--- !u!114 &337684187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 337684182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73779555c127cfa41b7178e5c9ef8538, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonSound
 --- !u!1 &340127830
 GameObject:
   m_ObjectHideFlags: 0
@@ -59478,6 +59491,7 @@ GameObject:
   - component: {fileID: 429889546}
   - component: {fileID: 429889545}
   - component: {fileID: 429889544}
+  - component: {fileID: 429889547}
   m_Layer: 5
   m_Name: Home
   m_TagString: Untagged
@@ -59598,6 +59612,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 429889542}
   m_CullTransparentMesh: 1
+--- !u!114 &429889547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 429889542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73779555c127cfa41b7178e5c9ef8538, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonSound
 --- !u!1 &467754409
 GameObject:
   m_ObjectHideFlags: 0
@@ -59685,6 +59711,7 @@ GameObject:
   - component: {fileID: 490321369}
   - component: {fileID: 490321368}
   - component: {fileID: 490321367}
+  - component: {fileID: 490321370}
   m_Layer: 5
   m_Name: Pause
   m_TagString: Untagged
@@ -59805,6 +59832,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 490321365}
   m_CullTransparentMesh: 1
+--- !u!114 &490321370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 490321365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73779555c127cfa41b7178e5c9ef8538, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonSound
 --- !u!1 &506263259
 GameObject:
   m_ObjectHideFlags: 0
@@ -60289,50 +60328,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5431981613125337291, guid: 4d2550bb0636629489747674e49d9e1f, type: 3}
   m_PrefabInstance: {fileID: 1961397495}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &611847532
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 611847534}
-  - component: {fileID: 611847533}
-  m_Layer: 0
-  m_Name: cc
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &611847533
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 611847532}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f47636c8055aa8d4c87158f5fb5ea8a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CheckpointManager
---- !u!4 &611847534
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 611847532}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1025.1486, y: 585.99896, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &619539099
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -61604,6 +61599,7 @@ GameObject:
   - component: {fileID: 939217724}
   - component: {fileID: 939217723}
   - component: {fileID: 939217722}
+  - component: {fileID: 939217725}
   m_Layer: 5
   m_Name: Play
   m_TagString: Untagged
@@ -61724,6 +61720,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 939217720}
   m_CullTransparentMesh: 1
+--- !u!114 &939217725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939217720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73779555c127cfa41b7178e5c9ef8538, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonSound
 --- !u!4 &950198247 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 553428094498274960, guid: 410e23d016366eb438c6ef3ba7c9c3d4, type: 3}
@@ -61762,8 +61770,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -7.1597466, y: -0.0000038146973}
-  m_SizeDelta: {x: -21.14513, y: 0.00001}
+  m_AnchoredPosition: {x: 0.7686081, y: -0.0000038146973}
+  m_SizeDelta: {x: -5.28842, y: 0.00001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &953976299
 GameObject:
@@ -63678,7 +63686,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 999545192}
   m_HandleRect: {fileID: 0}
@@ -63686,7 +63694,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 100
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -66714,7 +66722,7 @@ MonoBehaviour:
     waitForAction: 1
     LockPlayerControls: 1
   - actorId: 2
-    message: But you can call me <color=#FFD54F>Triple B</color> for short.
+    message: But you can call me <color=#A95C1B>Triple B</color> for short.
     waitForAction: 1
     LockPlayerControls: 1
   - actorId: 2
@@ -66956,7 +66964,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6917241684926676987, guid: 5b6573c3b63f51f4fa6648c26c8993c8, type: 3}
       propertyPath: startTime
-      value: 120
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 6917241684926676987, guid: 5b6573c3b63f51f4fa6648c26c8993c8, type: 3}
       propertyPath: timerText
@@ -68202,9 +68210,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3361946041436867848, guid: 1467a473c830af34cacc6c53ef2be4c4, type: 3}
-      propertyPath: maxHealth
-      value: 150
+    - target: {fileID: 4912468350788736870, guid: 1467a473c830af34cacc6c53ef2be4c4, type: 3}
+      propertyPath: m_Mass
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 5042322394332746900, guid: 1467a473c830af34cacc6c53ef2be4c4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -68250,26 +68258,6 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 517416415}
-    - target: {fileID: 6849636323740774374, guid: 1467a473c830af34cacc6c53ef2be4c4, type: 3}
-      propertyPath: maxSoldiersP1
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6849636323740774374, guid: 1467a473c830af34cacc6c53ef2be4c4, type: 3}
-      propertyPath: maxSoldiersP2
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6849636323740774374, guid: 1467a473c830af34cacc6c53ef2be4c4, type: 3}
-      propertyPath: maxSoldiersP3
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6849636323740774374, guid: 1467a473c830af34cacc6c53ef2be4c4, type: 3}
-      propertyPath: maxSoldiersFrenzy
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6849636323740774374, guid: 1467a473c830af34cacc6c53ef2be4c4, type: 3}
-      propertyPath: soliderSpawnPoints.Array.size
-      value: 13
-      objectReference: {fileID: 0}
     - target: {fileID: 6849636323740774374, guid: 1467a473c830af34cacc6c53ef2be4c4, type: 3}
       propertyPath: 'soliderSpawnPoints.Array.data[0]'
       value: 
@@ -68320,26 +68308,6 @@ PrefabInstance:
       objectReference: {fileID: 1982456032}
     - target: {fileID: 6849636323740774374, guid: 1467a473c830af34cacc6c53ef2be4c4, type: 3}
       propertyPath: 'soliderSpawnPoints.Array.data[12]'
-      value: 
-      objectReference: {fileID: 1938711104}
-    - target: {fileID: 6849636323740774374, guid: 1467a473c830af34cacc6c53ef2be4c4, type: 3}
-      propertyPath: 'soliderSpawnPoints.Array.data[13]'
-      value: 
-      objectReference: {fileID: 1938711104}
-    - target: {fileID: 6849636323740774374, guid: 1467a473c830af34cacc6c53ef2be4c4, type: 3}
-      propertyPath: 'soliderSpawnPoints.Array.data[14]'
-      value: 
-      objectReference: {fileID: 1938711104}
-    - target: {fileID: 6849636323740774374, guid: 1467a473c830af34cacc6c53ef2be4c4, type: 3}
-      propertyPath: 'soliderSpawnPoints.Array.data[15]'
-      value: 
-      objectReference: {fileID: 1938711104}
-    - target: {fileID: 6849636323740774374, guid: 1467a473c830af34cacc6c53ef2be4c4, type: 3}
-      propertyPath: 'soliderSpawnPoints.Array.data[16]'
-      value: 
-      objectReference: {fileID: 1938711104}
-    - target: {fileID: 6849636323740774374, guid: 1467a473c830af34cacc6c53ef2be4c4, type: 3}
-      propertyPath: 'soliderSpawnPoints.Array.data[17]'
       value: 
       objectReference: {fileID: 1938711104}
     - target: {fileID: 8283376859408779252, guid: 1467a473c830af34cacc6c53ef2be4c4, type: 3}
@@ -68574,4 +68542,3 @@ SceneRoots:
   - {fileID: 622910239}
   - {fileID: 1087158075}
   - {fileID: 1618125055}
-  - {fileID: 611847534}

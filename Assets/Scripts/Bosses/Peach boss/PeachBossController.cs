@@ -135,6 +135,13 @@ public class PeachBossController : MonoBehaviour, IDamagable, IBoss
 
     public event System.Action OnBossDied;
 
+
+    AudioSource rollLoop;
+
+    void OnDestroy()
+    {
+        StopRollSound();
+    }
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -277,7 +284,7 @@ public class PeachBossController : MonoBehaviour, IDamagable, IBoss
         currentState = BossState.Rolling;
 
         if (AudioManager.Instance != null)
-            AudioManager.Instance.PlaySFX(AudioManager.Instance.rollClip);
+            rollLoop = AudioManager.Instance.PlayLoopSFX(AudioManager.Instance.PeachrollClip);
 
         rollDirectionX = player.position.x > transform.position.x ? 1f : -1f;
         currentBounceCount = 0;
@@ -290,11 +297,18 @@ public class PeachBossController : MonoBehaviour, IDamagable, IBoss
 
         rollShakeTimer = 0f;
     }
+    void StopRollSound()
+    {
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.StopLoopSFX(rollLoop);
 
+        rollLoop = null;
+    }
     void StartRollOutro()
     {
         currentState = BossState.RollOutro;
         stateTimer = rollOutroDelay;
+        StopRollSound();
 
         rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
         SetRollCollider(false);
@@ -667,6 +681,9 @@ public class PeachBossController : MonoBehaviour, IDamagable, IBoss
         jumpElapsed = 0f;
         jumpStartPos = transform.position;
 
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.JumpSeedClip);
+
         if (animator != null)
             animator.SetTrigger("Phase2JumpRise");
     }
@@ -796,6 +813,7 @@ public class PeachBossController : MonoBehaviour, IDamagable, IBoss
         currentState = BossState.Dead;
         isVulnerable = false;
 
+        StopRollSound();
         rb.linearVelocity = Vector2.zero;
 
         OnBossDied?.Invoke();
@@ -822,13 +840,27 @@ public class PeachBossController : MonoBehaviour, IDamagable, IBoss
         if (explosionEffect != null)
             explosionEffect.Play();
 
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.explosionClip);
+        }
         yield return new WaitForSeconds(2f);
 
         if (AudioManager.Instance != null)
             AudioManager.Instance.PlaySFX(AudioManager.Instance.artifactAppearClip);
 
         if (artifactToReveal != null)
+        {
+            Debug.Log("ARTIFACT FOUND: " + artifactToReveal.name);
+
             artifactToReveal.SetActive(true);
+
+            Debug.Log("ARTIFACT ACTIVE: " + artifactToReveal.activeSelf);
+        }
+        else
+        {
+            Debug.LogError("ARTIFACT TO REVEAL IS NULL!");
+        }
 
         Destroy(gameObject);
     }
