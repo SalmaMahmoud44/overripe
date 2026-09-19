@@ -18,14 +18,15 @@ public class ArrowProjectille : MonoBehaviour
 
     public void Init(Vector2 dir)
     {
-        Arrowdir= dir.normalized;
-        Vector2 scale = transform.localScale;
-        scale.x = Mathf.Sign(dir.x); 
-        transform.localScale = scale;
+        Arrowdir = dir.normalized;
+
+        float angle = Mathf.Atan2(Arrowdir.y, Arrowdir.x) * Mathf.Rad2Deg;
+
+        transform.rotation = Quaternion.Euler( 0f, 0f, angle - 50f);
 
         Arrowrb.linearVelocity = Arrowdir * speed;
 
-        Destroy(gameObject, lifetime); 
+        Destroy(gameObject, lifetime);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
