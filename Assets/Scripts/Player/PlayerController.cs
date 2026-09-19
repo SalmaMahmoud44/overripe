@@ -232,8 +232,8 @@ public class PlayerController : MonoBehaviour
 
     void OnShoot(InputValue value)
     {
-        //if(levelManager.currentLevelIndex == 1 || levelManager.currentLevelIndex == 2|| levelManager.currentLevelIndex == 3)
-        //    return;
+        if (levelManager.currentLevelIndex == 1 || levelManager.currentLevelIndex == 2 || levelManager.currentLevelIndex == 3)
+            return;
 
         if (!value.isPressed)
             return;
@@ -310,7 +310,7 @@ public class PlayerController : MonoBehaviour
         shootDirection.Normalize();
 
 
-        float angle =Mathf.Atan2(shootDirection.y,shootDirection.x) * Mathf.Rad2Deg;
+        float angle = Mathf.Atan2(shootDirection.y,shootDirection.x) * Mathf.Rad2Deg;
 
         float facingAngle =isFacingRight ? 0f : 180f;
 
@@ -557,7 +557,7 @@ public class PlayerController : MonoBehaviour
             damagable.TakeDamage(meleeDamage);
 
             if (hitEffectPrefab != null)
-                Instantiate(hitEffectPrefab, enemy.transform.position, Quaternion.identity);
+                Instantiate(hitEffectPrefab,enemy.transform.position, Quaternion.identity);
 
             FlyEnemy flyEnemy = enemy.GetComponentInParent<FlyEnemy>();
 
@@ -572,8 +572,7 @@ public class PlayerController : MonoBehaviour
 
             KnockBack enemyKnockback = enemy.GetComponent<KnockBack>();
 
-            if (enemyKnockback != null &&
-            enemyKnockback.CanReceiveKnockback)
+            if (enemyKnockback != null && enemyKnockback.CanReceiveKnockback)
             {
                 float direction = isFacingRight ? 1f : -1f;
 
