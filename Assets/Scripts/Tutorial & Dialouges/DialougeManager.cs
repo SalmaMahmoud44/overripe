@@ -133,6 +133,9 @@ public class DialougeManager : MonoBehaviour
             case PlayerAction.Melee:
                 player.OnPlayerMelee += OnActionPerformed;
                 break;
+            case PlayerAction.Shoot:
+                player.OnPlayerShoot += OnActionPerformed;
+                break;
             case PlayerAction.Continue:
                 player.OnPlayerContinue += OnActionPerformed;
                 break;
@@ -148,6 +151,7 @@ public class DialougeManager : MonoBehaviour
         player.OnPlayerJumped -= OnActionPerformed;
         player.OnPlayerDashed -= OnActionPerformed;
         player.OnPlayerMelee -= OnActionPerformed;
+        player.OnPlayerShoot -= OnActionPerformed;
         player.OnPlayerContinue -= OnActionPerformed;
 
         if (tripleBLaser != null)

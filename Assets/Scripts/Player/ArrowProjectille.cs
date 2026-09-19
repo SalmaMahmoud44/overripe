@@ -51,11 +51,17 @@ public class ArrowProjectille : MonoBehaviour
     {
         Debug.Log("Arrow hit: " + collision.gameObject.name);
 
+
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         if (collision.gameObject.layer != LayerMask.NameToLayer("Enemy"))
             return;
 
-        IDamagable damagable =
-            collision.GetComponentInParent<IDamagable>();
+        IDamagable damagable = collision.GetComponentInParent<IDamagable>();
 
         if (damagable != null)
         {

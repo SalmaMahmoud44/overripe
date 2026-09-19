@@ -198,7 +198,7 @@ MonoBehaviour:
   dashCooldown: 1
   arrowPrefab: {fileID: 2226950002214366329, guid: 8c1f3c9a741408c47a78a094000ec4d2, type: 3}
   arrowSpawnPoint: {fileID: 731650840178208189}
-  arrowCooldown: 1
+  arrowCooldown: 0.5
   shootDelay: 0.15
   shootAnimationDuration: 0.35
   levelManager: {fileID: 4468910176655245706, guid: 11083b29bb44fd04db47c21601809af0, type: 3}

@@ -6928,6 +6928,81 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 692195422364780379, guid: ca780781931592e48a13e691420017cd, type: 3}
   m_PrefabInstance: {fileID: 1946112463}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &44390241
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 44390242}
+  - component: {fileID: 44390244}
+  - component: {fileID: 44390243}
+  m_Layer: 5
+  m_Name: AppleBossIconVulnerable
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &44390242
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 44390241}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2023853135}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: -7.133816, y: 2.401846}
+  m_SizeDelta: {x: 27, y: 30}
+  m_Pivot: {x: 0, y: 0.5}
+--- !u!114 &44390243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 44390241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 1546561213868647466, guid: d1d016b6bee8e3941b2c4759d0da4f4a, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &44390244
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 44390241}
+  m_CullTransparentMesh: 1
 --- !u!114 &60713667 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3108450733714282502, guid: eb85fe09e37bd884ca036f87a1bec320, type: 3}
@@ -99667,7 +99742,7 @@ Transform:
   m_GameObject: {fileID: 321317068}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.91, y: -6.19, z: 0}
+  m_LocalPosition: {x: -3.49, y: -6.19, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -102833,7 +102908,7 @@ Transform:
   m_GameObject: {fileID: 1003238325}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -38.109375, y: -13.149826, z: -10}
+  m_LocalPosition: {x: -29.496338, y: -13.183034, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -103291,6 +103366,8 @@ MonoBehaviour:
   vulnerableColor: {r: 0.59607846, g: 0.2392157, b: 0.25882354, a: 1}
   breakDuration: 0.25
   shieldPunchScale: 1.25
+  bossIconShielded: {fileID: 1366237415}
+  bossIconVulnerable: {fileID: 44390241}
 --- !u!4 &1084372352 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2502059266892193981, guid: 1ee3893e84aa5fb4ea74acdd24c5ac68, type: 3}
@@ -104345,7 +104422,7 @@ GameObject:
   - component: {fileID: 1366237418}
   - component: {fileID: 1366237417}
   m_Layer: 5
-  m_Name: AppleBossIcon
+  m_Name: AppleBossIconShielded
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -109693,7 +109770,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 5534077198186670608, guid: 476b22a136b654749aed7578b83687a6, type: 3}
+  m_Sprite: {fileID: 7744143922624257024, guid: 11c3524e4f9ed6848b406b66617f6a53, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -110085,6 +110162,7 @@ RectTransform:
   - {fileID: 951668828}
   - {fileID: 1986781101}
   - {fileID: 1366237416}
+  - {fileID: 44390242}
   m_Father: {fileID: 1356981158}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}

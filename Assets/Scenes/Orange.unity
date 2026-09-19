@@ -59970,6 +59970,10 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 6183291168645385503, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
+      propertyPath: arrowCooldown
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6183291168645385503, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
       propertyPath: tripleBLaserPrefab
       value: 
       objectReference: {fileID: 1868642892}
