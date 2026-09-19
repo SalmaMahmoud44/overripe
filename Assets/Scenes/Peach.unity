@@ -4876,6 +4876,7 @@ GameObject:
   - component: {fileID: 46795502}
   - component: {fileID: 46795501}
   - component: {fileID: 46795500}
+  - component: {fileID: 46795503}
   m_Layer: 5
   m_Name: Reload
   m_TagString: Untagged
@@ -4996,6 +4997,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 46795498}
   m_CullTransparentMesh: 1
+--- !u!114 &46795503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 46795498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73779555c127cfa41b7178e5c9ef8538, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonSound
 --- !u!1 &75256375
 GameObject:
   m_ObjectHideFlags: 0
@@ -6186,7 +6199,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 225550168}
   - {fileID: 915400481}
   - {fileID: 1645915515}
   - {fileID: 39812389}
@@ -6353,14 +6365,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 225550167}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 174807097}
   - {fileID: 241273542}
-  m_Father: {fileID: 205916955}
+  m_Father: {fileID: 915400481}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &241273541
 GameObject:
@@ -12060,6 +12072,7 @@ GameObject:
   - component: {fileID: 459878941}
   - component: {fileID: 459878940}
   - component: {fileID: 459878939}
+  - component: {fileID: 459878942}
   m_Layer: 5
   m_Name: Pause
   m_TagString: Untagged
@@ -12180,6 +12193,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 459878937}
   m_CullTransparentMesh: 1
+--- !u!114 &459878942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 459878937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73779555c127cfa41b7178e5c9ef8538, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonSound
 --- !u!1 &460373592
 GameObject:
   m_ObjectHideFlags: 0
@@ -19008,7 +19033,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 225550168}
   m_Father: {fileID: 205916955}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!66 &915400482
@@ -67288,8 +67314,8 @@ Camera:
   m_GameObject: {fileID: 1054016202}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.6, g: 0.3529412, b: 0.2627451, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -67812,6 +67838,7 @@ GameObject:
   - component: {fileID: 1166811649}
   - component: {fileID: 1166811648}
   - component: {fileID: 1166811647}
+  - component: {fileID: 1166811650}
   m_Layer: 5
   m_Name: Home
   m_TagString: Untagged
@@ -67932,6 +67959,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1166811645}
   m_CullTransparentMesh: 1
+--- !u!114 &1166811650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1166811645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73779555c127cfa41b7178e5c9ef8538, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonSound
 --- !u!4 &1174021894 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3443013028111980022, guid: 1b10ee6b1061c574090c0849ff3abe9f, type: 3}
@@ -73206,7 +73245,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6917241684926676987, guid: 5b6573c3b63f51f4fa6648c26c8993c8, type: 3}
       propertyPath: startTime
-      value: 160
+      value: 120
       objectReference: {fileID: 0}
     - target: {fileID: 6917241684926676987, guid: 5b6573c3b63f51f4fa6648c26c8993c8, type: 3}
       propertyPath: sartPaused
@@ -83832,7 +83871,7 @@ MonoBehaviour:
   explosionEffect: {fileID: 1203381337}
   deathAnimDelay: 1
   delayBeforeExplosion: 0.3
-  artifactToReveal: {fileID: 2212139751821455205, guid: c39d9da0946a2c245b51041ecd2b730f, type: 3}
+  artifactToReveal: {fileID: 1651927479}
   shieldUI: {fileID: 1621456065}
 --- !u!70 &1501190667
 CapsuleCollider2D:
@@ -84317,7 +84356,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 422558550}
   m_HandleRect: {fileID: 0}
@@ -84364,7 +84403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9583652b0b72bb24f86ee56668673668, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PeachBossShieldUI
-  shieldIcon: {fileID: 0}
+  shieldIcon: {fileID: 368385615}
   healthFill: {fileID: 422558551}
   shieldedColor: {r: 0.735849, g: 0.4072787, b: 0.23949803, a: 0.8784314}
   vulnerableColor: {r: 1, g: 0.6313726, b: 0.44705883, a: 1}
@@ -91487,6 +91526,11 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &1651927479 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2212139751821455205, guid: c39d9da0946a2c245b51041ecd2b730f, type: 3}
+  m_PrefabInstance: {fileID: 1787094845}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1708013896
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -92454,7 +92498,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 315650049332018269, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -26.28
+      value: -24.8
       objectReference: {fileID: 0}
     - target: {fileID: 315650049332018269, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
       propertyPath: m_LocalPosition.y
@@ -92840,7 +92884,7 @@ Transform:
   m_GameObject: {fileID: 2128836362}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -26.28, y: -14.5, z: -10}
+  m_LocalPosition: {x: -24.8, y: -14.5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -92921,6 +92965,7 @@ GameObject:
   - component: {fileID: 2144344848}
   - component: {fileID: 2144344847}
   - component: {fileID: 2144344846}
+  - component: {fileID: 2144344849}
   m_Layer: 5
   m_Name: Play
   m_TagString: Untagged
@@ -93041,6 +93086,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2144344844}
   m_CullTransparentMesh: 1
+--- !u!114 &2144344849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2144344844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73779555c127cfa41b7178e5c9ef8538, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonSound
 --- !u!1001 &1077734417154643212
 PrefabInstance:
   m_ObjectHideFlags: 0

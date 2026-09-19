@@ -80,7 +80,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -611315949
-  m_SortingLayer: 8
+  m_SortingLayer: 11
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -70752069470797899, guid: f45bb4176bde9714186e0a7a86fbf65c, type: 3}
@@ -127,8 +127,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.0067234463, y: 0.006476103}
-  m_Size: {x: 0.9955228, y: 0.98632467}
+  m_Offset: {x: -0.04089983, y: 0.30053428}
+  m_Size: {x: 3.3601735, y: 1.0284164}
   m_Direction: 1
 --- !u!114 &7142021007968384869
 MonoBehaviour:
@@ -143,3 +143,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JuiceSqueeze
   rootDuration: 1.5
+  juiceAnimationBool: inJuice

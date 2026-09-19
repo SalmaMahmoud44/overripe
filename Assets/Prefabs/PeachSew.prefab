@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3938375843227721585}
   - component: {fileID: 3231714237135314277}
   - component: {fileID: 3764492971708794225}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PeachSew
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,3 +165,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Saw
   damage: 3
+  knockbackForce: 5
+  knockbackUpwardForce: 1.5

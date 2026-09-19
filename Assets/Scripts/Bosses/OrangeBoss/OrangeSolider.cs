@@ -126,7 +126,9 @@ public class OrangeSolider : MonoBehaviour,ILaserStunnable
     {
         rb.linearVelocity = new Vector2(0f,rb.linearVelocity.y);
 
-        if(animator != null)
+        walkSoundTimer = 0f;
+
+        if (animator != null)
             animator.SetBool("isWalking",false);
     }
   
@@ -145,13 +147,15 @@ public class OrangeSolider : MonoBehaviour,ILaserStunnable
     {
        if(target == null || isDead) return;
 
-        if (AudioManager.Instance != null)
-            AudioManager.Instance.PlaySFX(AudioManager.Instance.soldierAttackClip);
+
 
         float distance = Vector2.Distance(transform.position, target.position);
 
         if(distance > attackRange+0.25f)
             return;
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.soldierAttackClip);
 
         Debug.Log("Orange Soldier ATTACK HIT!");
 

@@ -9,6 +9,7 @@ public class FogEffect : MonoBehaviour
     [SerializeField] float duration = 1.5f;
 
     Coroutine activeRoutine;
+    AudioSource fogAudio;
 
     void Awake()
     {
@@ -23,19 +24,32 @@ public class FogEffect : MonoBehaviour
         if (activeRoutine != null)
             StopCoroutine(activeRoutine);
 
+        if (fogRoot != null)
+            fogRoot.SetActive(true);
+
+        if (AudioManager.Instance != null)
+        {
+            fogAudio = AudioManager.Instance.PlayLoopSFX(
+                AudioManager.Instance.FogEffectClip
+            );
+        }
+
         activeRoutine = StartCoroutine(FogRoutine());
     }
 
     IEnumerator FogRoutine()
     {
-        if (fogRoot != null)
-            fogRoot.SetActive(true);
-
         yield return new WaitForSeconds(duration);
 
         if (fogRoot != null)
             fogRoot.SetActive(false);
 
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.StopLoopSFX(fogAudio);
+        }
+
+        fogAudio = null;
         activeRoutine = null;
     }
 }

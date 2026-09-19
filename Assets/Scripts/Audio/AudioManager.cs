@@ -50,12 +50,15 @@ public class AudioManager : MonoBehaviour
     public AudioClip soldierWalkClip;     
 
     [Header("Boss SFX")]
-    public AudioClip rollClip;        
+    public AudioClip ORANGErollClip;      
+    public AudioClip PeachrollClip;
     public AudioClip appleSeedClip;  
     public AudioClip appleStickClip;  
     public AudioClip appleWalkClip;
     public AudioClip dustPuffClip;
+    public AudioClip FogEffectClip;
     public AudioClip explosionClip;
+    public AudioClip JumpSeedClip;
 
     [Header("Timer SFX")]
     public AudioClip addTimeClip;     
@@ -99,6 +102,9 @@ public class AudioManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        StopAllAudio();
+
+
         if (scene.name == "Main Menu")
             PlayMainMenuMusic();
     }
@@ -186,6 +192,54 @@ public class AudioManager : MonoBehaviour
         sfxVolume = Mathf.Clamp01(volume);
         sfxSource.volume = sfxVolume;
     }
-   
-   
+    public AudioSource PlayLoopSFX(AudioClip clip)
+    {
+        if (clip == null) return null;
+
+        GameObject go = new GameObject("LoopSFX");
+        go.transform.SetParent(transform);
+
+        AudioSource src = go.AddComponent<AudioSource>();
+        src.clip = clip;
+        src.loop = true;
+        src.playOnAwake = false;
+        src.volume = sfxVolume;
+        src.Play();
+
+        return src;
+    }
+
+    public void StopLoopSFX(AudioSource src)
+    {
+        if (src != null)
+            Destroy(src.gameObject);
+    }
+
+    public void StopAllAudio()
+    {
+
+        if (musicSource != null)
+        {
+            musicSource.Stop();
+            musicSource.clip = null;
+        }
+
+  
+        if (sfxSource != null)
+        {
+            sfxSource.Stop();
+        }
+
+        AudioSource[] loopSources = GetComponentsInChildren<AudioSource>();
+
+        foreach (AudioSource source in loopSources)
+        {
+            if (source != musicSource && source != sfxSource)
+            {
+                source.Stop();
+                Destroy(source.gameObject);
+            }
+        }
+    }
+
 }
