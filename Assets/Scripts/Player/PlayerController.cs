@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Vector2 meleeHitboxSize = new Vector2(1.4f, 1f);
     [SerializeField] float meleeDamage = 10f;
     [SerializeField] LayerMask enemyLayer ;
+    [SerializeField] GameObject hitEffectPrefab;
 
     [Header("Melee Knockback")]
     [SerializeField] float meleeKnockbackForce = 5f;
@@ -522,7 +523,7 @@ public class PlayerController : MonoBehaviour
 
         Vector2 attackCenter = meleeSpawnPoint.position;
 
-        Collider2D[] enemies = Physics2D.OverlapBoxAll(attackCenter,meleeHitboxSize,0f,enemyLayer);
+        Collider2D[] enemies = Physics2D.OverlapBoxAll(attackCenter, meleeHitboxSize, 0f, enemyLayer);
 
         if (enemies.Length == 0)
             return;
@@ -542,6 +543,9 @@ public class PlayerController : MonoBehaviour
 
             damagable.TakeDamage(meleeDamage);
 
+            if (hitEffectPrefab != null)
+                Instantiate(hitEffectPrefab, enemy.transform.position, Quaternion.identity);
+
             FlyEnemy flyEnemy = enemy.GetComponentInParent<FlyEnemy>();
 
             if (flyEnemy != null)
@@ -560,10 +564,10 @@ public class PlayerController : MonoBehaviour
             {
                 float direction = isFacingRight ? 1f : -1f;
 
-                enemyKnockback.ApplyHitPushback(new Vector2(direction, 0f),meleeKnockbackForce);
+                enemyKnockback.ApplyHitPushback(new Vector2(direction, 0f), meleeKnockbackForce);
             }
 
-   
+
 
             Debug.Log("Melee hit: " + enemy.name);
         }

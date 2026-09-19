@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6497194824810700489}
   - component: {fileID: 8467059082306545527}
   - component: {fileID: 8243755633317336001}
+  - component: {fileID: 3305825164255776364}
   m_Layer: 7
   m_Name: Bat_Fly_0 (1)
   m_TagString: Untagged
@@ -230,3 +231,19 @@ MonoBehaviour:
   rotTimer: {fileID: 6917241684926676987, guid: 5b6573c3b63f51f4fa6648c26c8993c8, type: 3}
   deathDelay: 0.5
   flyingDeathGravityScale: 3
+--- !u!114 &3305825164255776364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7373642915656745143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0af7638f6f9983c41b1e70d701841f63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoliderHitFeedback
+  spriteRenderer: {fileID: 8983744981694711084}
+  hitColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 1
+  stunDuration: 0.5

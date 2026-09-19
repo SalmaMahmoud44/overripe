@@ -8,6 +8,7 @@ public class ArrowProjectille : MonoBehaviour
     [SerializeField] float damage = 10f;
 
     [SerializeField] private SpriteRenderer arrowSprite;
+    [SerializeField] GameObject hitEffectPrefab;
 
     private Rigidbody2D arrowrb;
     private Vector2 arrowDir;
@@ -61,6 +62,10 @@ public class ArrowProjectille : MonoBehaviour
             Debug.Log("Arrow damaging: " + collision.gameObject.name);
 
             damagable.TakeDamage(damage);
+
+            if (hitEffectPrefab != null)
+                Instantiate(hitEffectPrefab, collision.transform.position, Quaternion.identity);
+
             Destroy(gameObject);
         }
     }

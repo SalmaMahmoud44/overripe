@@ -67,9 +67,10 @@ public class PeachBossController : MonoBehaviour, IDamagable, IBoss
 
     [Header("Contact Damage")]
     [SerializeField] float rollDamage = 5f;
+    [SerializeField] float rollDamageCooldown = 0.5f;
     [SerializeField] float rollKnockbackForce = 8f;
     [SerializeField] float rollKnockbackUpwardForce = 3f;
-    bool hasHitPlayerThisRoll = false;
+    float rollDamageTimer;
 
     BossState currentState = BossState.Idle;
     BossPhase currentPhase = BossPhase.Phase1;
@@ -155,6 +156,9 @@ public class PeachBossController : MonoBehaviour, IDamagable, IBoss
 
     void Update()
     {
+        if (rollDamageTimer > 0f)
+            rollDamageTimer -= Time.deltaTime;
+
         switch (currentState)
         {
             case BossState.Idle:
@@ -270,7 +274,6 @@ public class PeachBossController : MonoBehaviour, IDamagable, IBoss
         rollDirectionX = player.position.x > transform.position.x ? 1f : -1f;
         currentBounceCount = 0;
         doingFinalHalfMove = false;
-        hasHitPlayerThisRoll = false;
 
         SetRollCollider(true);
 
@@ -496,20 +499,22 @@ public class PeachBossController : MonoBehaviour, IDamagable, IBoss
         if (rightWall != null) rightWall.SetActive(true);
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerStay2D(Collider2D collision)
     {
-        if (currentState != BossState.Rolling || hasHitPlayerThisRoll)
+        if (currentState != BossState.Rolling)
             return;
 
         if (!collision.gameObject.CompareTag("Player"))
             return;
 
+        if (rollDamageTimer > 0f)
+            return;
+
         PlayerDeath playerDeath = collision.gameObject.GetComponent<PlayerDeath>();
         if (playerDeath != null)
         {
-            hasHitPlayerThisRoll = true;
-
             playerDeath.TakeDamage(rollDamage);
+            rollDamageTimer = rollDamageCooldown;
 
             KnockBack knockBack = collision.gameObject.GetComponent<KnockBack>();
             if (knockBack != null)
