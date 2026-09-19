@@ -59448,7 +59448,7 @@ MonoBehaviour:
     CustomLookAtTarget: 0
   Lens:
     FieldOfView: 60
-    OrthographicSize: 7.63
+    OrthographicSize: 9.58
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -62118,7 +62118,7 @@ Transform:
   m_GameObject: {fileID: 1003238325}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -32.158405, y: -12.760533, z: -10}
+  m_LocalPosition: {x: -21.499472, y: -10.841498, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -62217,8 +62217,8 @@ Camera:
   m_GameObject: {fileID: 1003238325}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.64705884, g: 0.3647059, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -62243,7 +62243,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 7.63
+  orthographic size: 9.58
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -68212,7 +68212,7 @@ PrefabInstance:
       objectReference: {fileID: -5577905783502299866, guid: a8afb75f886ca6c4a97fb38e4693289a, type: 3}
     - target: {fileID: 7397049974804018250, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
       propertyPath: m_SortingLayer
-      value: 8
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7397049974804018250, guid: cd20cbe315b790d448b7808e9fe3c004, type: 3}
       propertyPath: m_SortingLayerID

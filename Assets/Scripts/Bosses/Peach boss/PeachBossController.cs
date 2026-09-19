@@ -2,7 +2,7 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PeachBossController : MonoBehaviour, IDamagable,IBoss
+public class PeachBossController : MonoBehaviour, IDamagable, IBoss
 {
     public enum BossState
     {
@@ -67,9 +67,9 @@ public class PeachBossController : MonoBehaviour, IDamagable,IBoss
 
     [Header("Contact Damage")]
     [SerializeField] float rollDamage = 5f;
-    [SerializeField] float rollDamageCooldown = 0.5f;
-
-    float rollDamageTimer;
+    [SerializeField] float rollKnockbackForce = 8f;
+    [SerializeField] float rollKnockbackUpwardForce = 3f;
+    bool hasHitPlayerThisRoll = false;
 
     BossState currentState = BossState.Idle;
     BossPhase currentPhase = BossPhase.Phase1;
@@ -155,9 +155,6 @@ public class PeachBossController : MonoBehaviour, IDamagable,IBoss
 
     void Update()
     {
-        if (rollDamageTimer > 0f)
-            rollDamageTimer -= Time.deltaTime;
-
         switch (currentState)
         {
             case BossState.Idle:
@@ -273,6 +270,7 @@ public class PeachBossController : MonoBehaviour, IDamagable,IBoss
         rollDirectionX = player.position.x > transform.position.x ? 1f : -1f;
         currentBounceCount = 0;
         doingFinalHalfMove = false;
+        hasHitPlayerThisRoll = false;
 
         SetRollCollider(true);
 
@@ -498,22 +496,29 @@ public class PeachBossController : MonoBehaviour, IDamagable,IBoss
         if (rightWall != null) rightWall.SetActive(true);
     }
 
-    void OnCollisionStay2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        if (currentState != BossState.Rolling)
+        if (currentState != BossState.Rolling || hasHitPlayerThisRoll)
             return;
 
         if (!collision.gameObject.CompareTag("Player"))
             return;
 
-        if (rollDamageTimer > 0f)
-            return;
-
         PlayerDeath playerDeath = collision.gameObject.GetComponent<PlayerDeath>();
         if (playerDeath != null)
         {
+            hasHitPlayerThisRoll = true;
+
             playerDeath.TakeDamage(rollDamage);
-            rollDamageTimer = rollDamageCooldown;
+
+            KnockBack knockBack = collision.gameObject.GetComponent<KnockBack>();
+            if (knockBack != null)
+            {
+                Vector2 direction = (Vector2)collision.transform.position - (Vector2)transform.position;
+                direction = new Vector2(Mathf.Sign(direction.x), 0f);
+
+                knockBack.ApplyKnockback(direction, rollKnockbackForce, rollKnockbackUpwardForce);
+            }
         }
     }
 
@@ -601,7 +606,7 @@ public class PeachBossController : MonoBehaviour, IDamagable,IBoss
         if (animator != null)
             animator.SetTrigger("SeedTransition");
 
-        Debug.Log("Peach Boss: Transitioning to Phase 2 (placeholder)");
+        Debug.Log("Transitioning");
     }
 
     void UpdateTransitioning()
@@ -619,8 +624,6 @@ public class PeachBossController : MonoBehaviour, IDamagable,IBoss
     {
         currentState = BossState.Phase2Idle;
         stateTimer = phase2IdleDelay;
-
-        Debug.Log("Peach Boss: Phase 2 started, idle before first jump");
     }
 
     void UpdatePhase2Idle()
@@ -690,7 +693,7 @@ public class PeachBossController : MonoBehaviour, IDamagable,IBoss
             if (impulseSource != null)
                 impulseSource.GenerateImpulse();
 
-            Debug.Log("Peach Boss Phase2: landed jump " + currentJumpCount + " / " + jumpsPerCycle);
+            Debug.Log(" Phase2: landed jump " + currentJumpCount + " / " + jumpsPerCycle);
 
             SpawnWave();
 
@@ -748,7 +751,7 @@ public class PeachBossController : MonoBehaviour, IDamagable,IBoss
         if (animator != null)
             animator.SetTrigger("Phase2Critical");
 
-        Debug.Log("Peach Boss Phase2: entered critical state, vulnerable now");
+        Debug.Log("Phase2: critical state");
     }
 
     void UpdateCriticalState()
@@ -759,8 +762,6 @@ public class PeachBossController : MonoBehaviour, IDamagable,IBoss
         {
             isVulnerable = false;
             StartJumpCycle();
-
-            Debug.Log("Peach Boss Phase2: critical state ended, jumping again");
         }
     }
 
@@ -783,13 +784,14 @@ public class PeachBossController : MonoBehaviour, IDamagable,IBoss
     {
         yield return new WaitForSeconds(deathAnimDelay);
 
+        if (spriteRenderer != null)
+            spriteRenderer.enabled = false;
+
         if (seedLandingRenderer != null)
             seedLandingRenderer.enabled = false;
 
         if (seedCollider != null)
             seedCollider.enabled = false;
-
-        yield return new WaitForSeconds(delayBeforeExplosion);
 
         if (explosionEffect != null)
             explosionEffect.Play();
