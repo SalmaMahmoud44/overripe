@@ -12875,6 +12875,7 @@ GameObject:
   - component: {fileID: 331767124}
   - component: {fileID: 331767126}
   - component: {fileID: 331767127}
+  - component: {fileID: 331767128}
   m_Layer: 7
   m_Name: MangoBoss
   m_TagString: Untagged
@@ -13146,6 +13147,22 @@ MonoBehaviour:
     DissipationDistance: 100
     PropagationSpeed: 343
   DefaultVelocity: {x: 0, y: -1, z: 0}
+--- !u!114 &331767128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 331767120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0af7638f6f9983c41b1e70d701841f63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoliderHitFeedback
+  spriteRenderer: {fileID: 331767122}
+  hitColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 1
+  stunDuration: 0.35
 --- !u!1 &370281410
 GameObject:
   m_ObjectHideFlags: 0
@@ -40287,6 +40304,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6183291168645385503, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
+      propertyPath: hitEffectPrefab
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7086515663351076259, guid: 3cbb5299303d6a347ae44583e631e352, type: 3}
       propertyPath: m_TagString
       value: Untagged
@@ -40581,7 +40602,7 @@ PrefabInstance:
       objectReference: {fileID: 2004650175}
     - target: {fileID: 8983744981694711084, guid: ca780781931592e48a13e691420017cd, type: 3}
       propertyPath: m_SortingLayer
-      value: 8
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 8983744981694711084, guid: ca780781931592e48a13e691420017cd, type: 3}
       propertyPath: m_SortingLayerID
