@@ -51,13 +51,6 @@ Download and play the latest build from our itch.io page:
   <a href="https://maryamahmed0.itch.io/overripe"><strong>🎮 Play Overripe on itch.io →</strong></a>
 </p>
 
----
-
-## 🎥 Gameplay
-
-<p align="center">
-  <img src="docs/media/gameplay.gif" alt="Overripe Gameplay" width="85%">
-</p>
 
 ---
 
