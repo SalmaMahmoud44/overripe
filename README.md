@@ -9,12 +9,6 @@
   <strong>A 2D action platformer where your own body is the clock.</strong>
 </p>
 
-<p align="center">
-  <a href="https://maryamahmed0.itch.io/overripe">
-    <img src="https://img.shields.io/badge/Play%20Now-Overripe-ff69b4?style=for-the-badge&logo=itch.io&logoColor=white" alt="Play Overripe">
-  </a>
-</p>
-
 ---
 
 ## 🎮 Game Overview
@@ -43,7 +37,7 @@ Download and play the latest build from our itch.io page:
 
 <p align="center">
   <a href="https://maryamahmed0.itch.io/overripe">
-    <img src="https://img.shields.io/badge/Download-Overripe-ff69b4?style=for-the-badge&logo=itch.io&logoColor=white" alt="Download Overripe">
+    <img src="https://img.shields.io/badge/Download-Overripe-D6A84F?style=for-the-badge&logo=itch.io&logoColor=white" alt="Download Overripe">
   </a>
 </p>
 
