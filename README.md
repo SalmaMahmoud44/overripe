@@ -37,7 +37,7 @@ Download and play the latest build from our itch.io page:
 
 <p align="center">
   <a href="https://maryamahmed0.itch.io/overripe">
-    <img src="https://img.shields.io/badge/Download-Overripe-8A9A3B?style=for-the-badge&logo=itch.io&logoColor=white" alt="Download Overripe">
+    <img src="https://img.shields.io/badge/Download-Overripe-D6A84F?style=for-the-badge&logo=itch.io&logoColor=white" alt="Download Overripe">
   </a>
 </p>
 
