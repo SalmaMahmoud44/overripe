@@ -13,8 +13,8 @@
 </p>
 
 <p align="center">
-  <a href="YOUR_ITCH_IO_LINK">
-    <img src="[https://img.shields.io/badge/Play%20Now-Overripe-ff69b4?style=for-the-badge](https://maryamahmed0.itch.io/overripe)&logo=itch.io&logoColor=white" alt="Play Overripe">
+  <a href="https://maryamahmed0.itch.io/overripe">
+    <img src="https://img.shields.io/badge/Play%20Now-Overripe-ff69b4?style=for-the-badge&logo=itch.io&logoColor=white" alt="Play Overripe">
   </a>
 </p>
 
@@ -45,13 +45,13 @@ You set out to recover it — knowing that every second away from it brings you 
 Download and play the latest build from our itch.io page:
 
 <p align="center">
-  <a href="YOUR_ITCH_IO_LINK">
+  <a href="https://maryamahmed0.itch.io/overripe">
     <img src="https://img.shields.io/badge/Download-Overripe-ff69b4?style=for-the-badge&logo=itch.io&logoColor=white" alt="Download Overripe">
   </a>
 </p>
 
 <p align="center">
-  <a href="YOUR_ITCH_IO_LINK"><strong>🎮 Play Overripe on itch.io →</strong></a>
+  <a href="https://maryamahmed0.itch.io/overripe"><strong>🎮 Play Overripe on itch.io →</strong></a>
 </p>
 
 ---
