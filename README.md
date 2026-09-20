@@ -13,7 +13,7 @@
 
 ## 🎮 Game Overview
 
-**Overripe** is a 2D action platformer created for the **IEEE Victories 5.0 Game Development Competition**, organized by the **IEEE Mansoura Student Branch**, with the theme **Time**.
+**Overripe** is a 2D action platformer created for the **IEEE Victoris 5.0 Game Development Competition**, organized by the **IEEE Mansoura Student Branch**, with the theme **Time**.
 
 The artifact that keeps the Banana Kingdom from rotting has been stolen.
 
@@ -327,7 +327,7 @@ Third-party assets remain subject to their respective creators' licenses and ter
 
 # 🏆 Competition
 
-## IEEE Victories 5.0 Game Development Competition
+## IEEE Victoris 5.0 Game Development Competition
 
 **Organizer:** IEEE Mansoura Student Branch
 **Theme:** Time
