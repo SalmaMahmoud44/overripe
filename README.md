@@ -14,7 +14,7 @@
 
 <p align="center">
   <a href="YOUR_ITCH_IO_LINK">
-    <img src="https://img.shields.io/badge/Play%20Now-Overripe-ff69b4?style=for-the-badge&logo=itch.io&logoColor=white" alt="Play Overripe">
+    <img src="[https://img.shields.io/badge/Play%20Now-Overripe-ff69b4?style=for-the-badge](https://maryamahmed0.itch.io/overripe)&logo=itch.io&logoColor=white" alt="Play Overripe">
   </a>
 </p>
 
