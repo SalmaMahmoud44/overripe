@@ -1,10 +1,9 @@
 # 🍌 Overripe
 <p align="center">
-  <img src="docs/media/logo.png" alt="Overripe Logo" width="45%">
+  <img src="docs/media/thumbnail.png" alt="Overripe Thumbnail" width="60%">
 </p>
-
 <p align="center">
-  <img src="docs/media/thumbnail.png" alt="Overripe Thumbnail" width="70%">
+  <img src="docs/media/logo.png" alt="Overripe Logo" width="45%">
 </p>
 <p align="center">
   <strong>A 2D action platformer where your own body is the clock.</strong>
