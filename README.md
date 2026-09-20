@@ -317,7 +317,7 @@ Then:
 | ------------- | ------------ 
 | Mushroom      | itch.io     
 | Bat           | itch.io     
-| Sound Effects | google 
+| Sound Effects | free assets
 
 All original gameplay code, game design, and original art were created by the team.
 
