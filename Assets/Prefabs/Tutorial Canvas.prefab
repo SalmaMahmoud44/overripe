@@ -702,8 +702,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Banana
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 88060bf5efa32e4459024404e2095ec4, type: 2}
-  m_sharedMaterial: {fileID: -5716665882345804137, guid: 88060bf5efa32e4459024404e2095ec4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2f3365478b37c1c4b936cd8986518458, type: 2}
+  m_sharedMaterial: {fileID: -5457870317605257122, guid: 2f3365478b37c1c4b936cd8986518458, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1264,8 +1264,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Skip Tutorial
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2f3365478b37c1c4b936cd8986518458, type: 2}
+  m_sharedMaterial: {fileID: -5457870317605257122, guid: 2f3365478b37c1c4b936cd8986518458, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

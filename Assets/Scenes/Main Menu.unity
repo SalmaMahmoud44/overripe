@@ -641,7 +641,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Zinab Mahmoud
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 88060bf5efa32e4459024404e2095ec4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2f3365478b37c1c4b936cd8986518458, type: 2}
   m_sharedMaterial: {fileID: -5716665882345804137, guid: 88060bf5efa32e4459024404e2095ec4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -708,7 +708,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &585619619
@@ -2207,7 +2207,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Maryam Ahmed
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 88060bf5efa32e4459024404e2095ec4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2f3365478b37c1c4b936cd8986518458, type: 2}
   m_sharedMaterial: {fileID: -5716665882345804137, guid: 88060bf5efa32e4459024404e2095ec4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2274,7 +2274,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1351309360
@@ -2763,7 +2763,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Salma Mahmoud
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 88060bf5efa32e4459024404e2095ec4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2f3365478b37c1c4b936cd8986518458, type: 2}
   m_sharedMaterial: {fileID: -5716665882345804137, guid: 88060bf5efa32e4459024404e2095ec4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2830,7 +2830,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1441895207
