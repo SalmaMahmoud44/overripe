@@ -46,12 +46,6 @@ Download and play the latest build from our itch.io page:
     <img src="https://img.shields.io/badge/Download-Overripe-ff69b4?style=for-the-badge&logo=itch.io&logoColor=white" alt="Download Overripe">
   </a>
 </p>
-
-<p align="center">
-  <a href="https://maryamahmed0.itch.io/overripe"><strong>🎮 Play Overripe on itch.io →</strong></a>
-</p>
-
-
 ---
 
 ## ✨ Features
