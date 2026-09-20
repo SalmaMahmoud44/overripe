@@ -316,9 +316,9 @@ Then:
 
 | Name              | Role       |
 | ----------------- | ---------- |
-| *Your Name*       | Programmer |
-| *Programmer Name* | Programmer |
-| *Artist Name*     | Artist     |
+| Maryam Ahmed      | Programmer |
+| Salma Mahmoud     | Programmer |
+| Zinab Mahmoud     | Artist     |
 
 ---
 
@@ -336,11 +336,11 @@ Then:
 
 # 🎵 Credits
 
-| Asset         | Source       | License       |
-| ------------- | ------------ | ------------- |
-| Mushroom      | itch.io      | *Add license* |
-| Bat           | itch.io      | *Add license* |
-| Sound Effects | *Add source* | *Add license* |
+| Asset         | Source       
+| ------------- | ------------ 
+| Mushroom      | itch.io     
+| Bat           | itch.io     
+| Sound Effects | google 
 
 All original gameplay code, game design, and original art were created by the team.
 
