@@ -52,7 +52,6 @@ Download and play the latest build from our itch.io page:
 * ⚡ **Triple B's Laser** — aim at enemies and use the laser to temporarily stun them.
 * 👹 **Four Boss Encounters** — each boss introduces different attacks and mechanics.
 * 🧩 **Artifact Pieces** — defeat each boss and recover a piece of the stolen artifact.
-* 💔 **A Corrupted Ally** — a friend introduced during the journey eventually becomes part of the final threat.
 
 ---
 
@@ -132,9 +131,6 @@ Time pressure is directly connected to the player's physical decay, making the c
 
 Each level introduces a new boss encounter with different attacks, mechanics, and challenges.
 
-### 💔 A Friend Becomes the Final Threat
-
-An ally introduced during the journey eventually becomes part of the final battle, bringing the story back to a character introduced earlier in the game.
 
 ---
 
